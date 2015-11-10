@@ -27,7 +27,6 @@ Temporary Items
 ### Windows ###
 # Windows image file caches
 Thumbs.db
-/www
 ehthumbs.db
 
 # Folder config file
@@ -135,6 +134,7 @@ node_modules
 ### Bower ###
 bower_components
 
+/www
 /hooks
 /platforms
 /plugins
