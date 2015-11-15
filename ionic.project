@@ -1,0 +1,10 @@
+{
+  "name": "QuakeWatch",
+  "app_id": "",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://rest-service.guides.spring.io/greeting"
+    }
+  ]
+}
