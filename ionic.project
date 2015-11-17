@@ -4,7 +4,7 @@
   "proxies": [
     {
       "path": "/api",
-      "proxyUrl": "http://rest-service.guides.spring.io/greeting"
+      "proxyUrl": "http://www.seismicportal.eu/fdsnws/event/1"
     }
   ]
 }

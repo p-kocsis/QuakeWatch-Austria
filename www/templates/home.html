@@ -1,15 +1,15 @@
 <ion-view view-title="QuakeWatch">
     <ion-header-bar class="bar-subheader">
         <div class="button-bar">
-            <a class="button button-clear button-dark">Österreich</a>
-            <a class="button button-clear button-dark">EU</a>
-            <a class="button button-clear button-dark">Welt</a>
+            <a class="button button-clear button-dark" ng-click="bebenAut()">Österreich</a>
+            <a class="button button-clear button-dark" ng-click="bebenEu()">EU</a>
+            <a class="button button-clear button-dark" ng-click="bebenWelt()">Welt</a>
         </div>
     </ion-header-bar>
     <ion-content>
         <ion-list>
             <ion-item ng-repeat="beben in bebenliste" href="#/app/bebenDetail/{{beben.id}}">
-                {{beben.id}}
+                {{beben.properties.flynn_region}}
             </ion-item>
         </ion-list>
     </ion-content>
