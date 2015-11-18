@@ -10,6 +10,21 @@ angular.module('starter.resources', ['ngResource'])
             $http.get('/api/query?orderby=time&limit=50&format=json&nodata=404').success(function (data) {
                 worldData = data;
             });
+
+        var quakeClasses= function (mag) {
+
+            if(mag < 5){
+                return "item-balanced";
+            }
+            if(mag >= 5 && mag < 6){
+                return "item-energized";
+            }
+            if(mag >= 6){
+                return "item-assertive";
+            }
+
+        };
+
         return {
             promise: promise,
             getAut: function () {
@@ -24,6 +39,7 @@ angular.module('starter.resources', ['ngResource'])
                         var timeLocal = dateAndTime[1].substring(0, 8);
                         currentFeature.date = date;
                         currentFeature.timeLocal = timeLocal;
+                        currentFeature.colorClass=quakeClasses(currentFeature.properties.mag);
                         bebenAutArray.push(currentFeature);
                     }
                 }
@@ -39,6 +55,7 @@ angular.module('starter.resources', ['ngResource'])
                         var timeLocal = dateAndTime[1].substring(0, 8);
                         currentFeature.date = date;
                         currentFeature.timeLocal = timeLocal;
+                        currentFeature.colorClass=quakeClasses(currentFeature.properties.mag);
                         return currentFeature;
                     }
                 }
@@ -54,6 +71,7 @@ angular.module('starter.resources', ['ngResource'])
                     var timeLocal = dateAndTime[1].substring(0, 8);
                     currentFeature.date = date;
                     currentFeature.timeLocal = timeLocal;
+                    currentFeature.colorClass=quakeClasses(currentFeature.properties.mag);
                     bebenAutArray.push(currentFeature);
                 }
                 return bebenAutArray;
@@ -72,6 +90,7 @@ angular.module('starter.resources', ['ngResource'])
                             var timeLocal = dateAndTime[1].substring(0, 8);
                             currentFeature.date = date;
                             currentFeature.timeLocal = timeLocal;
+                            currentFeature.colorClass=quakeClasses(currentFeature.properties.mag);
                             bebenAutArray.push(currentFeature);
                             break;
                         }

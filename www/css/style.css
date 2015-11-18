@@ -1,4 +1,4 @@
-/* Empty. Add your own CSS if you like */
+/* Own Css */
 div.footer-button a.button.button-full {
     width: 100%;
     margin-top: 0
@@ -15,4 +15,9 @@ div.footer-button a.button.button-full {
 
 .bold{
     font-weight: bold;
+}
+
+.whiteButton {
+
+    color:#fff;
 }
