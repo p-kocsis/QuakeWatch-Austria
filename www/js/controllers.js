@@ -50,6 +50,14 @@ angular.module('starter.controllers', ['starter.resources'])
 
         $scope.bebenAut();
 
+        $scope.bebenWorld = function(){
+            $scope.bebenliste = AustrianData.getWorld();
+        };
+
+        $scope.bebenEu = function(){
+            $scope.bebenliste = AustrianData.getEu();
+        }
+
         //ionicModal
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
             scope: $scope
@@ -76,7 +84,8 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.mag=quake.properties.mag;
         $scope.lon=quake.properties.lon;
         $scope.lat=quake.properties.lat;
-        $scope.time=quake.properties.time;
+        $scope.time=quake.timeLocal;
+        $scope.date=quake.date;
 
 
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {

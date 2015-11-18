@@ -5,6 +5,7 @@ div.footer-button a.button.button-full {
 }
 
 .mymodal {
+    width: 100%;
     top: 60%;
     left: 0%;
     right: 0%;

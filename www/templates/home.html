@@ -3,12 +3,12 @@
         <div class="button-bar">
             <a class="button button-clear button-dark" ng-click="bebenAut()">Österreich</a>
             <a class="button button-clear button-dark" ng-click="bebenEu()">EU</a>
-            <a class="button button-clear button-dark" ng-click="bebenWelt()">Welt</a>
+            <a class="button button-clear button-dark" ng-click="bebenWorld()">Welt</a>
         </div>
     </ion-header-bar>
     <ion-content>
         <ion-list>
-            <ion-item ng-repeat="beben in bebenliste" href="#/app/bebenDetail/{{beben.id}}">
+            <ion-item collection-repeat="beben in bebenliste" href="#/app/bebenDetail/{{beben.id}}">
                 <div class="row">
                     <div class="col col-25 col-bottom">
                         <h1>{{beben.properties.mag}}</h1>
