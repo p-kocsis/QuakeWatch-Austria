@@ -47,12 +47,15 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.bebenAut = function(){
             $scope.bebenliste=AustrianData.getAut();
         };
+
         $scope.bebenAut();
-        //inoicModal
+
+        //ionicModal
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
             scope: $scope
         }).then(function (modal) {
             $scope.bebenmodal = modal;
+            $scope.bebenmodal.show();
         });
         $scope.beben_verspuert = function () {
             $scope.bebenmodal.show();
@@ -61,26 +64,21 @@ angular.module('starter.controllers', ['starter.resources'])
             $scope.bebenmodal.hide();
         };
         //
-        //$scope.sortDataAustria();
+
 
     })
-    .controller('BebenDetailCtrl', function ($scope, $ionicModal, AustrianData) {
-        //$httpProvider.defaults.headers.get['Access-Control-Allow-Origin']= '*';
-        //$http.defaults.headers.common['Access-Control-Allow-Origin']= '*';
-        /*
-         //REST abfrage geht wegen Acces header nicht
-         Test.query(function(data) {
-         $scope.bebenliste = data;
-         });
-         */
-        $scope.bebenliste = [
-            {title: 'asd', id: 1},
-            {title: 'Chill', id: 2},
-            {title: 'Dubstep', id: 3},
-            {title: 'Indie', id: 4},
-            {title: 'Rap', id: 5},
-            {title: 'Cowbell', id: 6}
-        ];
+    .controller('BebenDetailCtrl', function ($scope, $ionicModal, AustrianData, $stateParams) {
+
+        var quake = AustrianData.getQuakefromId($stateParams.bebenId);
+
+
+        $scope.flynn_region=quake.flynn_region;
+        $scope.mag=quake.properties.mag;
+        $scope.lon=quake.properties.lon;
+        $scope.lat=quake.properties.lat;
+        $scope.time=quake.properties.time;
+
+
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
             scope: $scope
         }).then(function (modal) {

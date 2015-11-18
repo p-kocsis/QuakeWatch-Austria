@@ -9,7 +9,15 @@
     <ion-content>
         <ion-list>
             <ion-item ng-repeat="beben in bebenliste" href="#/app/bebenDetail/{{beben.id}}">
-                {{beben.properties.flynn_region}}
+                <div class="row">
+                    <div class="col col-25 col-bottom">
+                        <h1>{{beben.properties.mag}}</h1>
+                    </div>
+                    <div class="col">
+                        {{beben.date}} {{beben.timeLocal}} <br>
+                        <p class="bold">{{beben.properties.flynn_region}}</p>
+                    </div>
+                </div>
             </ion-item>
         </ion-list>
     </ion-content>
