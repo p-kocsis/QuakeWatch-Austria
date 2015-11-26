@@ -47,7 +47,7 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.resources'])
 
             })
             .state('app.bebenDetail', {
-                url: '/bebenDetail/:bebenId',
+                url: '/bebenDetail/:bebenId/:bebenRegion',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/beben_detail.html',

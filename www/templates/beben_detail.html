@@ -2,11 +2,11 @@
     <ion-content>
         <div class="row">
             <div class="col col-25 col-bottom">
-                <h1>{{mag}}</h1>
+                <h1 class="text-center">{{mag}}</h1>
             </div>
             <div class="col">
                 {{date}} <br>
-                {{time}}<br>
+                {{time}} <br>
                 <p class="bold">{{flynn_region}}</p>
             </div>
 
@@ -14,7 +14,7 @@
 
         <div class="row">
             <div class="col col-top">
-                <hr><br>
+                <hr>
                 vor 23 Minuten
             </div>
         </div>
@@ -37,9 +37,10 @@
             </div>
         </div>
     </ion-content>
+    <ion-footer-bar></ion-footer-bar>
     <div class="bar bar-footer bar-assertive footer-button">
         <a class="button button-full button-clear" ng-click="beben_verspuert()">
-            Habe Beben dieses Verspürt
+            Habe dieses Beben Verspürt
         </a>
     </div>
 </ion-view>

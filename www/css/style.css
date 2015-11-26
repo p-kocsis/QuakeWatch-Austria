@@ -18,6 +18,14 @@ div.footer-button a.button.button-full {
 }
 
 .whiteButton {
-
     color:#fff;
+}
+
+.button-width-full {
+    width: 100%;
+}
+
+.item.active, .item.activated, .item-complex.active .item-content, .item-complex.activated .item-content {
+    border-color: #ffffff;
+    background-color: #ffffff;
 }

@@ -60,7 +60,21 @@ angular.module('starter.resources', ['ngResource'])
                     }
                 }
             },
-
+            getQuakefromIdWorld: function (id) {
+                for (var i = 0; i < worldData.features.length; i++) {
+                    if (worldData.features[i].id === id) {
+                        var currentFeature = worldData.features[i];
+                        var timeFull = currentFeature.properties.time;
+                        var dateAndTime = timeFull.split("T");
+                        var date = dateAndTime[0];
+                        var timeLocal = dateAndTime[1].substring(0, 8);
+                        currentFeature.date = date;
+                        currentFeature.timeLocal = timeLocal;
+                        currentFeature.colorClass=quakeClasses(currentFeature.properties.mag);
+                        return currentFeature;
+                    }
+                }
+            },
             getWorld: function () {
                 var bebenAutArray = [];
                 for (var i = 0; i < worldData.features.length; i++) {

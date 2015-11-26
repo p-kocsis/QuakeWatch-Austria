@@ -8,7 +8,7 @@
     </ion-header-bar>
     <ion-content>
         <ion-list>
-            <ion-item class="item {{beben.colorClass}} row-no-padding" collection-repeat="beben in bebenliste" href="#/app/bebenDetail/{{beben.id}}" >
+            <ion-item class="item {{beben.colorClass}} row-no-padding" collection-repeat="beben in bebenliste" href="#/app/bebenDetail/{{beben.id}}/{{beben.properties.flynn_region}}" >
                 <div class="row">
                     <div class="col col-25 col-bottom">
                         <h1 class="whiteButton text-leftt">{{beben.properties.mag}}</h1>
@@ -21,9 +21,11 @@
             </ion-item>
         </ion-list>
     </ion-content>
+    <ion-footer-bar></ion-footer-bar>
     <div class="bar bar-footer bar-assertive footer-button">
         <a class="button button-full button-clear" ng-click="beben_verspuert()">
             Habe Beben Verspürt
         </a>
     </div>
 </ion-view>
+øøø

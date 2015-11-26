@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','starter.resources'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources'])
 
     .run(function ($ionicPlatform) {
         $ionicPlatform.ready(function () {
@@ -34,9 +34,9 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.resources'])
             .state('app.home', {
                 url: '/home',
                 resolve: {
-                     AustrianDataResolved :function(AustrianData){
-                         return AustrianData.promise;
-                     }
+                    AustrianDataResolved: function (AustrianData) {
+                        return AustrianData.promise;
+                    }
                 },
                 views: {
                     'menuContent': {
@@ -47,11 +47,20 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.resources'])
 
             })
             .state('app.bebenDetail', {
-                url: '/bebenDetail/:bebenId',
+                url: '/bebenDetail/:bebenId/:bebenRegion',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/beben_detail.html',
                         controller: 'BebenDetailCtrl'
+                    }
+                }
+            })
+            .state('app.bebenEintrag', {
+                url: '/bebenEintrag',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/beben_eintrag.html',
+                        controller: 'BebenEintragCtrl'
                     }
                 }
             });

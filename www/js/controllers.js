@@ -77,10 +77,15 @@ angular.module('starter.controllers', ['starter.resources'])
     })
     .controller('BebenDetailCtrl', function ($scope, $ionicModal, AustrianData, $stateParams) {
 
-        var quake = AustrianData.getQuakefromId($stateParams.bebenId);
+        if($stateParams.bebenRegion === 'AUSTRIA'){
+            var quake = AustrianData.getQuakefromId($stateParams.bebenId);
+        }else {
+            var quake = AustrianData.getQuakefromIdWorld($stateParams.bebenId);
+        }
 
 
-        $scope.flynn_region=quake.flynn_region;
+
+        $scope.flynn_region=quake.properties.flynn_region;
         $scope.mag=quake.properties.mag;
         $scope.lon=quake.properties.lon;
         $scope.lat=quake.properties.lat;
@@ -100,4 +105,6 @@ angular.module('starter.controllers', ['starter.resources'])
             $scope.bebenmodal.hide();
         };
 
+    })
+    .controller('BebenEintragCtrl', function ($scope, $ionicModal, AustrianData, $stateParams) {
     });
