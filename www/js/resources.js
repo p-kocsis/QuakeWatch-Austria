@@ -1,8 +1,8 @@
 angular.module('starter.resources', ['ngResource'])
-    .factory('AustrianData', function ($http) {
+    .factory('JsonData', function ($http) {
         var myData = null;
         var worldData = null;
-        var promise = $http.get('/api/query?orderby=time&limit=50&minlat=46.3780&maxlat=49.0171&minlon=9.5359&maxlon=17.1627&format=json&nodata=404').success(function (data) {
+        var AutPromise = $http.get('/api/query?orderby=time&limit=50&minlat=46.3780&maxlat=49.0171&minlon=9.5359&maxlon=17.1627&format=json&nodata=404').success(function (data) {
             myData = data;
         });
 
@@ -12,7 +12,6 @@ angular.module('starter.resources', ['ngResource'])
             });
 
         var quakeClasses= function (mag) {
-
             if(mag < 5){
                 return "item-balanced";
             }
@@ -22,11 +21,10 @@ angular.module('starter.resources', ['ngResource'])
             if(mag >= 6){
                 return "item-assertive";
             }
-
         };
 
         return {
-            promise: promise,
+            AutPromise: AutPromise,
             getAut: function () {
                 getWorldData;
                 var bebenAutArray = [];
@@ -96,7 +94,52 @@ angular.module('starter.resources', ['ngResource'])
                 var bebenAutArray = [];
                 for (var i = 0; i < worldData.features.length; i++) {
                     for(var o=0;o<euStates.length;o++){
-                        if(euStates[o].toUpperCase() === worldData.features[i].properties.flynn_region){
+
+                        if(worldData.features[i].properties.flynn_region.indexOf(euStates[o].toUpperCase()) != -1){
+                            var currentFeature = worldData.features[i];
+                            var timeFull = currentFeature.properties.time;
+                            var dateAndTime = timeFull.split("T");
+                            var date = dateAndTime[0];
+                            var timeLocal = dateAndTime[1].substring(0, 8);
+                            currentFeature.date = date;
+                            currentFeature.timeLocal = timeLocal;
+                            currentFeature.colorClass=quakeClasses(currentFeature.properties.mag);
+                            bebenAutArray.push(currentFeature);
+                            break;
+                        }
+                    }
+                }
+                return bebenAutArray;
+            }
+        };
+    })
+    .factory('QuakeReport', function ($http) {
+
+
+        return {
+            //Setzen der location mittels GPS
+            setGeoLocation: function (geoData) {
+
+            },
+            //Setzten der location mittels Postleitzahl
+            setZIPLocation: function (zipData) {
+            },
+            //Die Bebenintensitaet setzten
+            setQuakeIntensity: function (intensity) {
+
+            },
+            //Die Antworten der Zusatzfragen setzten
+            setExtraQuestionAnswers: function (extraQuestions) {
+
+            },
+
+            getEu: function(){
+                var euStates = ['Albania','Andorra','Armenia','Austria','Azerbaijan','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Cyprus','Czech Republic','Denmark','Estonia','Finland','France','Georgia','Germany','Greece','Hungary','Iceland','Ireland','Italy','Kazakhstan','Kosovo','Latvia','Liechtenstein','Lithuania','Luxembourg','Macedonia','Malta','Moldova','Monaco','Montenegro','Netherlands','Norway','Poland','Portugal','Romania','Russia','San Marino','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Turkey','Ukraine','United Kingdom','Vatican City (Holy See)'];
+                var bebenAutArray = [];
+                for (var i = 0; i < worldData.features.length; i++) {
+                    for(var o=0;o<euStates.length;o++){
+
+                        if(worldData.features[i].properties.flynn_region.indexOf(euStates[o].toUpperCase()) != -1){
                             var currentFeature = worldData.features[i];
                             var timeFull = currentFeature.properties.time;
                             var dateAndTime = timeFull.split("T");
