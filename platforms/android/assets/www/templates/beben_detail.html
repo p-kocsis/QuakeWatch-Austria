@@ -2,45 +2,43 @@
     <ion-content>
         <div class="row">
             <div class="col col-25 col-bottom">
-                <h1 class="text-center">{{mag}}</h1>
+                <h1 class="text-center">{{quake.magnitude}}</h1>
             </div>
             <div class="col">
-                {{date}} <br>
-                {{time}}<br>
-                <p class="bold">{{flynn_region}}</p>
+                <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'LL'}}</span> <br>
+                <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'HH:mm:ss'}}</span>
+                {{quake.quakeTimeAtPhoneLoc}} <br>
+                <p class="bold">{{quake.country}}</p>
             </div>
 
         </div>
-
         <div class="row">
             <div class="col col-top">
                 <hr>
-                vor 23 Minuten
+                <span am-time-ago="quake.dateAndTime"></span>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <p class="bold"> Standort: </p>{{lon}} Longitude {{lat}} Latitude
-            </div>
-
         </div>
         <div class="row">
             <div class="col">
-                <p class="bold"> Lokalzeit am Ort des Erdbebens: </p>{{time}}
+                <p class="bold"> Standort: </p>{{quake.locLon}} Longitude {{quake.locLat}} Latitude
             </div>
 
         </div>
         <div class="row">
             <div class="col">
-                <p class="bold">Entfernung des Handy Standortes vom Beben : </p> 10 km
+                <p class="bold"> Lokalzeit am Ort des Erdbebens: </p><span>{{quake.dateAndTime | amUtc | amDateFormat:'LL HH:mm:ss'}} UTC</span><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p class="bold">Entfernung des Handy Standortes vom Beben : </p> {{quake.distanceFromPhoneToQuake}}
             </div>
         </div>
     </ion-content>
     <ion-footer-bar></ion-footer-bar>
     <div class="bar bar-footer bar-assertive footer-button">
         <a class="button button-full button-clear" ng-click="beben_verspuert()">
-            Habe Beben dieses Verspürt
+            Habe dieses Beben Verspürt
         </a>
     </div>
 </ion-view>

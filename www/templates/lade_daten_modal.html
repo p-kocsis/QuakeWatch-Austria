@@ -13,7 +13,7 @@
                 <h3 class="light">Wann?</h3>
                 <div class="row row-center">
                     <div class="col">
-                        <a class="button button-outline button-light button-width-full">
+                        <a class="button button-outline button-light button-width-full" ng-click="getGeoLocation()">
                             Ja, gerade jetzt
                         </a>
                     </div>
@@ -23,15 +23,12 @@
                         <a class="button button-outline button-light button-width-full"  ng-click="vorMehrAls30Min()">
                             Vor mehr als 30 min
                         </a>
-                        <a class="button button-outline button-light button-width-full"  ng-click="getGeoLocation()">
-                            getgeoTEST
-                        </a>
                     </div>
                 </div>
             </ion-slide>
             <ion-slide class="padding">
                 <h3 class="light">Eines dieser Erdbeben?</h3>
-                <a class="button button-outline button-light button-width-full"  ng-click="goToComics()" ng-repeat="beben in letzteBeben">
+                <a class="button button-outline button-light button-width-full"  ng-click="getGeoLocationWithId({{beben.id}})" ng-repeat="beben in letzteBeben">
                     {{beben.date}}
                 </a>
                 <a class="button button-outline button-light button-width-full"  ng-click="anderesBeben()">

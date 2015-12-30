@@ -46,6 +46,7 @@
 		A4B730FB4FD64B60A8F7B861 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 640448149D134D80B91449D8 /* CDVStatusBar.m */; };
 		5D4CAE6D2B48472B9EF8E691 /* IonicKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CCAAEBE0C9E495995FD204C /* IonicKeyboard.m */; };
 		4FFAD9D82C1D465CAFFFBCDA /* UIWebViewExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 491BA8A68BE74E09B0C8A456 /* UIWebViewExtension.m */; };
+		8E6EF8DDF3944267BE765921 /* CDVGlobalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 33691D399B2746DDB3C3C8D1 /* CDVGlobalization.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +126,8 @@
 		491BA8A68BE74E09B0C8A456 /* UIWebViewExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIWebViewExtension.m"; path = "ionic-plugin-keyboard/UIWebViewExtension.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		02EDB7D1867A4983B29B9935 /* IonicKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "IonicKeyboard.h"; path = "ionic-plugin-keyboard/IonicKeyboard.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		5680B28127154D17A1EE7BDC /* UIWebViewExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIWebViewExtension.h"; path = "ionic-plugin-keyboard/UIWebViewExtension.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		33691D399B2746DDB3C3C8D1 /* CDVGlobalization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVGlobalization.m"; path = "cordova-plugin-globalization/CDVGlobalization.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		D378C3BE9D2843B1B35CBF5D /* CDVGlobalization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVGlobalization.h"; path = "cordova-plugin-globalization/CDVGlobalization.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +240,8 @@
 				491BA8A68BE74E09B0C8A456 /* UIWebViewExtension.m */,
 				02EDB7D1867A4983B29B9935 /* IonicKeyboard.h */,
 				5680B28127154D17A1EE7BDC /* UIWebViewExtension.h */,
+				33691D399B2746DDB3C3C8D1 /* CDVGlobalization.m */,
+				D378C3BE9D2843B1B35CBF5D /* CDVGlobalization.h */,
 			);
 			name = Plugins;
 			path = "HelloCordova/Plugins";
@@ -428,6 +433,7 @@
 				A4B730FB4FD64B60A8F7B861 /* CDVStatusBar.m in Sources */,
 				5D4CAE6D2B48472B9EF8E691 /* IonicKeyboard.m in Sources */,
 				4FFAD9D82C1D465CAFFFBCDA /* UIWebViewExtension.m in Sources */,
+				8E6EF8DDF3944267BE765921 /* CDVGlobalization.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
