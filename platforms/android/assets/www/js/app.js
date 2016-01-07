@@ -5,7 +5,6 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','ngCordova','angularMoment'])
-
     .run(function ($ionicPlatform,amMoment) {
         $ionicPlatform.ready(function () {
             //Zum anzeigen der Vergangenen Zeit in deutsch(beben_detail)
@@ -37,7 +36,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
                     AustrianDataResolved: function (JsonData) {
                         return JsonData.AutPromise;
                     }
-
                 },
                 views: {
                     'menuContent': {
@@ -48,7 +46,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
 
             })
             .state('app.bebenDetail', {
-                url: '/bebenDetail/:bebenId/:bebenRegion',
+                url: '/bebenDetail/:bebenId',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/beben_detail.html',

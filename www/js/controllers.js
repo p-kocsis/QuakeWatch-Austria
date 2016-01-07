@@ -7,35 +7,28 @@ angular.module('starter.controllers', ['starter.resources'])
     //Home Controller
     .controller('HomeCtrl', function ($scope, $ionicModal, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,DataGeoWebZAMG) {
         var location="";
-
         $scope.quakeAut = function () {
             $scope.quakeList = JsonData.getAut();
             location="aut";
         };
-
         $scope.quakeAut();
-
         $scope.quakeWorld = function () {
             $scope.quakeList = JsonData.getWorld();
             location="world";
         };
-
         $scope.quakeEu = function () {
             $scope.quakeList = JsonData.getEu();
             location="eu";
         };
-
         $scope.loadMoreData = function (){
             JsonData.getMoreData(location).then(function (bebenAutArray) {
                 $scope.quakeList = $scope.quakeList.concat(bebenAutArray);
                $scope.$broadcast('scroll.infiniteScrollComplete');
             });
         };
-
         $scope.$on('$stateChangeSuccess', function() {
             $scope.loadMoreData();
         });
-
 
         //START BEBEN REPORT MODAL UND SEINE FUNKTIONEN
         $ionicModal.fromTemplateUrl('templates/lade_daten_modal.html', {
@@ -58,14 +51,10 @@ angular.module('starter.controllers', ['starter.resources'])
             $scope.selectModalSlider.slide(0);
             $scope.selectModal.show();
         };
-
-
-
-
         //Wird beim betaetigen von Button vor mehr al 30 Minuten aktiviert
         $scope.vorMehrAls30Min = function () {
             $ionicSlideBoxDelegate.$getByHandle('modalSlider').next();
-            //@TODO ERDBEBEN LETZTE ERDBEBEN LADEN
+            //@TODO LETZTE ERDBEBEN LADEN
             //Jetzt noch sample data
             bebenObject = {
                 date: "Dezember 1",
@@ -137,6 +126,10 @@ angular.module('starter.controllers', ['starter.resources'])
                 "Feine Risse im Verputz? ja/nein",
                 "Bitte beschreiben Sie Ihre Wahrnehmung und eventuelle Schäden"
             ]
+        };
+        $scope.goTo = function () {
+            $state.go('app.bebenZusatzfragen');
+
         };
     })
     .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation) {

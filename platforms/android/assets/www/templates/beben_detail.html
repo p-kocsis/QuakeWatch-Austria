@@ -7,7 +7,6 @@
             <div class="col">
                 <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'LL'}}</span> <br>
                 <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'HH:mm:ss'}}</span>
-                {{quake.quakeTimeAtPhoneLoc}} <br>
                 <p class="bold">{{quake.country}}</p>
             </div>
 
@@ -26,7 +25,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <p class="bold"> Lokalzeit am Ort des Erdbebens: </p><span>{{quake.dateAndTime | amUtc | amDateFormat:'LL HH:mm:ss'}} UTC</span><br>
+                <p class="bold"> Lokalzeit am Ort des Erdbebens: </p><span>{{quake.ldate}} {{quake.ltime}} {{quake.ltz}}</span><br>
             </div>
         </div>
         <div class="row">

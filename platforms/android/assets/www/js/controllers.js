@@ -5,22 +5,30 @@ angular.module('starter.controllers', ['starter.resources'])
 
     })
     //Home Controller
-    .controller('HomeCtrl', function ($scope, $ionicModal, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation) {
-
+    .controller('HomeCtrl', function ($scope, $ionicModal, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,DataGeoWebZAMG) {
+        var location="";
         $scope.quakeAut = function () {
             $scope.quakeList = JsonData.getAut();
+            location="aut";
         };
-
         $scope.quakeAut();
-
-        $scope.bebenWorld = function () {
-            $scope.bebenliste = JsonData.getWorld();
+        $scope.quakeWorld = function () {
+            $scope.quakeList = JsonData.getWorld();
+            location="world";
         };
-
-        $scope.bebenEu = function () {
-            $scope.bebenliste = JsonData.getEu();
+        $scope.quakeEu = function () {
+            $scope.quakeList = JsonData.getEu();
+            location="eu";
         };
-
+        $scope.loadMoreData = function (){
+            JsonData.getMoreData(location).then(function (bebenAutArray) {
+                $scope.quakeList = $scope.quakeList.concat(bebenAutArray);
+               $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+        };
+        $scope.$on('$stateChangeSuccess', function() {
+            $scope.loadMoreData();
+        });
 
         //START BEBEN REPORT MODAL UND SEINE FUNKTIONEN
         $ionicModal.fromTemplateUrl('templates/lade_daten_modal.html', {
@@ -43,7 +51,6 @@ angular.module('starter.controllers', ['starter.resources'])
             $scope.selectModalSlider.slide(0);
             $scope.selectModal.show();
         };
-
         //Wird beim betaetigen von Button vor mehr al 30 Minuten aktiviert
         $scope.vorMehrAls30Min = function () {
             $ionicSlideBoxDelegate.$getByHandle('modalSlider').next();
@@ -110,6 +117,15 @@ angular.module('starter.controllers', ['starter.resources'])
     })
     .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, JsonData) {
         //@TODO Object zurückgeben mit fragen und input typ (bild text)
+        zusatzfragen = {
+            fragen:[
+                "In welchem Stock befanden Sie sich? 	0 – 1 – 2 – 3 – 4 oder höher",
+                "Sind Gegenstände umgefallen? ja/nein",
+                "Sind Sie aus Angst ins Freie geflüchtet? ja/nein",
+                "Feine Risse im Verputz? ja/nein",
+                "Bitte beschreiben Sie Ihre Wahrnehmung und eventuelle Schäden"
+            ]
+        };
     })
     .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation) {
 
@@ -122,12 +138,8 @@ angular.module('starter.controllers', ['starter.resources'])
             var fullResult = 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
             return Math.round(fullResult * 100) / 100;
         }
-
-        if ($stateParams.bebenRegion === 'AUSTRIA') {
-            $scope.quake = JsonData.getQuakefromId($stateParams.bebenId);
-        } else {
-            $scope.quake = JsonData.getQuakefromIdWorld($stateParams.bebenId);
-        }
+        console.log($stateParams.bebenId);
+        $scope.quake = JsonData.getQuakefromIdWorld($stateParams.bebenId);
 
 
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -171,7 +183,6 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.$on('modal.shown', function () {
             $scope.bebenmodal.hide();
         });
-
         $scope.goToComics = function () {
             $state.go('app.bebenWahrnehmung');
         }

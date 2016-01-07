@@ -1,4 +1,8 @@
 angular.module('starter.resources', ['ngResource'])
+    .constant('ApiEndpointZAMG', {
+        url: 'http://localhost:8100/apiZAMG'
+    })
+
     /*
         To change the API you must include your API(AngularJS Factory) in the function parameters
         Initialize restEndpoint with your API(AngularJS Factory)
@@ -171,7 +175,7 @@ angular.module('starter.resources', ['ngResource'])
         };
     })
 
-    .factory('DataGeoWebZAMG', function ($http,$ionicLoading) {
+    .factory('DataGeoWebZAMG', function ($http,$ionicLoading,ApiEndpointZAMG) {
         //http://geoweb.zamg.ac.at/fdsnws/app/1/query?orderby=time;location=austria;limit=10
         var atData = null;
         var atDataWithObjects = null;
@@ -187,18 +191,18 @@ angular.module('starter.resources', ['ngResource'])
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner><br/>Lade Erdbebendaten'
         });
-        var AutPromise = $http.get('/apiZAMG/query?orderby=time;location=austria;limit=10').success(function (data) {
+        var AutPromise = $http.get(ApiEndpointZAMG.url+'/query?orderby=time;location=austria;limit=10').success(function (data) {
             $ionicLoading.hide();
             atData = data;
         });
         //Abfrage der aller Erdbeben
         var getWorldData = function() {
-            $http.get('/apiZAMG/query?orderby=time;location=welt;limit=10').success(function (data) {
+            $http.get(ApiEndpointZAMG.url+'/query?orderby=time;location=welt;limit=10').success(function (data) {
                 worldData = data;
             });
         };
         var getEuData= function() {
-            $http.get('/apiZAMG/query?orderby=time;location=europa;limit=10').success(function (data) {
+            $http.get(ApiEndpointZAMG.url+'/query?orderby=time;location=europa;limit=10').success(function (data) {
                 euData = data;
             });
         };
@@ -235,6 +239,7 @@ angular.module('starter.resources', ['ngResource'])
                 feature.properties.tz
             );
         };
+
 
         return {
             AutPromise: AutPromise,
@@ -284,7 +289,7 @@ angular.module('starter.resources', ['ngResource'])
             getMoreData: function(location){
                 switch (location){
                     case "aut":
-                        return $http.get('/apiZAMG/query?endtime='+atLastDate+';orderby=time;limit=10;location=austria').then(function (response) {
+                        return $http.get(ApiEndpointZAMG.url+'/query?endtime='+atLastDate+';orderby=time;limit=10;location=austria').then(function (response) {
                             var bebenAutArray = [];
                             data= response.data;
                             for (var i = 0; i < data.features.length; i++) {
@@ -299,7 +304,7 @@ angular.module('starter.resources', ['ngResource'])
                         });
                         break;
                     case "world":
-                        return $http.get('/apiZAMG/query?endtime='+worldLastDate+';orderby=time;limit=10;location=welt').then(function (response) {
+                        return $http.get(ApiEndpointZAMG.url+'/query?endtime='+worldLastDate+';orderby=time;limit=10;location=welt').then(function (response) {
                             var bebenAutArray = [];
                             data= response.data;
                             for (var i = 0; i < data.features.length; i++) {
@@ -314,7 +319,7 @@ angular.module('starter.resources', ['ngResource'])
                         });
                         break;
                     case "eu":
-                        return $http.get('/apiZAMG/query?endtime='+euLastDate+';orderby=time;limit=10;location=europa').then(function (response) {
+                        return $http.get(ApiEndpointZAMG.url+'/query?endtime='+euLastDate+';orderby=time;limit=10;location=europa').then(function (response) {
                             var bebenAutArray = [];
                             data= response.data;
                             for (var i = 0; i < data.features.length; i++) {

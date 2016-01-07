@@ -6,10 +6,22 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
-
+var replace = require('gulp-replace');
 var paths = {
   sass: ['./scss/**/*.scss']
 };
+
+gulp.task('add-proxy', function(){
+  gulp.src(['/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/resources.js'])
+    .pipe(replace('http://geoweb.zamg.ac.at/fdsnws/app/1','http://localhost:8100/apiZAMG'))
+    .pipe(gulp.dest('/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/'));
+});
+ 
+gulp.task('remove-proxy', function(){
+  gulp.src(['/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/resources.js'])
+    .pipe(replace('http://localhost:8100/apiZAMG', 'http://geoweb.zamg.ac.at/fdsnws/app/1'))
+    .pipe(gulp.dest('/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/'));
+});
 
 gulp.task('default', ['sass']);
 
@@ -46,6 +58,10 @@ gulp.task('git-check', function(done) {
       '\n  Once git is installed, run \'' + gutil.colors.cyan('gulp install') + '\' again.'
     );
     process.exit(1);
-  }
-  done();
-});
+    done();
+  }});
+  
+ 
+  
+  
+

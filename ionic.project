@@ -13,7 +13,9 @@
   ],
   "gulpStartupTasks": [
     "sass",
+	"add-proxy",
     "watch"
+
   ],
   "watchPatterns": [
     "www/**/*",

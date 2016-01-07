@@ -4,10 +4,11 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','ngCordova'])
-
-    .run(function ($ionicPlatform) {
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','ngCordova','angularMoment'])
+    .run(function ($ionicPlatform,amMoment) {
         $ionicPlatform.ready(function () {
+            //Zum anzeigen der Vergangenen Zeit in deutsch(beben_detail)
+            amMoment.changeLocale('de-at');
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
             if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -35,7 +36,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
                     AustrianDataResolved: function (JsonData) {
                         return JsonData.AutPromise;
                     }
-
                 },
                 views: {
                     'menuContent': {
@@ -46,7 +46,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
 
             })
             .state('app.bebenDetail', {
-                url: '/bebenDetail/:bebenId/:bebenRegion',
+                url: '/bebenDetail/:bebenId',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/beben_detail.html',
