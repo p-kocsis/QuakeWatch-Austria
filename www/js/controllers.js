@@ -122,11 +122,12 @@ angular.module('starter.controllers', ['starter.resources'])
         };
         //END MODAL
     })
-    .controller('BebenWahrnehmungCtrl', function ($scope, $ionicModal, JsonData) {
-
-
+    .controller('BebenWahrnehmungCtrl', function ($scope, $ionicModal, $state, JsonData) {
+		$scope.continueToAdditional = function() {
+			$state.go('app.bebenZusatzfragen');
+		};
     })
-    .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, JsonData) {
+    .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, $state, JsonData) {
         //@TODO Object zurückgeben mit fragen und input typ (bild text)
         zusatzfragen = {
             fragen:[
