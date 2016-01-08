@@ -5,12 +5,19 @@ angular.module('starter.controllers', ['starter.resources'])
 
     })
     //Home Controller
-    .controller('HomeCtrl', function ($scope, $ionicModal, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,DataGeoWebZAMG) {
+    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,DataGeoWebZAMG) {
         var location="";
         $scope.quakeAut = function () {
             $scope.quakeList = JsonData.getAut();
             location="aut";
         };
+		
+		//Blaaaaaas mir
+		$scope.getHeightForDiv = function () {
+            return 50;//($window.innerHeight/100);
+        };
+		//Ende blaaaaas mir
+		
         $scope.quakeAut();
         $scope.quakeWorld = function () {
             $scope.quakeList = JsonData.getWorld();
@@ -47,7 +54,7 @@ angular.module('starter.controllers', ['starter.resources'])
                 $scope.selectModalSlider.previous();
         };
 
-        $scope.openSelectModal = function () {
+        $scope.openSelectModal = function () {			
             $scope.selectModalSlider.slide(0);
             $scope.selectModal.show();
         };
