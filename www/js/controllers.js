@@ -123,6 +123,16 @@ angular.module('starter.controllers', ['starter.resources'])
 			$state.go('app.bebenZusatzfragen');
 		};
     })
+	.controller('ZusatzVerhaltenCtrl', function ($scope, $location, $anchorScroll, $ionicScrollDelegate) {
+		$scope.scrollTop = function() {
+			$ionicScrollDelegate.scrollTop(true);
+		};
+		$scope.scrollToAnchor = function(anchorID) {
+			$location.hash(anchorID);
+			var handle = $ionicScrollDelegate.$getByHandle('content');
+			handle.anchorScroll(true);
+		};
+    })
     .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, $state, JsonData) {
         //@TODO Object zurückgeben mit fragen und input typ (bild text)
         zusatzfragen = {

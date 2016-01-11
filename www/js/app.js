@@ -72,6 +72,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
                     }
                 }
             })
+			.state('app.zusatzVerhalten', {
+                url: '/zusatzVerhalten',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/zusatz_verhalten_erdbeben.html',
+                        controller: 'ZusatzVerhaltenCtrl'
+                    }
+                }
+            })
             .state('app.bebenEintrag', {
                 url: '/bebenEintrag',
                 views: {
