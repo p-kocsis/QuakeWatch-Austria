@@ -5,7 +5,8 @@ angular.module('starter.controllers', ['starter.resources'])
 
     })
     //Home Controller
-    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,DataGeoWebZAMG) {
+    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,$window) {
+
         var location="";
         $scope.quakeAut = function () {
             $scope.quakeList = JsonData.getAut();
@@ -57,7 +58,24 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.openSelectModal = function () {			
             $scope.selectModalSlider.slide(0);
             $scope.selectModal.show();
+            /*
+            var modalHeight = document.getElementById("headerBar").offsetHeight+document.getElementById("slide2").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*3;
+            console.log(document.getElementById("headerBar").offsetHeight);//+document.getElementById("slide2").offsetHeight);
+            console.log(document.getElementById("slide2").offsetHeight);
+            console.log(document.getElementById("header2").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*2 );
+            console.log(document.getElementById("header2").offsetHeight);
+            console.log(document.getElementById("buttonAnderesBeben").offsetHeight);
+            var modalHeight2 = document.getElementById("header2").offsetHeight+document.getElementById("headerBar").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*4;
+            console.log(modalHeight2);
+            console.log(modalHeight);
+            document.getElementById("modalHome").style.top=$window.innerHeight-modalHeight+"px";
+             */
+            document.getElementById("modalHome").style.top=$window.innerHeight-290+"px";
         };
+
+
+
+
         //Wird beim betaetigen von Button vor mehr al 30 Minuten aktiviert
         $scope.vorMehrAls30Min = function () {
             $ionicSlideBoxDelegate.$getByHandle('modalSlider').next();
@@ -71,11 +89,14 @@ angular.module('starter.controllers', ['starter.resources'])
                 date: "Dezember 2",
                 id: "2"
             };
+
             bebenObject3 = {
                 date: "Dezember 3",
                 id: "3"
             };
+
             $scope.letzteBeben = [bebenObject, bebenObject2, bebenObject3];
+            //$scope.letzteBeben = [bebenObject, bebenObject2];
         };
         //Routing fuer den Button anderes Beben
         $scope.anderesBeben = function () {
