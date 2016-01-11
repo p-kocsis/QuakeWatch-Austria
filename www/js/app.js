@@ -81,6 +81,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
                     }
                 }
             })
+			.state('app.zusatzUebersicht', {
+                url: '/zusatzUebersicht',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/zusatz_uebersicht.html',
+                        controller: 'ZusatzUebersichtCtrl'
+                    }
+                }
+            })
             .state('app.bebenEintrag', {
                 url: '/bebenEintrag',
                 views: {
