@@ -128,8 +128,8 @@ angular.module('starter.controllers', ['starter.resources'])
 			$ionicScrollDelegate.scrollTop(true);
 		};
 		$scope.scrollToAnchor = function(anchorID) {
-			$location.hash(anchorID);
-			var handle = $ionicScrollDelegate.$getByHandle('content');
+			//$location.hash(anchorID);
+			var handle = $ionicScrollDelegate.$getByHandle(anchorID);
 			handle.anchorScroll(true);
 		};
     })
