@@ -1,5 +1,5 @@
 <ion-view view-title="Verhaltensratgeber">
-    <ion-content delegate-handle="content">
+    <ion-content delegate-handle="verhaltenContent" overflow-scroll=true>
 	
 	<!-- Inhaltsverzeichniss mit Links -->
         <div class="list">
@@ -7,14 +7,13 @@
 				&Ouml;sterreich
 			</div>
 			<a class="item" ng-click="scrollToAnchor('aut_before')">Vor einem Erdbeben in &Ouml;sterreich</a>
-			<a class="item" href="#">W&auml;hrend eines Erdbebens in &Ouml;sterreich</a>
-			<a class="item" href="#">Nach einem starken Erdbeben in &Ouml;sterreich</a>
+			<a class="item" ng-click="scrollToAnchor('aut_while')">W&auml;hrend eines Erdbebens in &Ouml;sterreich</a>
+			<a class="item" ng-click="scrollToAnchor('aut_after')">Nach einem starken Erdbeben in &Ouml;sterreich</a>
 			<div class="item item-divider">
 				Im Ausland
 			</div>
-			<a class="item" href="#">Erdbeben</a>
-			<a class="item" href="#">Tsunami</a>
-			<a class="item" href="#">Was kann man vorher tun?</a>
+			<a class="item" ng-click="scrollToAnchor('foreign_earthquake')">Erdbeben</a>
+			<a class="item" ng-click="scrollToAnchor('foreign_tsunami')">Tsunami</a>
 		</div>
 		<div style="padding: 10px;">
 		<br>
@@ -27,15 +26,13 @@
 		diesen Regionen wichtig, sich die folgenden Punkte vor Augen zu halten, um eventuelle Sch&auml;den 
 		durch Erdbeben zu verringern. Aus diesem Grund erstellte der &Ouml;sterreichische Erdbebendienst f&uuml;r 
 		Sie diesen n&uuml;tzlichen Verhaltensratgeber im Falle eine Erdbebens.
-		<div delegate-handle="aut_before">
-			<br><br><h4>Vor einem Erdbeben in &Ouml;sterreich</h4>
+		<br><br><h4 delegate-handle='aut_before'>Vor einem Erdbeben in &Ouml;sterreich</h4>
 		<ul class="list">
 		<li>&bull; Die Baunorm <b>&Ouml;NORM EN 1998-1</b> beachten. Das Haus gut instand halten, vor allem stets f&uuml;r einen guten Bauzustand von Schornsteinen, Balustraden, Dachrinnen und dergleichen sorgen.</li><br>
 		<li>&bull; In der Wohnung <b>schwere M&ouml;bel</b> in der Wand gut verankern. Warmwasserspeicher gut befestigen. &Uuml;ber den Betten keine <b>schweren Bilder</b> oder <b>Regale</b> aufh&auml;ngen.</li><br>
 		<li>&bull; <b>Sichere Pl&auml;tze</b> in der Wohnung festlegen. Im Allgemeinen sind diese Pl&auml;tze in der N&auml;he von tragenden W&auml;nden im Inneren des Geb&auml;udes, unter T&uuml;rst&ouml;cken, allenfalls auch unter einem stabilen Tisch (Schutz vor herabfallenden Deckenteilen).</li><br>
 		<li>&bull; Sich mit der <b>Umgebung</b> vertraut machen. Die Lage des Hauptschalters f&uuml;r den elektrischen Strom und der Absperrventile f&uuml;r Gas und Wasser einpr&auml;gen. Auch die Nachbarn dar&uuml;ber informieren.</li><br>
 		</ul>
-		</div>
 		<h4 id="aut_while">W&auml;hrend eines Erdbebens in &Ouml;sterreich</h4>
 		<ul class="list">
 		<li>&bull; <b>Im Haus</b> weilende Personen sollen die schon fr&uuml;her ausgew&auml;hlten Pl&auml;tze aufsuchen und das Ende des Erdbebens abwarten. Die N&auml;he von Fenstern meiden. Nicht ins Freie laufen.</li><br>
@@ -70,7 +67,7 @@
 		Sehr starke Erdbeben, die mehrere Minuten andauern k&ouml;nnen, kommen an der Westk&uuml;ste von S&uuml;damerika, Mittelamerika, Kalifornien, 
 		Westk&uuml;ste von Kanada, Alaska, Japan, Philippinen, Neuseeland und Indonesien vor. Diese Erdbeben k&ouml;nnen auch Tsunamis verursachen.</p>
 		
-		<br><h4 id="foreign_earthquake">Tsunami</h4>
+		<br><h4 id="foreign_tsunami">Tsunami</h4>
 		<p>Je gr&ouml;&szlig;er die Magnitude eines Erdbebens, desto wahrscheinlicher l&ouml;st dieses Erdbeben auch einen Tsunami aus. Der Grund hierf&uuml;r 
 		ist das Ausma&szlig; der vertikalen Bodenverschiebung infolge eines Erdbebens, dessen Epizentrum sich auf dem Meer befindet. Je st&auml;rker 
 		das Erdbeben, desto st&auml;rker auch die vertikale Bodenverschiebung und der daraus resultierende Tsunami. Davon sind vor allem die K&uuml;sten 
