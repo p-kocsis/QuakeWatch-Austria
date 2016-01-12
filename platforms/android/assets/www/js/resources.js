@@ -1,6 +1,6 @@
 angular.module('starter.resources', ['ngResource'])
     .constant('ApiEndpointZAMG', {
-        url: 'http://localhost:8100/apiZAMG'
+        url: 'http://geoweb.zamg.ac.at/fdsnws/app/1'
     })
 
     /*
@@ -176,7 +176,7 @@ angular.module('starter.resources', ['ngResource'])
     })
 
     .factory('DataGeoWebZAMG', function ($http,$ionicLoading,ApiEndpointZAMG) {
-        //http://localhost:8100/apiZAMG/query?orderby=time;location=austria;limit=10
+        //http://geoweb.zamg.ac.at/fdsnws/app/1/query?orderby=time;location=austria;limit=10
         var atData = null;
         var atDataWithObjects = null;
         var atLastDate=null;
