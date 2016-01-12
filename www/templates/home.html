@@ -1,36 +1,55 @@
 <ion-view view-title="QuakeWatch">
-    <ion-header-bar class="bar-subheader bar-assertive">
-        <div class="button-bar">
-            <a class="button button-clear light" ng-click="quakeAut()">Österreich</a>
-            <a class="button button-clear light" ng-click="quakeEu()">EU</a>
-            <a class="button button-clear light" ng-click="quakeWorld()">Welt</a>
-        </div>
-    </ion-header-bar>
-    <ion-content>
-        <ion-list>
-            <ion-item class="item {{quake.classColor}} row-no-padding" collection-repeat="quake in quakeList" href="#/app/bebenDetail/{{quake.id}}" >
-                <div class="row">
-                    <div class="col col-25 col-bottom">
-                        <h1 class="whiteButton text-leftt">{{quake.magnitude}}</h1>
-                    </div>
-                    <div class="col text-left">
-                        <span>{{quake.dateAndTime| amUtc | amLocal | amDateFormat:'LLL'}}</span><br>
-                        <p class="bold">{{quake.country}}</p>
-                    </div>
-                </div>
-            </ion-item>
+    <div ng-if="isOnline">
+        <ion-header-bar class="bar-subheader bar-assertive">
+            <div class="button-bar">
+                <a class="button button-clear light" ng-click="quakeAut()">Österreich</a>
+                <a class="button button-clear light" ng-click="quakeEu()">EU</a>
+                <a class="button button-clear light" ng-click="quakeWorld()">Welt</a>
+            </div>
+        </ion-header-bar>
 
-        </ion-list>
-        <ion-infinite-scroll
-                on-infinite="loadMoreData()"
-                distance="1%">
-        </ion-infinite-scroll>
+    <ion-content>
+            <ion-list>
+                <ion-item class="item {{quake.classColor}} row-no-padding" collection-repeat="quake in quakeList"
+                          href="#/app/bebenDetail/{{quake.id}}">
+                    <div class="row">
+                        <div class="col col-25 col-bottom">
+                            <h1 class="whiteButton text-leftt">{{quake.magnitude}}</h1>
+                        </div>
+                        <div class="col text-left">
+                            <span>{{quake.dateAndTime| amUtc | amLocal | amDateFormat:'LLL'}}</span><br>
+
+                            <p class="bold">{{quake.country}}</p>
+                        </div>
+                    </div>
+                </ion-item>
+
+            </ion-list>
+            <ion-infinite-scroll
+                    on-infinite="loadMoreData()"
+                    distance="1%">
+            </ion-infinite-scroll>
     </ion-content>
     <ion-footer-bar></ion-footer-bar>
-    <div class="bar bar-footer bar-assertive footer-button">
-        <a class="button button-full button-clear" ng-click="openSelectModal()">
-            Habe Beben Verspürt
-        </a>
+        <div class="bar bar-footer bar-assertive footer-button">
+            <a class="button button-full button-clear" ng-click="openSelectModal()">
+                Habe Beben Verspürt
+            </a>
+        </div>
+    </div>
+    <div ng-if="isOnline == false">
+        <ion-content style="background-color: #f2f2f2" class="padding">
+            <h3>Sie befinden sich im Offline Modus </h3>
+            <p>Es stehen Ihnen allerdings noch interessante Informationen über Erdbeben zur Verfügung (Navigation über das Menü) </p>
+
+            <ion-list>
+                <ion-item menu-close href="#/app/zusatzUebersicht">
+                    Erdbeben - &Uuml;bersicht
+                </ion-item>
+                <ion-item menu-close href="#/app/zusatzVerhalten">
+                    Erdbeben - Eigenes Verhalten
+                </ion-item>
+            </ion-list>
+        </ion-content>
     </div>
 </ion-view>
-øøø

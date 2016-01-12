@@ -9,7 +9,14 @@ angular.module('starter.resources', ['ngResource'])
      */
     .factory('JsonData', function ($http,$ionicLoading,DataSeismicPortal,DataGeoWebZAMG) {
         var restEndpoint=DataGeoWebZAMG;
+        var isOnline=null;
         return {
+            setOnline: function (online){
+                isOnline= online;
+            },
+            isOnline: function () {
+                return isOnline;
+            },
             AutPromise: restEndpoint.AutPromise,
             //Oesterrechische Erdbeben Daten abfragen
             //return: Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
@@ -175,7 +182,7 @@ angular.module('starter.resources', ['ngResource'])
         };
     })
 
-    .factory('DataGeoWebZAMG', function ($http,$ionicLoading,ApiEndpointZAMG) {
+    .factory('DataGeoWebZAMG', function ($http,$ionicLoading,ApiEndpointZAMG,$templateCache) {
         //http://localhost:8100/apiZAMG/query?orderby=time;location=austria;limit=10
         var atData = null;
         var atDataWithObjects = null;
@@ -187,14 +194,28 @@ angular.module('starter.resources', ['ngResource'])
         var euDataWithObjects = null;
         var euLastDate = null;
         var somedata=null;
+        var isOnline=null;
 
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner><br/>Lade Erdbebendaten'
         });
+
+        var AutPromise = $http({method: "GET", url: ApiEndpointZAMG.url+'/query?orderby=time;location=austria;limit=10', cache: $templateCache}).
+        then(function(response) {
+            $ionicLoading.hide();
+            atData = response.data;
+            return true;
+        }, function(response) {
+            $ionicLoading.hide();
+            return false;
+        });
+
+        /*
         var AutPromise = $http.get(ApiEndpointZAMG.url+'/query?orderby=time;location=austria;limit=10').success(function (data) {
             $ionicLoading.hide();
             atData = data;
         });
+        */
         //Abfrage der aller Erdbeben
         var getWorldData = function() {
             $http.get(ApiEndpointZAMG.url+'/query?orderby=time;location=welt;limit=10').success(function (data) {
@@ -367,6 +388,7 @@ angular.module('starter.resources', ['ngResource'])
 
     //Factory zum Senden der erstellten Erdbeben
     .factory('QuakeReport', function ($http) {
+
         return {
             //Setzen der location mittels GPS
             setGeoLocation: function (geoData) {

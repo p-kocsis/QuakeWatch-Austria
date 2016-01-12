@@ -34,7 +34,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
                 url: '/home',
                 resolve: {
                     AustrianDataResolved: function (JsonData) {
-                        return JsonData.AutPromise;
+                        var autData = JsonData.AutPromise;
+                        autData.then(function(result) {
+                            JsonData.setOnline(result);
+                            console.log(result);
+                            console.log(JsonData.isOnline());
+                        });
+                        return autData;
                     }
                 },
                 views: {
