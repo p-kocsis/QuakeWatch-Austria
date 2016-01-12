@@ -81,6 +81,9 @@ angular.module('starter.controllers', ['starter.resources'])
             $ionicSlideBoxDelegate.$getByHandle('modalSlider').next();
             //@TODO LETZTE ERDBEBEN LADEN
             //Jetzt noch sample data
+
+            var beben = JsonData.getAut();
+            /*
             bebenObject = {
                 date: "Dezember 1",
                 id: "1"
@@ -94,7 +97,10 @@ angular.module('starter.controllers', ['starter.resources'])
                 date: "Dezember 3",
                 id: "3"
             };
-
+            */
+            var bebenObject=beben[0];
+            var bebenObject2=beben[1];
+            var bebenObject3=beben[2];
             $scope.letzteBeben = [bebenObject, bebenObject2, bebenObject3];
             //$scope.letzteBeben = [bebenObject, bebenObject2];
         };

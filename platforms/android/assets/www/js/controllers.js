@@ -5,12 +5,20 @@ angular.module('starter.controllers', ['starter.resources'])
 
     })
     //Home Controller
-    .controller('HomeCtrl', function ($scope, $ionicModal, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,DataGeoWebZAMG) {
+    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,$window) {
+
         var location="";
         $scope.quakeAut = function () {
             $scope.quakeList = JsonData.getAut();
             location="aut";
         };
+		
+		//Blaaaaaas mir
+		$scope.getHeightForDiv = function () {
+            return 50;//($window.innerHeight/100);
+        };
+		//Ende blaaaaas mir
+		
         $scope.quakeAut();
         $scope.quakeWorld = function () {
             $scope.quakeList = JsonData.getWorld();
@@ -47,15 +55,35 @@ angular.module('starter.controllers', ['starter.resources'])
                 $scope.selectModalSlider.previous();
         };
 
-        $scope.openSelectModal = function () {
+        $scope.openSelectModal = function () {			
             $scope.selectModalSlider.slide(0);
             $scope.selectModal.show();
+            /*
+            var modalHeight = document.getElementById("headerBar").offsetHeight+document.getElementById("slide2").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*3;
+            console.log(document.getElementById("headerBar").offsetHeight);//+document.getElementById("slide2").offsetHeight);
+            console.log(document.getElementById("slide2").offsetHeight);
+            console.log(document.getElementById("header2").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*2 );
+            console.log(document.getElementById("header2").offsetHeight);
+            console.log(document.getElementById("buttonAnderesBeben").offsetHeight);
+            var modalHeight2 = document.getElementById("header2").offsetHeight+document.getElementById("headerBar").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*4;
+            console.log(modalHeight2);
+            console.log(modalHeight);
+            document.getElementById("modalHome").style.top=$window.innerHeight-modalHeight+"px";
+             */
+            document.getElementById("modalHome").style.top=$window.innerHeight-290+"px";
         };
+
+
+
+
         //Wird beim betaetigen von Button vor mehr al 30 Minuten aktiviert
         $scope.vorMehrAls30Min = function () {
             $ionicSlideBoxDelegate.$getByHandle('modalSlider').next();
-            //@TODO ERDBEBEN LETZTE ERDBEBEN LADEN
+            //@TODO LETZTE ERDBEBEN LADEN
             //Jetzt noch sample data
+
+            var beben = JsonData.getAut();
+            /*
             bebenObject = {
                 date: "Dezember 1",
                 id: "1"
@@ -64,11 +92,17 @@ angular.module('starter.controllers', ['starter.resources'])
                 date: "Dezember 2",
                 id: "2"
             };
+
             bebenObject3 = {
                 date: "Dezember 3",
                 id: "3"
             };
+            */
+            var bebenObject=beben[0];
+            var bebenObject2=beben[1];
+            var bebenObject3=beben[2];
             $scope.letzteBeben = [bebenObject, bebenObject2, bebenObject3];
+            //$scope.letzteBeben = [bebenObject, bebenObject2];
         };
         //Routing fuer den Button anderes Beben
         $scope.anderesBeben = function () {
@@ -111,11 +145,25 @@ angular.module('starter.controllers', ['starter.resources'])
         };
         //END MODAL
     })
-    .controller('BebenWahrnehmungCtrl', function ($scope, $ionicModal, JsonData) {
-
-
+    .controller('BebenWahrnehmungCtrl', function ($scope, $ionicModal, $state, JsonData) {
+		$scope.continueToAdditional = function() {
+			$state.go('app.bebenZusatzfragen');
+		};
     })
-    .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, JsonData) {
+	.controller('ZusatzVerhaltenCtrl', function ($scope, $location, $anchorScroll, $ionicScrollDelegate) {
+		$scope.scrollTop = function() {
+			$ionicScrollDelegate.scrollTop(true);
+		};
+		$scope.scrollToAnchor = function(anchorID) {
+			$location.hash(anchorID);
+			var handle = $ionicScrollDelegate.$getByHandle('verhaltenContent');
+			handle.anchorScroll(true);
+		};
+    })
+	.controller('ZusatzUebersichtCtrl', function ($scope, $location, $anchorScroll, $ionicScrollDelegate) {
+		
+    })
+    .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, $state, JsonData) {
         //@TODO Object zurückgeben mit fragen und input typ (bild text)
         zusatzfragen = {
             fragen:[
@@ -125,6 +173,10 @@ angular.module('starter.controllers', ['starter.resources'])
                 "Feine Risse im Verputz? ja/nein",
                 "Bitte beschreiben Sie Ihre Wahrnehmung und eventuelle Schäden"
             ]
+        };
+        $scope.goTo = function () {
+            $state.go('app.bebenZusatzfragen');
+
         };
     })
     .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation) {

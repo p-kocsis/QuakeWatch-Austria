@@ -3,10 +3,7 @@
         <h1 class="title light">Erdbeben Verspürt?</h1>
         <a class="button button-clear whiteButton" ng-click="closeSelectModal()">Schließen</a>
     </ion-header-bar>
-
-	
     <ion-content class="has-header has-footer" >
-	
         <ion-slide-box delegate-handle="modalSlider" show-pager="false">
             <ion-slide class="padding" id="slide1">
                 <h3 class="light">Wann?</h3>
@@ -26,23 +23,14 @@
                 </div>
             </ion-slide>
             <ion-slide class="padding" id="slide2">
-                <!-- <ion-scroll zooming="false" direction="y" id="scroll" style="height: 150px"> <!--style="height: 100px"-->
 					<h3 id="header2" class="light">Eines dieser Erdbeben?</h3>
 					<a class="button button-outline button-light button-width-full"  ng-click="getGeoLocationWithId({{beben.id}})" ng-repeat="beben in letzteBeben">
-						{{beben.date}}
+						{{beben.ldate}} {{beben.ltime}}
 					</a>
                 <a class="button button-outline button-light button-width-full"  ng-click="anderesBeben()" id="buttonAnderesBeben">
                     Anderes Erdbeben
                 </a>
-                <!-- </ion-scroll> -->
-                <!--
-                DIESES SCHEIßDING WIRD NICHT AUSGEFUEHRT!!!eins!11elf!1
-                script language="javascript" type="text/javascript">
-                    var myElement = document.querySelector("#scroll");
-                    myElement.style.height = "100px";
-                </script-->
             </ion-slide>
         </ion-slide-box>
-
     </ion-content>
 </ion-modal-view>
