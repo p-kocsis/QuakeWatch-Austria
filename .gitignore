@@ -1,3 +1,6 @@
 platforms
 plugins
 resources
+bower_components
+hooks
+node_modules
