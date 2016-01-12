@@ -1,23 +1,14 @@
 angular.module('starter.controllers', ['starter.resources'])
 
     .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
-
-
     })
     //Home Controller
-    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,$window) {
-
+    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation) {
         var location="";
         $scope.quakeAut = function () {
             $scope.quakeList = JsonData.getAut();
             location="aut";
         };
-		
-		//Blaaaaaas mir
-		$scope.getHeightForDiv = function () {
-            return 50;//($window.innerHeight/100);
-        };
-		//Ende blaaaaas mir
 		
         $scope.quakeAut();
         $scope.quakeWorld = function () {
@@ -47,57 +38,21 @@ angular.module('starter.controllers', ['starter.resources'])
             $scope.selectModalSlider = $ionicSlideBoxDelegate.$getByHandle('modalSlider');
             $scope.selectModalSlider.enableSlide(false);
         });
-
         $scope.closeSelectModal = function () {
             if ($scope.selectModalSlider.currentIndex() == 0)
                 $scope.selectModal.hide();
             else
                 $scope.selectModalSlider.previous();
         };
-
         $scope.openSelectModal = function () {			
             $scope.selectModalSlider.slide(0);
             $scope.selectModal.show();
-            /*
-            var modalHeight = document.getElementById("headerBar").offsetHeight+document.getElementById("slide2").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*3;
-            console.log(document.getElementById("headerBar").offsetHeight);//+document.getElementById("slide2").offsetHeight);
-            console.log(document.getElementById("slide2").offsetHeight);
-            console.log(document.getElementById("header2").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*2 );
-            console.log(document.getElementById("header2").offsetHeight);
-            console.log(document.getElementById("buttonAnderesBeben").offsetHeight);
-            var modalHeight2 = document.getElementById("header2").offsetHeight+document.getElementById("headerBar").offsetHeight+document.getElementById("buttonAnderesBeben").offsetHeight*4;
-            console.log(modalHeight2);
-            console.log(modalHeight);
-            document.getElementById("modalHome").style.top=$window.innerHeight-modalHeight+"px";
-             */
             document.getElementById("modalHome").style.top=$window.innerHeight-290+"px";
         };
-
-
-
-
         //Wird beim betaetigen von Button vor mehr al 30 Minuten aktiviert
         $scope.vorMehrAls30Min = function () {
             $ionicSlideBoxDelegate.$getByHandle('modalSlider').next();
-            //@TODO LETZTE ERDBEBEN LADEN
-            //Jetzt noch sample data
-
             var beben = JsonData.getAut();
-            /*
-            bebenObject = {
-                date: "Dezember 1",
-                id: "1"
-            };
-            bebenObject2 = {
-                date: "Dezember 2",
-                id: "2"
-            };
-
-            bebenObject3 = {
-                date: "Dezember 3",
-                id: "3"
-            };
-            */
             var bebenObject=beben[0];
             var bebenObject2=beben[1];
             var bebenObject3=beben[2];
@@ -164,16 +119,6 @@ angular.module('starter.controllers', ['starter.resources'])
 		
     })
     .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, $state, JsonData) {
-        //@TODO Object zurückgeben mit fragen und input typ (bild text)
-        zusatzfragen = {
-            fragen:[
-                "In welchem Stock befanden Sie sich? 	0 – 1 – 2 – 3 – 4 oder höher",
-                "Sind Gegenstände umgefallen? ja/nein",
-                "Sind Sie aus Angst ins Freie geflüchtet? ja/nein",
-                "Feine Risse im Verputz? ja/nein",
-                "Bitte beschreiben Sie Ihre Wahrnehmung und eventuelle Schäden"
-            ]
-        };
         $scope.goTo = function () {
             $state.go('app.bebenZusatzfragen');
 
@@ -209,7 +154,7 @@ angular.module('starter.controllers', ['starter.resources'])
             }, function (err) {
                 $scope.quake.distanceFromPhoneToQuake= "Bitte Ortungsdienste aktivieren";
             });
-
+        //MODAL BEBENDETAIL
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
             scope: $scope
         }).then(function (modal) {
@@ -222,7 +167,7 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.closeBebenModal = function () {
             $scope.bebenmodal.hide();
         };
-
+        //MODAL ENDE
     })
     .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state) {
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
@@ -238,5 +183,4 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.goToComics = function () {
             $state.go('app.bebenWahrnehmung');
         }
-
     });
