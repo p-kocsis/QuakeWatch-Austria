@@ -1,0 +1,77 @@
+<ion-view view-title="Zusatzfragen">
+    <ion-content>
+        <div class="row row-center">
+            <div class="col">
+				<br><h5>In welchem Stock befanden Sie sich?</h5>
+				<label class="item item-input item-select">
+				&nbsp;<!--Workaround damit die Zeile hoch genung ist. Bei zu viel Zeit aendern, sonst stoerts aber nicht
+						  Schaut allerdings zugegebener Massen noch ziemlich scheiße aus, von wegen ganz rechts kleben-->
+                    <select ng-model="model.id">
+						<option value="0" selected>Erdgeschoss</option>
+						<option value="1">1. Stock</option>
+						<option value="2">2. Stock</option>
+						<option value="3">3. Stock</option>
+						<option value="4">4. Stock</option>
+						<option value="5">Höher</option>
+					</select>
+				</label>
+				
+				<!-- Start der optionalen Abfragen, wenn Erdbeben sehr stark. Absichtlich hier in der Mitte, Kommentar sollte immmer das letzte sein 
+				Ich hätt hier lieber so geile toggles gehabt, aber die überreissen das sicher nicht, ALSO mach ich dropdowns
+				<br><ion-toggle ng-model="itemsDropped" toggle-class="toggle-calm">Es sind Gegenstände umgefallen</ion-toggle>
+				
+				Abfrage:
+				ng-if="false"
+				
+				div wird verwendet um nicht jedes Element einzeln ausblenden zu müssen
+				-->
+				<div ng-if="true">
+					<br><h5>Sind Gegenstände umgefallen?</h5>
+					<label class="item item-input item-select">
+						&nbsp;
+						<select ng-model="itemsDropped">
+							<option value="0">Ja</option>
+							<option value="1" selected>Nein</option>
+						</select>
+					</label>
+				</div>
+				
+				<div ng-if="true">
+					<br><h5>Sind Sie aus Angst ins Freie geflüchtet?</h5>
+					<label class="item item-input item-select">
+						&nbsp;
+						<select ng-model="ranAway">
+							<option value="0">Ja</option>
+							<option value="1" selected>Nein</option>
+						</select>
+					</label>
+				</div>
+				
+				<div ng-if="true">
+					<br><h5>Feine Risse im Verputz?</h5>
+					<label class="item item-input item-select">
+						&nbsp;
+						<select ng-model="facadeFucked">
+							<option value="0">Ja</option>
+							<option value="1" selected>Nein</option>
+						</select>
+					</label>
+				</div>
+				
+				<br><h5>Ihr persönlicher Kommentar zum Erdbeben</h5>
+                <label class="item item-input">
+                    <textarea name="comment" id="comment-textarea" rows="5" ng-model="comment"> </textarea>
+                </label>
+				
+                
+            </div>
+        </div>
+        <div class="row row-center">
+            <div class="col">
+                <button class="button button-assertive" ng-click="goToComics()">
+                    Weiter
+                </button>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,90 @@
+<ion-view view-title="Verhaltensratgeber">
+    <ion-content delegate-handle="verhaltenContent" overflow-scroll=true>
+	
+	<!-- Inhaltsverzeichniss mit Links -->
+        <div class="list">
+			<div class="item item-divider">
+				&Ouml;sterreich
+			</div>
+			<a class="item" ng-click="scrollToAnchor('aut_before')">Vor einem Erdbeben in &Ouml;sterreich</a>
+			<a class="item" ng-click="scrollToAnchor('aut_while')">W&auml;hrend eines Erdbebens in &Ouml;sterreich</a>
+			<a class="item" ng-click="scrollToAnchor('aut_after')">Nach einem starken Erdbeben in &Ouml;sterreich</a>
+			<div class="item item-divider">
+				Im Ausland
+			</div>
+			<a class="item" ng-click="scrollToAnchor('foreign_earthquake')">Erdbeben</a>
+			<a class="item" ng-click="scrollToAnchor('foreign_tsunami')">Tsunami</a>
+		</div>
+		<div style="padding: 10px;">
+		<br>
+	<!-- Start Oesterreich Infos -->
+		<h3>&Ouml;sterreich</h3>
+		Wie verhalte ich mich richtig vor, w&auml;hrend und nach einem Erdbeben in &Ouml;sterreich?
+
+		Die Gebiete &Ouml;sterreichs, die regelm&auml;&szlig;ig von Erdbeben betroffen sind, k&ouml;nnen schon an Hand der 
+		Epizentrenverteilung der gef&uuml;hlten Erdbeben (Intensit&auml;t &ge; 3&deg;) erkannt werden. Es ist deshalb in 
+		diesen Regionen wichtig, sich die folgenden Punkte vor Augen zu halten, um eventuelle Sch&auml;den 
+		durch Erdbeben zu verringern. Aus diesem Grund erstellte der &Ouml;sterreichische Erdbebendienst f&uuml;r 
+		Sie diesen n&uuml;tzlichen Verhaltensratgeber im Falle eine Erdbebens.
+		<br><br><h4 delegate-handle='aut_before'>Vor einem Erdbeben in &Ouml;sterreich</h4>
+		<ul class="list">
+		<li>&bull; Die Baunorm <b>&Ouml;NORM EN 1998-1</b> beachten. Das Haus gut instand halten, vor allem stets f&uuml;r einen guten Bauzustand von Schornsteinen, Balustraden, Dachrinnen und dergleichen sorgen.</li><br>
+		<li>&bull; In der Wohnung <b>schwere M&ouml;bel</b> in der Wand gut verankern. Warmwasserspeicher gut befestigen. &Uuml;ber den Betten keine <b>schweren Bilder</b> oder <b>Regale</b> aufh&auml;ngen.</li><br>
+		<li>&bull; <b>Sichere Pl&auml;tze</b> in der Wohnung festlegen. Im Allgemeinen sind diese Pl&auml;tze in der N&auml;he von tragenden W&auml;nden im Inneren des Geb&auml;udes, unter T&uuml;rst&ouml;cken, allenfalls auch unter einem stabilen Tisch (Schutz vor herabfallenden Deckenteilen).</li><br>
+		<li>&bull; Sich mit der <b>Umgebung</b> vertraut machen. Die Lage des Hauptschalters f&uuml;r den elektrischen Strom und der Absperrventile f&uuml;r Gas und Wasser einpr&auml;gen. Auch die Nachbarn dar&uuml;ber informieren.</li><br>
+		</ul>
+		<h4 id="aut_while">W&auml;hrend eines Erdbebens in &Ouml;sterreich</h4>
+		<ul class="list">
+		<li>&bull; <b>Im Haus</b> weilende Personen sollen die schon fr&uuml;her ausgew&auml;hlten Pl&auml;tze aufsuchen und das Ende des Erdbebens abwarten. Die N&auml;he von Fenstern meiden. Nicht ins Freie laufen.</li><br>
+		<li>&bull; <b>Im Freien</b> befindliche Personen sollen dort bleiben und einen Sicherheitsabstand zu Geb&auml;uden und elektrischen Freileitungen einhalten, um nicht durch herabfallende Bauteile, wie Dachziegel, Schornsteine, 
+		Balustraden oder Leitungen gef&auml;hrdet zu werden. Unter Sicherheitsabstand ist normalerweise f&uuml;nf Meter zu verstehen. In engen Stra&szlig;en, wie sie z. B. in Stadtzentren vorkommen, am besten den n&auml;chsten Hauseingang oder die n&auml;chste Hauseinfahrt aufsuchen.</li><br>
+		</ul>
+		
+		<h4 id="aut_after">Nach einem starken Erdbeben in &Ouml;sterreich</h4>
+		<ul class="list">
+		<li>&bull; <b>Im Haus</b>: Bausch&auml;den &uuml;berpr&uuml;fen. Offene Feuer (Kamin, Kerzen etc.) l&ouml;schen, den elektrischen Strom mit dem Hauptschalter ausschalten und die Haupth&auml;hne von Gas und Wasser schlie&szlig;en. Bei Einsturzgefahr das Haus mit Notgep&auml;ck umgehend verlassen.</li><br>
+		<li>&bull; Bei <b>Sch&auml;den</b> am Geb&auml;ude, insbesondere Kamin: H&auml;user und Wohnungen erst wieder betreten, wenn diese von <b>Fachleuten</b> als sicher bezeichnet wurden. Drau&szlig;en Sicherheitsabstand zu Geb&auml;uden einhalten, weil Nachbeben weitere Sch&auml;den verursachen k&ouml;nnen und Geb&auml;udeteile herabst&uuml;rzen k&ouml;nnen.
+			Radio einschalten und <b>Instruktionen</b> &uuml;ber das weitere Verhalten abwarten.</li><br>
+		</ul>
+	<!-- Start Ausland Infos -->
+		<h3>Im Ausland</h3>
+		Bevor man eine Reise antritt, sollte man sich nicht nur wegen Impfungen informieren, sondern auch &uuml;ber Gefahren durch Erdbeben oder Tsunamis.
+		Bedenken Sie, dass auch paradiesische Orte Erdbeben, Tsunamis, Vulkanausbr&uuml;chen und Hurrikans ausgesetzt sein k&ouml;nnen. Vergessen Sie nicht, dass 
+		ein Tsunami auch ohne Erdbeben entstehen kann - wie z. B. durch Hangrutschungen im Ozean oder dadurch, dass an Land ein Gebirgsteil ins Meer gleitet.
+		
+		<br><br><h4 id="foreign_earthquake">Erdbeben</h4>
+		<p>Sollten Sie im Hotelzimmer ein Erdbeben versp&uuml;ren, dann legen Sie sich neben Ihr Bett oder bei zwei Einzelbetten dazwischen. Das sch&uuml;tzt Sie vor dem 
+		Herabfallen der Decke. Laufen Sie nicht aus dem Haus. Stiegenh&auml;user und Lifte sind die t&ouml;dlichsten Fallen. In einem Restaurant gehen Sie unter dem 
+		Tisch in Deckung. Suchen Sie auch Schutz vor Fenstern. Diese k&ouml;nnen zerspringen und die Glassplitter k&ouml;nnen Sie verletzen. Daher wenden Sie Ihr 
+		Gesicht von den Fenstern ab. Dies gilt auch im Freien. Gehen Sie dann von der Geb&auml;udefassade wenn m&ouml;glich 5-10 m weg, damit sie nicht von 
+		herabfallenden Fassadenteilen und Glas verletzt werden.</p>
+		
+		<p>In Europa kommen zwar nicht so starke Erdbeben vor wie im zirkumpazifischen Raum, aber dennoch sind die Auswirkungen manchmal fatal. 
+		Zu den L&auml;ndern, die davon betroffen sind, z&auml;hlen Italien (Friaul, Apennin, Westseite von Kalabrien, Stra&szlig;h einen Tsunami zerst&ouml;rte, 
+		und 1908 ereignete sich in Messina ein starkes Erdbeben, das auch einen Tsunami verursachte und zu zig-tausenden Todesopfern f&uuml;hrte.</p>
+		
+		<p>Der Norden von Algerien ist auch immer wieder Epizentrum st&auml;rkerer Erdbeben mit Tsunamis gewesen.
+		Sehr starke Erdbeben, die mehrere Minuten andauern k&ouml;nnen, kommen an der Westk&uuml;ste von S&uuml;damerika, Mittelamerika, Kalifornien, 
+		Westk&uuml;ste von Kanada, Alaska, Japan, Philippinen, Neuseeland und Indonesien vor. Diese Erdbeben k&ouml;nnen auch Tsunamis verursachen.</p>
+		
+		<br><h4 id="foreign_tsunami">Tsunami</h4>
+		<p>Je gr&ouml;&szlig;er die Magnitude eines Erdbebens, desto wahrscheinlicher l&ouml;st dieses Erdbeben auch einen Tsunami aus. Der Grund hierf&uuml;r 
+		ist das Ausma&szlig; der vertikalen Bodenverschiebung infolge eines Erdbebens, dessen Epizentrum sich auf dem Meer befindet. Je st&auml;rker 
+		das Erdbeben, desto st&auml;rker auch die vertikale Bodenverschiebung und der daraus resultierende Tsunami. Davon sind vor allem die K&uuml;sten 
+		jener L&auml;nder betroffen, vor denen sich auch starke Erdbeben ereignen.</p>
+
+		<p>Das Ph&auml;nomen, dass sich das Meer innerhalb weniger Minuten langsam zur&uuml;ckzieht, ist sp&auml;testens seit dem Tsunami in Sumatra, 
+		der Thailand ebenfalls mit katastrophalen Folgen erreichte, bekannt. Was weniger bekannt ist, ist der Umstand, dass ein scheinbares 
+		Aufsch&auml;umen des Meeres am Horizont durch das Brechen des hohen Wellenkamms zu beobachten ist. Dann bleiben nur wenige Minuten, 
+		um einen h&ouml;her gelegenen Ort aufzusuchen. Falls es sich bei der Hotelanlage um eine Stahlbetonkonstruktion handelt, sollte man in 
+		ein m&ouml;glichst hoch gelegenes Stockwerk fl&uuml;chten. Mit der ersten Welle ist es meist noch nicht vor&uuml;ber. Meist folgen im Abstand von 
+		5-30 Minuten weitere Wellen, wobei die sp&auml;teren Wellen gr&ouml;&szlig;er sein k&ouml;nnen, wie dies auch in Sumatra 2004 der Fall war.</p>
+		
+		</div>
+    </ion-content>
+	<ion-footer-bar>
+		<div class="bar bar-footer bar-assertive">
+			<div class="bar bar-footer bar-assertive footer-button"><a class="button button-full button-clear" ng-click="scrollTop()">Zur&uuml;ck zur &Uuml;bersicht</a></div>
+		</div>
+	</ion-footer-bar>
+</ion-view>

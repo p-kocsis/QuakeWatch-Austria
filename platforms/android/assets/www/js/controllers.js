@@ -179,7 +179,7 @@ angular.module('starter.controllers', ['starter.resources'])
 
         };
     })
-    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation) {
+    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, $ionicLoading, $compile) {
 
         function distance(lat1, lon1, lat2, lon2) {
             var p = 0.017453292519943295;    // Math.PI / 180
@@ -192,8 +192,7 @@ angular.module('starter.controllers', ['starter.resources'])
         }
         console.log($stateParams.bebenId);
         $scope.quake = JsonData.getQuakefromIdWorld($stateParams.bebenId);
-
-
+		
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation
             .getCurrentPosition(posOptions)
@@ -210,6 +209,31 @@ angular.module('starter.controllers', ['starter.resources'])
                 $scope.quake.distanceFromPhoneToQuake= "Bitte Ortungsdienste aktivieren";
             });
 
+		//Map
+		function initializeMap() {
+			var myLatlng = new google.maps.LatLng(0,0);
+        
+			var mapOptions = {
+				center: myLatlng,
+				zoom: 16,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+		
+			//Marker + infowindow + angularjs compiled ng-click
+			var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
+			var compiled = $compile(contentString)($scope);
+		
+			var infowindow = new google.maps.InfoWindow({
+				content: compiled[0]
+			});
+		
+			$scope.map = map;
+		}
+		google.maps.event.addDomListener(window, 'load', initializeMap);
+		
+		//Ende Map
+			
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
             scope: $scope
         }).then(function (modal) {
@@ -222,7 +246,7 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.closeBebenModal = function () {
             $scope.bebenmodal.hide();
         };
-
+		
     })
     .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state) {
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {

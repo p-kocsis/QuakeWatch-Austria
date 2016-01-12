@@ -30,9 +30,15 @@
         </div>
         <div class="row">
             <div class="col">
-                <p class="bold">Entfernung des Handy Standortes vom Beben : </p> {{quake.distanceFromPhoneToQuake}}
+                <p class="bold">Entfernung des Handy Standortes vom Beben: </p> {{quake.distanceFromPhoneToQuake}}
             </div>
         </div>
+		<div class="row">
+            <div class="col">
+                <p class="bold">Epizentrum des Erdbebens:</p> <div id="map" data-tap-disabled="true"></div>
+            </div>
+        </div>
+		
     </ion-content>
     <ion-footer-bar></ion-footer-bar>
     <div class="bar bar-footer bar-assertive footer-button">

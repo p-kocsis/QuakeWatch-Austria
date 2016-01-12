@@ -1,4 +1,16 @@
 <ion-view view-title="Beben Details">
+	<head>
+		<meta charset="utf-8">
+		<title>Map</title>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		
+		<script src="//code.ionicframework.com/nightly/js/ionic.bundle.js"></script>
+
+		<!-- google maps javascript -->
+		<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
+
+	</head>
+	<body ng-controller="BebenDetailCtrl">
     <ion-content>
         <div class="row">
             <div class="col col-25 col-bottom">
@@ -30,9 +42,15 @@
         </div>
         <div class="row">
             <div class="col">
-                <p class="bold">Entfernung des Handy Standortes vom Beben : </p> {{quake.distanceFromPhoneToQuake}}
+                <p class="bold">Entfernung des Handy Standortes vom Beben: </p> {{quake.distanceFromPhoneToQuake}}
             </div>
         </div>
+		<div class="row">
+            <div class="col">
+                <p class="bold">Epizentrum des Erdbebens: </p> <div id="map" data-tap-disabled="true"></div>
+            </div>
+        </div>
+	</body>
     </ion-content>
     <ion-footer-bar></ion-footer-bar>
     <div class="bar bar-footer bar-assertive footer-button">
