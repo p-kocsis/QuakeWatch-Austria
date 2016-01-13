@@ -3,8 +3,7 @@ angular.module('starter.controllers', ['starter.resources'])
     .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
     })
     //Home Controller
-    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation) {
-        console.log(JsonData.isOnline());
+    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,QuakeReport) {
         $scope.isOnline = JsonData.isOnline();
         if ($scope.isOnline) {
             var location = "";
@@ -12,7 +11,6 @@ angular.module('starter.controllers', ['starter.resources'])
                 $scope.quakeList = JsonData.getAut();
                 location = "aut";
             };
-
             $scope.quakeAut();
             $scope.quakeWorld = function () {
                 $scope.quakeList = JsonData.getWorld();
@@ -62,13 +60,14 @@ angular.module('starter.controllers', ['starter.resources'])
                 $scope.letzteBeben = [bebenObject, bebenObject2, bebenObject3];
                 //$scope.letzteBeben = [bebenObject, bebenObject2];
             };
+
             //Routing fuer den Button anderes Beben
             $scope.anderesBeben = function () {
                 $state.go('app.bebenEintrag');
                 $scope.selectModal.hide();
             };
             //Fuer das Button "Ja gerade jetzt" Standort bestimmen und Datum setzten
-            $scope.getGeoLocation = function () {
+            $scope.geradeJetzt = function () {
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
                 $cordovaGeolocation
                     .getCurrentPosition(posOptions)
@@ -77,29 +76,26 @@ angular.module('starter.controllers', ['starter.resources'])
                         var long = position.coords.longitude;
                         console.log(lat);
                         console.log(long);
+                        //TODO: GET TIME IN UTC AND ADD IT TO QUAKEDATA
 
+                        var d1 = new Date();
+                        //d1.toUTCString();
+
+                        console.log(d1.toUTCString());
+                        QuakeReport.setLon(long);
+                        QuakeReport.setLat(lat);
                         $state.go('app.bebenWahrnehmung');
                         $scope.selectModal.hide();
                     }, function (err) {
+                        $scope.selectModal.hide();
                         $state.go('app.bebenEintrag');
                     });
             };
             //Fuer die Buttons der 3 letzten spuerhbaren erdbeben (ID uebergeben)
-            $scope.getGeoLocationWithBebenId = function (bebenid) {
-                var posOptions = {timeout: 10000, enableHighAccuracy: false};
-                $cordovaGeolocation
-                    .getCurrentPosition(posOptions)
-                    .then(function (position) {
-                        var lat = position.coords.latitude;
-                        var long = position.coords.longitude;
-                        console.log(lat);
-                        console.log(long);
-
-                        $state.go('app.bebenWahrnehmung');
-                        $scope.selectModal.hide();
-                    }, function (err) {
-                        $state.go('app.bebenEintrag');
-                    });
+            $scope.recentQuakes = function (id) {
+                QuakeReport.setId(id);
+                $scope.selectModal.hide();
+                $state.go('app.bebenEintrag');
             };
             //END MODAL
         }
@@ -139,8 +135,7 @@ angular.module('starter.controllers', ['starter.resources'])
 
         };
     })
-    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation) {
-
+    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation,QuakeReport,$window) {
         function distance(lat1, lon1, lat2, lon2) {
             var p = 0.017453292519943295;    // Math.PI / 180
             var c = Math.cos;
@@ -150,11 +145,7 @@ angular.module('starter.controllers', ['starter.resources'])
             var fullResult = 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
             return Math.round(fullResult * 100) / 100;
         }
-
-        console.log($stateParams.bebenId);
         $scope.quake = JsonData.getQuakefromIdWorld($stateParams.bebenId);
-
-
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation
             .getCurrentPosition(posOptions)
@@ -175,17 +166,46 @@ angular.module('starter.controllers', ['starter.resources'])
             scope: $scope
         }).then(function (modal) {
             $scope.bebenmodal = modal;
-        });
 
-        $scope.beben_verspuert = function () {
+        });
+        $scope.openBebenModal = function () {
             $scope.bebenmodal.show();
+            document.getElementById("modalDetail").style.top = $window.innerHeight - 170 + "px";
+            //console.log(document.getElementById("header").offsetHeight+document.getElementById("content2").offsetHeight);
         };
         $scope.closeBebenModal = function () {
             $scope.bebenmodal.hide();
         };
+        $scope.$on('$destroy', function() {
+            $scope.bebenmodal.remove();
+        });
+        $scope.geradeJetzt = function () {
+            QuakeReport.setId($stateParams.bebenId);
+            var posOptions = {timeout: 10000, enableHighAccuracy: false};
+            $cordovaGeolocation
+                .getCurrentPosition(posOptions)
+                .then(function (position) {
+                    var lat = position.coords.latitude;
+                    var long = position.coords.longitude;
+                    console.log(lat);
+                    console.log(long);
+                    QuakeReport.setLon(long);
+                    QuakeReport.setLat(lat);
+                    $state.go('app.bebenWahrnehmung');
+                    $scope.bebenmodal.hide();
+                }, function (err) {
+                    $state.go('app.bebenEintrag');
+                });
+        };
+        $scope.vorMehrAls30Min = function () {
+            QuakeReport.setId($stateParams.bebenId);
+            $scope.bebenmodal.hide();
+            $state.go('app.bebenEintrag');
+        };
         //MODAL ENDE
     })
     .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state) {
+        /*
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
             scope: $scope
         }).then(function (modal) {
@@ -199,4 +219,5 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.goToComics = function () {
             $state.go('app.bebenWahrnehmung');
         }
+        */
     });

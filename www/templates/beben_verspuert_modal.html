@@ -1,5 +1,4 @@
-<ion-modal-view id="modal" class="mymodal assertive-bg">
-    <div id="size">
+<ion-modal-view id="modalDetail" class="mymodal assertive-bg">
     <ion-header-bar class="assertive-bg">
         <h1 class="title light">Erdbeben Verspürt?</h1>
         <a class="button button-clear whiteButton" ng-click="closeBebenModal()">Schließen</a>
@@ -7,23 +6,17 @@
     <ion-content>
         <div class="row row-center">
             <div class="col">
-                <a class="button button-outline button-light button-width-full">
+                <a class="button button-outline button-light button-width-full" ng-click="geradeJetzt()">
                     Ja, gerade jetzt
                 </a>
             </div>
         </div>
         <div class="row row-center">
             <div class="col">
-                <!--
-                <a class="button button-outline button-light button-width-full" href="#/app/bebenEintrag" ng-click="closeBebenModal()">
-                    Vor mehr als 30 min
-                </a>
-                -->
-                <a class="button button-outline button-light button-width-full"  ng-click="showLastQuakes()">
+                <a class="button button-outline button-light button-width-full"  ng-click="vorMehrAls30Min()">
                     Vor mehr als 30 min
                 </a>
             </div>
         </div>
     </ion-content>
-    </div>
 </ion-modal-view>

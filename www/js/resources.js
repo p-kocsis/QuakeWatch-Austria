@@ -388,22 +388,60 @@ angular.module('starter.resources', ['ngResource'])
 
     //Factory zum Senden der erstellten Erdbeben
     .factory('QuakeReport', function ($http) {
+        var quakeDataObj = new quakeReport(
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        );
 
         return {
-            //Setzen der location mittels GPS
-            setGeoLocation: function (geoData) {
-
+            setId: function (id) {
+              quakeDataObj.referenzID=id;
+                console.log(quakeDataObj.referenzID);
+            },
+            setLon: function (lon) {
+                quakeDataObj.locLon=lon;
+            },
+            setLat: function (lat) {
+                quakeDataObj.locLat=lat;
+            },
+            setLocPrec: function (prec) {
+                quakeDataObj.locPrecision=prec;
+            },
+            setLocLastUpdate: function (time) {
+                quakeDataObj.locLastUpdate=time;
             },
             //Setzten der location mittels Postleitzahl
-            setZIPLocation: function (zipData) {
+            setZIP: function (zipData) {
+                quakeDataObj.locLastUpdate=zipData;
+            },
+            setPlace: function (place) {
+                quakeDataObj.mlocOrtsname=place;
+            },
+            setFloor: function (floor) {
+                quakeDataObj.stockwerk=floor;
+            },
+            setMagClass: function (mag) {
+                quakeDataObj.klassifikation=mag;
+            },
+            setTime: function (time) {
+                quakeDataObj.verspuert=time;
             },
             //Die Bebenintensitaet setzten
-            setQuakeIntensity: function (intensity) {
-
+            setComment: function (comment) {
+                quakeDataObj.kommentar=comment;
             },
-            //Die Antworten der Zusatzfragen setzten
-            setExtraQuestionAnswers: function (extraQuestions) {
-
+            setContact: function (contact) {
+                quakeDataObj.kontakt=contact;
             }
         };
     });

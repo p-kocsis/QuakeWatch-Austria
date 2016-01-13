@@ -9,7 +9,7 @@
                 <h3 class="light">Wann?</h3>
                 <div class="row row-center">
                     <div class="col">
-                        <a class="button button-outline button-light button-width-full" ng-click="getGeoLocation()">
+                        <a class="button button-outline button-light button-width-full" ng-click="geradeJetzt()">
                             Ja, gerade jetzt
                         </a>
                     </div>
@@ -24,7 +24,7 @@
             </ion-slide>
             <ion-slide class="padding" id="slide2">
 					<h3 id="header2" class="light">Eines dieser Erdbeben?</h3>
-					<a class="button button-outline button-light button-width-full"  ng-click="getGeoLocationWithId({{beben.id}})" ng-repeat="beben in letzteBeben">
+					<a class="button button-outline button-light button-width-full"  ng-click="recentQuakes({{beben.id}})" ng-repeat="beben in letzteBeben">
 						{{beben.ldate}} {{beben.ltime}}
 					</a>
                 <a class="button button-outline button-light button-width-full"  ng-click="anderesBeben()" id="buttonAnderesBeben">
