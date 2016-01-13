@@ -32,3 +32,10 @@ div.footer-button a.button.button-full {
     border-color: #ffffff;
     background-color: #ffffff;
 }
+
+.text {
+	width:100%;
+	overflow: inherit ;
+	text-overflow: inherit ;
+	white-space: normal ;
+}

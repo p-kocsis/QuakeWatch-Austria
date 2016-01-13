@@ -119,8 +119,19 @@ angular.module('starter.controllers', ['starter.resources'])
             handle.anchorScroll(true);
         };
     })
-    .controller('ZusatzUebersichtCtrl', function ($scope, $location, $anchorScroll, $ionicScrollDelegate) {
-
+    .controller('ZusatzUebersichtCtrl', function ($scope) {
+		
+    })
+	.controller('ZusatzLexikonCtrl', function ($scope, $ionicScrollDelegate, $ionicPopup, $timeout) {
+		$scope.scrollTop = function () {
+            $ionicScrollDelegate.scrollTop(true);
+        };
+		
+		$scope.showAlert = function() {
+			var alertPopup = $ionicPopup.alert({
+			title: '>_ mandalore394',
+			});
+		};
     })
     .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, $state, JsonData) {
         $scope.goTo = function () {
