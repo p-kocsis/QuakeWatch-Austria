@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','ngCordova','angularMoment'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','ngCordova','angularMoment','ionic-timepicker'])
     .run(function ($ionicPlatform,amMoment) {
         $ionicPlatform.ready(function () {
             //Zum anzeigen der Vergangenen Zeit in deutsch(beben_detail)
@@ -36,9 +36,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
                     AustrianDataResolved: function (JsonData) {
                         var autData = JsonData.AutPromise;
                         autData.then(function(result) {
-                            JsonData.setOnline(result);
                             console.log(result);
-                            console.log(JsonData.isOnline());
+                            JsonData.setOnline(result);
                         });
                         return autData;
                     }

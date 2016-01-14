@@ -1,33 +1,39 @@
 <ion-view view-title="Erdbeben verspürt">
     <ion-content>
-        <div class="row row-center">
-            <div class="col">
+        <form ng-submit="goToComics()">
+            <div class="row row-center">
+                <div class="col">
 
-                <h5>
-                    <p>
-                        The following data are collected for scientific<br>
-                        purposes only They refer to the place where you<br>
-                        experienced the earthquake
-                    </p>
-                </h5>
-                <label class="item item-input">
-                    <input type="text" placeholder="PLZ">
-                </label>
-                <label class="item item-input">
-                    <input type="text" placeholder="ORT">
-                </label>
-                <label class="item item-input">
-                    <input type="text" placeholder="Datum">
-                    <input type="text" placeholder="Zeit">
-                </label>
+                    <h5>
+                        <p>
+                            Diese Daten werden nur aus Forschungsspezifischen Zwecken gesammelt.<br>
+                        </p>
+                    </h5>
+
+                    <label class="item item-input">
+                        <input type="number" placeholder="Postleitzahl" ng-model="zipCode">
+                    </label>
+                    <label class="item item-input">
+                        <input type="text" placeholder="Ort" ng-model="place">
+                    </label>
+                    <label class="item item-input">
+                        <input type="date" placeholder="Datum" ng-model="date">
+                    </label>
+                    <label class="item">{{chosenTime}}</label>
+                </div>
             </div>
-        </div>
-        <div class="row row-center">
-            <div class="col">
-                <button class="button button-assertive" ng-click="goToComics()">
-                    Weiter
-                </button>
+            <div class="row row-center">
+                <div class="col">
+                    <button class="button button-assertive" type="submit">Weiter</button>
+
+                </div>
             </div>
-        </div>
+        </form>
+        <ionic-timepicker input-obj="timePickerObject">
+            <button class="button button-block button-assertive overflowShow">
+                <standard-time-meridian etime='timePickerObject.inputEpochTime'>Zeit wählen
+                </standard-time-meridian>
+            </button>
+        </ionic-timepicker>
     </ion-content>
 </ion-view>

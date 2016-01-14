@@ -9,7 +9,6 @@
                 <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'HH:mm:ss'}}</span>
                 <p class="bold">{{quake.country}}</p>
             </div>
-
         </div>
         <div class="row">
             <div class="col col-top">
@@ -19,7 +18,10 @@
         </div>
         <div class="row">
             <div class="col">
-                <p class="bold"> Standort: </p>{{quake.locLon}} Longitude {{quake.locLat}} Latitude
+                <p class="bold" > Standort: </p>{{quake.locLon}} Länge {{quake.locLat}} Breite
+                <map center="[ {{quake.locLat}} , {{quake.locLon}}]" zoom-to-inlude-markers="true">
+                    <marker position=“[ {{quake.locLat}} , {{quake.locLon}} ]”></marker>
+                    </map>
             </div>
 
         </div>
@@ -33,11 +35,7 @@
                 <p class="bold">Entfernung des Handy Standortes vom Beben : </p> {{quake.distanceFromPhoneToQuake}}
             </div>
         </div>
-		<div class="row">
-            <div class="col">
-                <p class="bold">Epizentrum: </p> <div id="map" data-tap-disabled="true"></div>
-            </div>
-        </div>
+
     </ion-content>
     <ion-footer-bar></ion-footer-bar>
     <div class="bar bar-footer bar-assertive footer-button">

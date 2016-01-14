@@ -1,9 +1,16 @@
-angular.module('starter.controllers', ['starter.resources'])
+angular.module('starter.controllers', ['starter.resources', 'uiGmapgoogle-maps','ngMap'])
 
     .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
     })
     //Home Controller
-    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation,QuakeReport) {
+    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport) {
+
+        $scope.getOnline = function () {
+            document.location.href = 'index.html';
+        };
+        $scope.goToMap = function () {
+            $state.go('app.map')
+        };
         $scope.isOnline = JsonData.isOnline();
         if ($scope.isOnline) {
             var location = "";
@@ -116,18 +123,18 @@ angular.module('starter.controllers', ['starter.resources'])
         };
     })
     .controller('ZusatzUebersichtCtrl', function ($scope) {
-		
+
     })
-	.controller('ZusatzLexikonCtrl', function ($scope, $ionicScrollDelegate, $ionicPopup, $timeout) {
-		$scope.scrollTop = function () {
+    .controller('ZusatzLexikonCtrl', function ($scope, $ionicScrollDelegate, $ionicPopup, $timeout) {
+        $scope.scrollTop = function () {
             $ionicScrollDelegate.scrollTop(true);
         };
-		
-		$scope.showAlert = function() {
-			var alertPopup = $ionicPopup.alert({
-			title: '>_ mandalore394',
-			});
-		};
+
+        $scope.showAlert = function () {
+            var alertPopup = $ionicPopup.alert({
+                title: '>_ mandalore394',
+            });
+        };
     })
     .controller('BebenZusatzfragenCtrl', function ($scope, $ionicModal, $state, JsonData) {
         $scope.goTo = function () {
@@ -135,7 +142,32 @@ angular.module('starter.controllers', ['starter.resources'])
 
         };
     })
-    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation,QuakeReport,$window) {
+    .controller('MapCtrl', function ($scope, $cordovaGeolocation) {
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+                var lat = position.coords.latitude;
+                var long = position.coords.longitude;
+                 //GOOGLE MAPS
+                 var myLatlng = new google.maps.LatLng(lat, long);
+                 var mapOptions = {
+                 center: myLatlng,
+                 zoom: 16,
+                 mapTypeId: google.maps.MapTypeId.ROADMAP
+                 };
+                 var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                 $scope.map = map;
+                 //GOOGLE MAPS
+            }, function (err) {
+                $scope.quake.distanceFromPhoneToQuake = "Bitte Ortungsdienste aktivieren";
+            });
+    })
+    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window) {
+
+
+        // Code goes here
+
         function distance(lat1, lon1, lat2, lon2) {
             var p = 0.017453292519943295;    // Math.PI / 180
             var c = Math.cos;
@@ -144,7 +176,9 @@ angular.module('starter.controllers', ['starter.resources'])
                 (1 - c((lon2 - lon1) * p)) / 2;
             var fullResult = 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
             return Math.round(fullResult * 100) / 100;
+
         }
+
         $scope.quake = JsonData.getQuakefromIdWorld($stateParams.bebenId);
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation
@@ -152,6 +186,19 @@ angular.module('starter.controllers', ['starter.resources'])
             .then(function (position) {
                 var lat = position.coords.latitude;
                 var long = position.coords.longitude;
+                /*
+                //GOOGLE MAPS
+                var myLatlng = new google.maps.LatLng(lat, long);
+
+                var mapOptions = {
+                    center: myLatlng,
+                    zoom: 16,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                $scope.map = map;
+                //GOOGLE MAPS
+                */
                 $scope.quake.distanceFromPhoneToQuake = distance(
                         position.coords.latitude,
                         position.coords.longitude,
@@ -171,12 +218,11 @@ angular.module('starter.controllers', ['starter.resources'])
         $scope.openBebenModal = function () {
             $scope.bebenmodal.show();
             document.getElementById("modalDetail").style.top = $window.innerHeight - 170 + "px";
-            //console.log(document.getElementById("header").offsetHeight+document.getElementById("content2").offsetHeight);
         };
         $scope.closeBebenModal = function () {
             $scope.bebenmodal.hide();
         };
-        $scope.$on('$destroy', function() {
+        $scope.$on('$destroy', function () {
             $scope.bebenmodal.remove();
         });
         $scope.geradeJetzt = function () {
@@ -191,9 +237,10 @@ angular.module('starter.controllers', ['starter.resources'])
                     console.log(long);
                     QuakeReport.setLon(long);
                     QuakeReport.setLat(lat);
-                    $state.go('app.bebenWahrnehmung');
                     $scope.bebenmodal.hide();
+                    $state.go('app.bebenWahrnehmung');
                 }, function (err) {
+                    $scope.bebenmodal.hide();
                     $state.go('app.bebenEintrag');
                 });
         };
@@ -204,20 +251,61 @@ angular.module('starter.controllers', ['starter.resources'])
         };
         //MODAL ENDE
     })
-    .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state) {
-        /*
-        $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
-            scope: $scope
-        }).then(function (modal) {
-            $scope.bebenmodal = modal;
-            modal.hide();
-        });
-        //$scope.bebenmodal.hide();
-        $scope.$on('modal.shown', function () {
-            $scope.bebenmodal.hide();
-        });
-        $scope.goToComics = function () {
-            $state.go('app.bebenWahrnehmung');
+    .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, QuakeReport, $ionicLoading, $compile) {
+        $scope.zipCode = null;
+        $scope.place = null;
+        $scope.date = null;
+        $scope.chosenTime = "Zeit";
+
+        //Zeit wählen
+        $scope.timePickerObject = {
+            inputEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
+            step: 5,  //Optional
+            format: 24,  //Optional
+            titleLabel: 'Zeit wählen',  //Optional
+            setLabel: 'Wählen',  //Optional
+            closeLabel: 'Schließen',  //Optional
+            setButtonType: 'button-assertive',  //Optional
+            closeButtonType: 'button-stable',  //Optional
+            callback: function (val) {    //Mandatory
+                timePickerCallback(val);
+            }
+        };
+        function timePickerCallback(val) {
+            if (typeof (val) === 'undefined') {
+            } else {
+                var selectedTime = new Date(val * 1000);
+                $scope.chosenTime = selectedTime.getUTCHours() + ':' + selectedTime.getUTCMinutes();
+            }
         }
-        */
+
+        //Zeit wählen ENDE
+
+        $scope.goToComics = function () {
+            /*
+             if($scope.zipCode != null && $scope.place != null && $scope.date != null && $scope.chosenTime !== "Zeit"){
+             $state.go('app.bebenWahrnehmung');
+             }
+             */
+            $state.go('app.bebenWahrnehmung');
+            console.log($scope.zipCode);
+        };
+
+        /*
+         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
+         scope: $scope
+         }).then(function (modal) {
+         $scope.bebenmodal = modal;
+         modal.hide();
+         });
+         //$scope.bebenmodal.hide();
+         $scope.$on('modal.shown', function () {
+         $scope.bebenmodal.hide();
+         });
+         $scope.goToComics = function () {
+         $state.go('app.bebenWahrnehmung');
+         }
+         */
+
+
     });
