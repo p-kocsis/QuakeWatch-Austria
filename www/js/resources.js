@@ -7,7 +7,14 @@ angular.module('starter.resources', ['ngResource'])
         To change the API you must include your API(AngularJS Factory) in the function parameters
         Initialize restEndpoint with your API(AngularJS Factory)
      */
-    .factory('JsonData', function ($http,$ionicLoading,DataSeismicPortal,DataGeoWebZAMG) {
+    /**
+     * @ngdoc service
+     * @name starter.resources.service:JsonData
+     * @description
+     * # rest
+     * Service to talk with backend api.
+     */
+    .factory('JsonData', function ($http,$ionicLoading,DataGeoWebZAMG) {
         var restEndpoint=DataGeoWebZAMG;
         var isOnline=null;
         return {
@@ -65,123 +72,11 @@ angular.module('starter.resources', ['ngResource'])
         },
         getEu: function(){
             return all European Earthquakes with one Quake Object Array
+        },
+        getMoreData: function(location){
+            return restEndpoint.getMoreData(location);
         }
      */
-
-
-
-    .factory('DataSeismicPortal', function ($http,$ionicLoading) {
-        //Ergebnis der Abfrage von ca.(mit lat und long eingeschraenkt) Oesterreich
-        var myData = null;
-        //Ergebnis Abfrage aller Erdbeben
-        var worldData = null;
-
-        //In der App.js wird gewartet bis die Abfrage vollendet wurde (http.get.success)
-        //Danach wird die App geladen
-        $ionicLoading.show({
-            template: '<ion-spinner></ion-spinner><br/>Lade Erdbebendaten'
-        });
-        var AutPromise = $http.get('/api/query?orderby=time&limit=50&minlat=46.3780&maxlat=49.0171&minlon=9.5359&maxlon=17.1627&format=json&nodata=404').success(function (data) {
-            $ionicLoading.hide();
-            myData = data;
-        });
-
-        //Abfrage der aller Erdbeben
-        var getWorldData =
-            $http.get('/api/query?orderby=time&limit=50&format=json&nodata=404').success(function (data) {
-                worldData = data;
-            });
-
-        //Hier wird die Farbe nach dem schweregrad des Erdbebens vergeben
-        var quakeClasses= function (mag) {
-            if(mag < 5){
-                return "item-balanced";
-            }
-            if(mag >= 5 && mag < 6){
-                return "item-energized";
-            }
-            if(mag >= 6){
-                return "item-assertive";
-            }
-        };
-
-        var convertFeatureToQuakeObject = function(feature){
-            var timeFull = feature.properties.time;
-            var dateAndTime = timeFull.split("T");
-            var date = dateAndTime[0];
-            var timeLocal = dateAndTime[1].substring(0, 8)+" UTC";
-            var distanceFromPhoneToQuake="";
-            return new quakeData(
-                feature.id,
-                feature.properties.mag,
-                feature.properties.time,
-                feature.properties.lon,
-                feature.properties.lat,
-                feature.properties.flynn_region,
-                distanceFromPhoneToQuake,
-                quakeClasses(feature.properties.mag),
-                "ldate",
-                "ltime",
-                "ltz"
-            );
-
-        };
-
-        return {
-            AutPromise: AutPromise,
-            //Oesterrechische Erdbeben Daten abfragen
-            //return: Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
-            getAut: function () {
-                //alle Erdbebendaten im hintergrund Abfragen
-                getWorldData;
-                var bebenAutArray = [];
-                for (var i = 0; i < myData.features.length; i++) {
-                    if (myData.features[i].properties.flynn_region === "AUSTRIA") {
-                        bebenAutArray.push(convertFeatureToQuakeObject(myData.features[i]));
-                    }
-                }
-                return bebenAutArray;
-            },
-            //Ein Erdbeben nach ID Abfragen (Welt)
-            getQuakefromIdWorld: function (id) {
-                for (var i = 0; i < worldData.features.length; i++) {
-                    if (worldData.features[i].id === id) {
-                        return convertFeatureToQuakeObject(worldData.features[i]);
-                    }
-                }
-                for (var i = 0; i < myData.features.length; i++) {
-                    if (myData.features[i].id === id) {
-                        return convertFeatureToQuakeObject(myData.features[i]);
-                    }
-                }
-            },
-            //Alle Erdbebendaten abfragen
-            //return: Erdbeben Objekte , daten formatiert
-            getWorld: function () {
-                var bebenAutArray = [];
-                for (var i = 0; i < worldData.features.length; i++) {
-                    bebenAutArray.push(convertFeatureToQuakeObject(worldData.features[i]));
-                }
-                return bebenAutArray;
-            },
-            //Abfrage der Erdbeben in der EU
-            //return : Erdbeben Objekte , daten formatiert und nach EU gefieltert(Kontinent)
-            getEu: function(){
-                var euStates = ['Albania','Andorra','Armenia','Austria','Azerbaijan','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Cyprus','Czech Republic','Denmark','Estonia','Finland','France','Georgia','Germany','Greece','Hungary','Iceland','Ireland','Italy','Kazakhstan','Kosovo','Latvia','Liechtenstein','Lithuania','Luxembourg','Macedonia','Malta','Moldova','Monaco','Montenegro','Netherlands','Norway','Poland','Portugal','Romania','Russia','San Marino','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Turkey','Ukraine','United Kingdom','Vatican City (Holy See)'];
-                var bebenAutArray = [];
-                for (var i = 0; i < worldData.features.length; i++) {
-                    for(var o=0;o<euStates.length;o++){
-                        if(worldData.features[i].properties.flynn_region.indexOf(euStates[o].toUpperCase()) != -1){
-                            bebenAutArray.push(convertFeatureToQuakeObject(worldData.features[i]));
-                            break;
-                        }
-                    }
-                }
-                return bebenAutArray;
-            }
-        };
-    })
-
     .factory('DataGeoWebZAMG', function ($http,$ionicLoading,ApiEndpointZAMG,$templateCache) {
         //http://localhost:8100/apiZAMG/query?orderby=time;location=austria;limit=10
         var atData = null;
@@ -193,17 +88,14 @@ angular.module('starter.resources', ['ngResource'])
         var euData = null;
         var euDataWithObjects = null;
         var euLastDate = null;
-        var somedata=null;
-        var isOnline=null;
 
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner><br/>Lade Erdbebendaten'
         });
-
         var AutPromise = $http({method: "GET", url: ApiEndpointZAMG.url+'/query?orderby=time;location=austria;limit=10', cache: $templateCache}).
         then(function(response) {
-            $ionicLoading.hide();
             atData = response.data;
+            $ionicLoading.hide();
             return true;
         }, function(response) {
             $ionicLoading.hide();
@@ -243,8 +135,6 @@ angular.module('starter.resources', ['ngResource'])
         var convertFeatureToQuakeObject = function(feature){
             var timeFull = feature.properties.time;
             var dateAndTime = timeFull.split("T");
-            var date = dateAndTime[0];
-            var timeLocal = dateAndTime[1].substring(0, 8)+" UTC";
             var distanceFromPhoneToQuake="";
             return new quakeData(
                 feature.id,
@@ -383,30 +273,28 @@ angular.module('starter.resources', ['ngResource'])
             }
 
         };
-
     })
 
     //Factory zum Senden der erstellten Erdbeben
     .factory('QuakeReport', function ($http) {
         var quakeDataObj = new quakeReport(
             "",
+            null,
+            null,
+            null,
+            null,
             "",
             "",
             "",
             "",
             "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
+            null,
+            null
         );
 
         return {
             setId: function (id) {
               quakeDataObj.referenzID=id;
-                console.log(quakeDataObj.referenzID);
             },
             setLon: function (lon) {
                 quakeDataObj.locLon=lon;
@@ -433,7 +321,8 @@ angular.module('starter.resources', ['ngResource'])
             setMagClass: function (mag) {
                 quakeDataObj.klassifikation=mag;
             },
-            setTime: function (time) {
+            //Zeit und datum in utc
+            setDateTime: function (time) {
                 quakeDataObj.verspuert=time;
             },
             //Die Bebenintensitaet setzten
@@ -442,6 +331,132 @@ angular.module('starter.resources', ['ngResource'])
             },
             setContact: function (contact) {
                 quakeDataObj.kontakt=contact;
+            },
+            //TODO daten senden mithilfe von http
+            sendData: function (){
+                console.log("id "+quakeDataObj.referenzID);
+                console.log("loclon "+quakeDataObj.locLon);
+                console.log("loclat "+quakeDataObj.locLat);
+                console.log("locprec "+quakeDataObj.locPrecision);
+                console.log("locallastupdate "+quakeDataObj.locLastUpdate);
+                console.log("plz "+quakeDataObj.mlocPLZ);
+                console.log("ort "+quakeDataObj.mlocOrtsname);
+                console.log("stock"+quakeDataObj.stockwerk);
+                console.log("klass "+quakeDataObj.klassifikation);
+                console.log("versp "+quakeDataObj.verspuert);
+                console.log("kommentar "+quakeDataObj.kommentar);
+                console.log("kontakt "+quakeDataObj.kontakt);
+            }
+        };
+    })
+    .factory('DataSeismicPortal', function ($http,$ionicLoading) {
+        //Ergebnis der Abfrage von ca.(mit lat und long eingeschraenkt) Oesterreich
+        var myData = null;
+        //Ergebnis Abfrage aller Erdbeben
+        var worldData = null;
+
+        //In der App.js wird gewartet bis die Abfrage vollendet wurde (http.get.success)
+        //Danach wird die App geladen
+        $ionicLoading.show({
+            template: '<ion-spinner></ion-spinner><br/>Lade Erdbebendaten'
+        });
+        var AutPromise = $http.get('/api/query?orderby=time&limit=50&minlat=46.3780&maxlat=49.0171&minlon=9.5359&maxlon=17.1627&format=json&nodata=404').success(function (data) {
+            $ionicLoading.hide();
+            myData = data;
+        });
+
+        //Abfrage der aller Erdbeben
+        var getWorldData =
+            $http.get('/api/query?orderby=time&limit=50&format=json&nodata=404').success(function (data) {
+                worldData = data;
+            });
+
+        //Hier wird die Farbe nach dem schweregrad des Erdbebens vergeben
+        var quakeClasses= function (mag) {
+            if(mag < 5){
+                return "item-balanced";
+            }
+            if(mag >= 5 && mag < 6){
+                return "item-energized";
+            }
+            if(mag >= 6){
+                return "item-assertive";
+            }
+        };
+
+        var convertFeatureToQuakeObject = function(feature){
+            var timeFull = feature.properties.time;
+            var dateAndTime = timeFull.split("T");
+            var date = dateAndTime[0];
+            var timeLocal = dateAndTime[1].substring(0, 8)+" UTC";
+            var distanceFromPhoneToQuake="";
+            return new quakeData(
+                feature.id,
+                feature.properties.mag,
+                feature.properties.time,
+                feature.properties.lon,
+                feature.properties.lat,
+                feature.properties.flynn_region,
+                distanceFromPhoneToQuake,
+                quakeClasses(feature.properties.mag),
+                "ldate",
+                "ltime",
+                "ltz"
+            );
+
+        };
+
+        return {
+            AutPromise: AutPromise,
+            //Oesterrechische Erdbeben Daten abfragen
+            //return: Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
+            getAut: function () {
+                //alle Erdbebendaten im hintergrund Abfragen
+                getWorldData;
+                var bebenAutArray = [];
+                for (var i = 0; i < myData.features.length; i++) {
+                    if (myData.features[i].properties.flynn_region === "AUSTRIA") {
+                        bebenAutArray.push(convertFeatureToQuakeObject(myData.features[i]));
+                    }
+                }
+                return bebenAutArray;
+            },
+            //Ein Erdbeben nach ID Abfragen (Welt)
+            getQuakefromIdWorld: function (id) {
+                for (var i = 0; i < worldData.features.length; i++) {
+                    if (worldData.features[i].id === id) {
+                        return convertFeatureToQuakeObject(worldData.features[i]);
+                    }
+                }
+                for (var i = 0; i < myData.features.length; i++) {
+                    if (myData.features[i].id === id) {
+                        return convertFeatureToQuakeObject(myData.features[i]);
+                    }
+                }
+            },
+            //Alle Erdbebendaten abfragen
+            //return: Erdbeben Objekte , daten formatiert
+            getWorld: function () {
+                var bebenAutArray = [];
+                for (var i = 0; i < worldData.features.length; i++) {
+                    bebenAutArray.push(convertFeatureToQuakeObject(worldData.features[i]));
+                }
+                return bebenAutArray;
+            },
+            //Abfrage der Erdbeben in der EU
+            //return : Erdbeben Objekte , daten formatiert und nach EU gefieltert(Kontinent)
+            getEu: function(){
+                var euStates = ['Albania','Andorra','Armenia','Austria','Azerbaijan','Belarus','Belgium','Bosnia and Herzegovina','Bulgaria','Croatia','Cyprus','Czech Republic','Denmark','Estonia','Finland','France','Georgia','Germany','Greece','Hungary','Iceland','Ireland','Italy','Kazakhstan','Kosovo','Latvia','Liechtenstein','Lithuania','Luxembourg','Macedonia','Malta','Moldova','Monaco','Montenegro','Netherlands','Norway','Poland','Portugal','Romania','Russia','San Marino','Serbia','Slovakia','Slovenia','Spain','Sweden','Switzerland','Turkey','Ukraine','United Kingdom','Vatican City (Holy See)'];
+                var bebenAutArray = [];
+                for (var i = 0; i < worldData.features.length; i++) {
+                    for(var o=0;o<euStates.length;o++){
+                        if(worldData.features[i].properties.flynn_region.indexOf(euStates[o].toUpperCase()) != -1){
+                            bebenAutArray.push(convertFeatureToQuakeObject(worldData.features[i]));
+                            break;
+                        }
+                    }
+                }
+                return bebenAutArray;
             }
         };
     });

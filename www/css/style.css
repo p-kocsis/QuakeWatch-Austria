@@ -47,3 +47,11 @@ div.footer-button a.button.button-full {
 .scroll {
     height: 100%;
 }
+.my-input {
+    transition:0.5s linear all;
+    background: white;
+}
+.my-input.ng-invalid {
+    background: red;
+    color:white;
+}

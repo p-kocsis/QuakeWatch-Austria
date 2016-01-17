@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','ngCordova','angularMoment','ionic-timepicker'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','ngCordova','angularMoment','ionic-timepicker','ionic-datepicker','ngMap',])
     .run(function ($ionicPlatform,amMoment) {
         $ionicPlatform.ready(function () {
             //Zum anzeigen der Vergangenen Zeit in deutsch(beben_detail)

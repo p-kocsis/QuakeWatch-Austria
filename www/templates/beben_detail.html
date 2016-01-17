@@ -7,6 +7,7 @@
             <div class="col">
                 <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'LL'}}</span> <br>
                 <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'HH:mm:ss'}}</span>
+
                 <p class="bold">{{quake.country}}</p>
             </div>
         </div>
@@ -18,16 +19,17 @@
         </div>
         <div class="row">
             <div class="col">
-                <p class="bold" > Standort: </p>{{quake.locLon}} Länge {{quake.locLat}} Breite
-                <map center="[ {{quake.locLat}} , {{quake.locLon}}]" zoom-to-inlude-markers="true">
-                    <marker position=“[ {{quake.locLat}} , {{quake.locLon}} ]”></marker>
-                    </map>
+                <p class="bold"> Standort: </p>{{quake.locLon}} Länge {{quake.locLat}} Breite
+                <map center="[ {{quake.locLat}} , {{quake.locLon}} ]" zoom="13">
+                    <marker center="[ {{quake.locLat}} , {{quake.locLon}} ]" ></marker>
+                </map>
             </div>
 
         </div>
         <div class="row">
             <div class="col">
-                <p class="bold"> Lokalzeit am Ort des Erdbebens: </p><span>{{quake.ldate}} {{quake.ltime}} {{quake.ltz}}</span><br>
+                <p class="bold"> Lokalzeit am Ort des Erdbebens: </p>
+                <span>{{quake.ldate}} {{quake.ltime}} {{quake.ltz}}</span><br>
             </div>
         </div>
         <div class="row">

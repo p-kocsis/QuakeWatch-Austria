@@ -1,5 +1,5 @@
 <ion-view view-title="Erdbeben verspürt">
-    <ion-content>
+    <ion-content scroll="false">
         <form ng-submit="goToComics()">
             <div class="row row-center">
                 <div class="col">
@@ -11,29 +11,30 @@
                     </h5>
 
                     <label class="item item-input">
-                        <input type="number" placeholder="Postleitzahl" ng-model="zipCode">
+                        <input class="my-input" type="number" placeholder="Postleitzahl" ng-model="input.zipCode" ng-pattern="/^\d{4}$/">
                     </label>
                     <label class="item item-input">
-                        <input type="text" placeholder="Ort" ng-model="place">
+                        <input class="my-input" type="text" placeholder="Ort" ng-model="input.place" ng-pattern="/^\D+$/">
                     </label>
-                    <label class="item item-input">
-                        <input type="date" placeholder="Datum" ng-model="date">
+                    <ionic-datepicker input-obj="datepickerObject">
+                    <label class="item">
+                            {{input.date | date:datepickerObject.dateFormat}}
                     </label>
-                    <label class="item">{{chosenTime}}</label>
+                    </ionic-datepicker>
+                    <ionic-timepicker input-obj="timePickerObject">
+                    <label class="item">
+                        <standard-time-meridian etime='timePickerObject.inputEpochTime'>{{input.chosenTime}}
+                        </standard-time-meridian>
+                    </label>
+                    </ionic-timepicker>
                 </div>
             </div>
             <div class="row row-center">
                 <div class="col">
-                    <button class="button button-assertive" type="submit">Weiter</button>
-
+                    <button class="button button-assertive" type="submit" ng-show="input.zipCode && input.place">Weiter</button>
                 </div>
             </div>
         </form>
-        <ionic-timepicker input-obj="timePickerObject">
-            <button class="button button-block button-assertive overflowShow">
-                <standard-time-meridian etime='timePickerObject.inputEpochTime'>Zeit wählen
-                </standard-time-meridian>
-            </button>
-        </ionic-timepicker>
+
     </ion-content>
 </ion-view>
