@@ -1,7 +1,23 @@
-angular.module('starter.controllers', ['starter.resources'])
-    .controller('AppCtrl', function () {
+/**
+ * @ngdoc overview
+ * @name controllers
+ * @description
+ * # controllers
+ * Hier geschieht die ganze Logik der Applikation.
+ * In diesem Modul sind alle Controller implementiert
+ *
+ */
+angular.module('quakewatch.controllers', ['quakewatch.resources'])
+    .controller('AppCtrl', function (JsonData,$scope) {
+        $scope.isOnline = JsonData.isOnline();
     })
-    //Home Controller
+
+    /**
+     * @ngdoc controller
+     * @name controllers.controller:HomeCtrl
+     * @description
+     * Das ist der Controller für die home.html View
+     */
     .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport,$ionicLoading) {
         $scope.isOnline = JsonData.isOnline();
         if(!$scope.isOnline){
@@ -108,36 +124,69 @@ angular.module('starter.controllers', ['starter.resources'])
             //END MODAL
         }
     })
-    .controller('BebenWahrnehmungCtrl', function ($scope, $ionicModal, $state, QuakeReport) {
+    /**
+     * @ngdoc controller
+     * @name controllers.controller:BebenWahrnehmungCtrl
+     * @description
+     * Das ist der Controller für die beben_wahrnehmung.html View
+     */
+    .controller('BebenWahrnehmungCtrl', function ($scope, $state, QuakeReport) {
         $scope.continueToAdditional = function (magClass) {
-            console.log(magClass);
             QuakeReport.setMagClass(magClass);
             $state.go('app.bebenZusatzfragen');
         };
     })
+    /**
+     * @ngdoc controller
+     * @name controllers.controller:ZusatzVerhaltenCtrl
+     * @description
+     * Das ist der Controller für die zusatz_verhalten_erdbeben.html View
+     */
     .controller('ZusatzVerhaltenCtrl', function ($scope, $location, $anchorScroll, $ionicScrollDelegate) {
         $scope.scrollTop = function () {
+            $location.hash(" ");
             $ionicScrollDelegate.scrollTop(true);
         };
         $scope.scrollToAnchor = function (anchorID) {
             $location.hash(anchorID);
             var handle = $ionicScrollDelegate.$getByHandle('verhaltenContent');
-            handle.anchorScroll(true);
+            handle.scrollBy(0,-8,true);
         };
     })
+    /**
+     * @ngdoc controller
+     * @name controllers.controller:ZusatzUebersichtCtrl
+     * @description
+     * Das ist der Controller für die zusatz_uebersicht.html View
+     */
     .controller('ZusatzUebersichtCtrl', function ($scope) {
 
     })
+    /**
+     * @ngdoc controller
+     * @name controllers.controller:ZusatzLexikonCtrl
+     * @description
+     * Das ist der Controller für die zusatz_lexikon.html View
+     */
     .controller('ZusatzLexikonCtrl', function ($scope, $ionicScrollDelegate) {
         $scope.scrollTop = function () {
             $ionicScrollDelegate.scrollTop(true);
         };
     })
+    /**
+     * @ngdoc controller
+     * @name controllers.controller:BebenZusatzfragenCtrl
+     * @description
+     * Das ist der Controller für die beben_zusatzfragen.html View
+     */
     .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport) {
         $scope.input = {
           floor: "",
             comment: null,
-            contact: null
+            contact: null,
+            itemsDropped: null,
+            ranAway: null,
+            facade: null
         };
         $scope.sendData = function (){
             QuakeReport.setFloor($scope.input.floor);
@@ -146,7 +195,20 @@ angular.module('starter.controllers', ['starter.resources'])
             console.log($scope.input.floor);
         };
     })
-    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window,$ionicLoading) {
+    /**
+     * @ngdoc controller
+     * @name controllers.controller:BebenDetailCtrl
+     * @description
+     * Das ist der Controller für die beben_detail.html View
+     */
+    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window,$ionicLoading,NgMap) {
+
+        $scope.mapVisible=false;
+        $scope.showMap = function(){
+            $scope.mapVisible= !$scope.mapVisible;
+            $scope.$broadcast('scroll.resize');
+            // document.getElementById("scrollArea").offsetHeight;
+        };
 
         function distance(lat1, lon1, lat2, lon2) {
             var p = 0.017453292519943295;    // Math.PI / 180
@@ -159,6 +221,18 @@ angular.module('starter.controllers', ['starter.resources'])
 
         }
         $scope.quake = JsonData.getQuakefromIdWorld($stateParams.bebenId);
+        switch ($scope.quake.classColor){
+            case "item-balanced":
+                $scope.detailHeaderClass = "balanced-bg";
+                break;
+            case "item-energized":
+                $scope.detailHeaderClass = "energized-bg";
+                break;
+            case "item-assertive":
+                $scope.detailHeaderClass = "assertive-bg";
+                break;
+        }
+
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation
             .getCurrentPosition(posOptions)
@@ -172,8 +246,9 @@ angular.module('starter.controllers', ['starter.resources'])
                         $scope.quake.locLat,
                         $scope.quake.locLon
                     ) + " km";
-
+                $scope.$broadcast('scroll.resize');
             }, function (err) {
+                $scope.$broadcast('scroll.resize');
                 $scope.quake.distanceFromPhoneToQuake = "Bitte Ortungsdienste aktivieren";
             });
         //MODAL BEBENDETAIL
@@ -228,6 +303,12 @@ angular.module('starter.controllers', ['starter.resources'])
         };
         //MODAL ENDE
     })
+    /**
+     * @ngdoc controller
+     * @name controllers.controller:BebenEintragCtrl
+     * @description
+     * Das ist der Controller für die beben_eintrag.html View
+     */
     .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, QuakeReport) {
         $scope.input = {
             zipCode : null,

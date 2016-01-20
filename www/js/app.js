@@ -1,10 +1,13 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','ngCordova','angularMoment','ionic-timepicker','ionic-datepicker','ngMap',])
+/**
+ * @ngdoc overview
+ * @name quakewatch
+ * @description
+ * # quakewatch
+ * Hier wird das routing der Applikation durchgeführt.
+ * Falls eine neue View (Seite, Menüpunkt, ..) hizugefügt wird dann muss diese auch hier verlinkt werden.
+ * Alle externen Module die für die App benötigt werden sind hier inkludiert.(außer ngResource,es ist eine Gewohnheit diese im Service Modul zu importieren)
+ */
+angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.resources','ngCordova','angularMoment','ionic-timepicker','ionic-datepicker','ngMap'])
     .run(function ($ionicPlatform,amMoment) {
         $ionicPlatform.ready(function () {
             //Zum anzeigen der Vergangenen Zeit in deutsch(beben_detail)
@@ -24,6 +27,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
 
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
+        /**
+         * @ngdoc object
+         * @name quakewatch.object:state('app')
+         * @description
+         * Das ist der Controller für die home.html View
+         */
             .state('app', {
                 url: '/app',
                 abstract: true,
@@ -33,7 +42,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.resources','
             .state('app.home', {
                 url: '/home',
                 resolve: {
-                    AustrianDataResolved: function (JsonData) {
+                    AustrianDataResolved: function (JsonData,$ionicLoading) {
+                        $ionicLoading.show({
+                            template: '<ion-spinner></ion-spinner><br/>Lade Erdbebendaten',
+                            hideOnStateChange: true
+                        });
                         var autData = JsonData.AutPromise;
                         autData.then(function(result) {
                             console.log(result);

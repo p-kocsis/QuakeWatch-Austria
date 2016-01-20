@@ -1,5 +1,5 @@
 <ion-view view-title="Zusatzfragen">
-    <ion-content>
+    <ion-content scroll="false">
         <form ng-submit="sendData()">
             <div class="row row-center">
                 <div class="col">
@@ -18,7 +18,6 @@
                     </label>
 
                     <!-- Start der optionalen Abfragen, wenn Erdbeben sehr stark. Absichtlich hier in der Mitte, Kommentar sollte immmer das letzte sein
-                    Ich hätt hier lieber so geile toggles gehabt, aber die überreissen das sicher nicht, ALSO mach ich dropdowns
                     <br><ion-toggle ng-model="itemsDropped" toggle-class="toggle-calm">Es sind Gegenstände umgefallen</ion-toggle>
 
                     Abfrage:
@@ -30,7 +29,7 @@
                         <br><h5>Sind Gegenstände umgefallen?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="itemsDropped">
+                            <select ng-model="input.itemsDropped">
                                 <option value="0">Ja</option>
                                 <option value="1" selected>Nein</option>
                             </select>
@@ -41,7 +40,7 @@
                         <br><h5>Sind Sie aus Angst ins Freie geflüchtet?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="ranAway">
+                            <select ng-model="input.ranAway">
                                 <option value="0">Ja</option>
                                 <option value="1" selected>Nein</option>
                             </select>
@@ -52,7 +51,7 @@
                         <br><h5>Feine Risse im Verputz?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="facade">
+                            <select ng-model="input.facade">
                                 <option value="0">Ja</option>
                                 <option value="1" selected>Nein</option>
                             </select>
@@ -69,7 +68,7 @@
             </div>
             <div class="row row-center">
                 <div class="col">
-                    <button class="button button-assertive" type="submit">Weiter</button>
+                    <button class="button button-assertive" type="submit" ng-show="input.floor && input.facade">Weiter</button>
                 </div>
             </div>
         </form>

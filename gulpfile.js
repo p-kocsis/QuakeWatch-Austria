@@ -10,6 +10,9 @@ var replace = require('gulp-replace');
 var paths = {
   sass: ['./scss/**/*.scss']
 };
+var connect = require('gulp-connect');
+
+gulp.task('default', ['sass']);
 
 gulp.task('add-proxy', function(){
   gulp.src(['/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/resources.js'])
@@ -22,8 +25,6 @@ gulp.task('remove-proxy', function(){
     .pipe(replace('http://localhost:8100/apiZAMG', 'http://geoweb.zamg.ac.at/fdsnws/app/1'))
     .pipe(gulp.dest('/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/'));
 });
-
-gulp.task('default', ['sass']);
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
@@ -38,8 +39,16 @@ gulp.task('sass', function(done) {
     .on('end', done);
 });
 
+
+
+gulp.task('html', function () {
+  gulp.src('./docs/*')
+      .pipe(connect.reload());
+});
+
 gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
+  gulp.watch("./docs/*",['html']);
 });
 
 gulp.task('install', ['git-check'], function() {
@@ -60,6 +69,39 @@ gulp.task('git-check', function(done) {
     process.exit(1);
     done();
   }});
+
+gulp.task('serve-docs', function() {
+  connect.server({
+    root: './docs',
+    livereload: false,
+    port: 8200
+  });
+});
+
+gulp.task('generate-docs', [], function () {
+  var gulpDocs = require('gulp-ngdocs');
+  var options = {
+    html5Mode: false,
+    startPage: '/api',
+    title: "QuakeWatch App Dokumentation"
+    /*
+    image: "path/to/my/image.png",
+    imageLink: "http://my-domain.com",
+    titleLink: "/api"
+    */
+  };
+  return gulpDocs.sections({
+    api: {
+      glob:['www/js/*.js'],
+      api: true,
+      title: 'API Dokumentation'
+    },
+    tutorial: {
+      glob: ['docs_new_developer/*.js'],
+      title: 'Neuer Entwickler'
+    }
+  }).pipe(gulpDocs.process(options)).pipe(gulp.dest('./docs'));
+});
   
  
   

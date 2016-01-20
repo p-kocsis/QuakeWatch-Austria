@@ -13,8 +13,8 @@
                 <ion-item class="item {{quake.classColor}} row-no-padding" collection-repeat="quake in quakeList"
                           href="#/app/bebenDetail/{{quake.id}}">
                     <div class="row">
-                        <div class="col col-33 col-bottom">
-                            <h1 class="whiteButton text-leftt">{{quake.magnitude}}</h1>
+                        <div class="col col-33">
+                            <h1 class="whiteButton">{{quake.magnitude}}</h1>
                         </div>
                         <div class="col text-left">
                             <span>{{quake.dateAndTime| amUtc | amLocal | amDateFormat:'LLL'}}</span><br>
