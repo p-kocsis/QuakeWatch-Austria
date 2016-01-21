@@ -652,8 +652,8 @@ angular.module('quakewatch.resources', ['ngResource'])
                 feature.properties.flynn_region,
                 distanceFromPhoneToQuake,
                 quakeClasses(feature.properties.mag),
-                "ldate",
-                "ltime",
+                "19.1.2016",
+                "10:10",
                 "ltz"
             );
 
