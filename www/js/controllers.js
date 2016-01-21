@@ -116,9 +116,11 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     });
             };
             //Fuer die Buttons der 3 letzten spuerhbaren erdbeben (ID uebergeben)
-            $scope.recentQuakes = function (id) {
-                QuakeReport.setId(id);
+            //TODO MIT DER ID WIEDER UMBAUEN
+            $scope.recentQuakes = function () {
+                //QuakeReport.setId(id);
                 $scope.selectModal.hide();
+
                 $state.go('app.bebenEintrag');
             };
             //END MODAL
@@ -179,7 +181,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die beben_zusatzfragen.html View
      */
-    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport) {
+    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport,$state,$ionicPopup) {
         $scope.input = {
           floor: "",
             comment: null,
@@ -193,7 +195,19 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             QuakeReport.setComment($scope.input.comment);
             QuakeReport.sendData();
             console.log($scope.input.floor);
+            var alertPopup = $ionicPopup.alert({
+                title: 'Danke für ihre Meldung!',
+                template: 'Danke für ihre Meldung!',
+                okText: '', // String (default: 'OK'). The text of the OK button.
+                okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
+            });
+            alertPopup.then(function(res) {
+                $state.go('app.home');
+            });
+
+
         };
+
     })
     /**
      * @ngdoc controller

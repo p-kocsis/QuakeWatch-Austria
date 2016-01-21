@@ -3,7 +3,7 @@
         <h1 class="title light">Erdbeben Verspürt?</h1>
         <a class="button button-clear whiteButton" ng-click="closeSelectModal()">Schließen</a>
     </ion-header-bar>
-    <ion-content class="has-header has-footer" >
+    <ion-content class="has-header has-footer" scroll="false">
         <ion-slide-box delegate-handle="modalSlider" show-pager="false">
             <ion-slide class="padding" id="slide1">
                 <h3 class="light">Wann?</h3>
@@ -24,7 +24,7 @@
             </ion-slide>
             <ion-slide class="padding" id="slide2">
 					<h3 id="header2" class="light">Eines dieser Erdbeben?</h3>
-					<a class="button button-outline button-light button-width-full"  ng-click="recentQuakes({{beben.id}})" ng-repeat="beben in letzteBeben">
+					<a class="button button-outline button-light button-width-full"  ng-click="recentQuakes()" ng-repeat="beben in letzteBeben">
 						{{beben.ldate}} {{beben.ltime}}
 					</a>
                 <a class="button button-outline button-light button-width-full"  ng-click="anderesBeben()" id="buttonAnderesBeben">
