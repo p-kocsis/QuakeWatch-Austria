@@ -654,7 +654,7 @@ angular.module('quakewatch.resources', ['ngResource'])
                 quakeClasses(feature.properties.mag),
                 "19.1.2016",
                 "10:10",
-                "ltz"
+                "MEZ"
             );
 
         };
