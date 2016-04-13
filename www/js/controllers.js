@@ -407,6 +407,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
         $scope.goToComics = function () {
             QuakeReport.setPlace($scope.input.place);
             QuakeReport.setZIP($scope.input.zipCode);
+			QuakeReport.setStrasse($scope.input.strasse);
             var datetime = new Date(
                 $scope.input.date.getFullYear(),
                 $scope.input.date.getMonth(),

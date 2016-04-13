@@ -16,6 +16,11 @@
                     <ion-input class="item item-input">
                         <input class="my-input" type="text" placeholder="Ort" ng-model="input.place" ng-pattern="/^\D+$/">
                     </ion-input>
+					
+					<ion-input class="item item-input">
+                        <input class="my-input" type="text" placeholder="Stra&szlig;e" ng-model="input.strasse">
+                    </ion-input>
+					
                     <ionic-datepicker input-obj="datepickerObject">
                     <ion-input class="item">
                             {{input.date | date:datepickerObject.dateFormat}}

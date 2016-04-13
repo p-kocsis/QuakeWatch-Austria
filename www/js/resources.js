@@ -414,6 +414,7 @@ angular.module('quakewatch.resources', ['ngResource'])
             null,
             "",
             "",
+			"",
             "",
             "",
             "",
@@ -579,6 +580,19 @@ angular.module('quakewatch.resources', ['ngResource'])
              */
             setContact: function (contact) {
                 quakeDataObj.kontakt=contact;
+            },
+			/**
+             * @ngdoc method
+             * @name resources.service#setContact
+             * @methodOf resources.service:QuakeReport
+             *
+             * @description
+             * @param {String} contact Strasse
+             * @example
+             * QuakeReport.setStrasse("Asdgasse 1");
+             */
+            setStrasse: function (strasse) {
+                quakeDataObj.mlocStrasse=strasse;
             },
             /**
              * @ngdoc method
