@@ -1,4 +1,4 @@
-<ion-view view-title="Erdbeben verspürt">
+<ion-view cache-view="false" view-title="Erdbeben verspürt">
     <ion-content scroll="false">
         <form ng-submit="goToComics()">
             <div class="row row-center">
@@ -9,22 +9,23 @@
                             Diese Daten werden nur aus Forschungsspezifischen Zwecken gesammelt.<br>
                         </p>
                     </h5>
-                    <label class="item item-input">
+                    <ion-input class="item item-input">
                         <input class="my-input" type="number" placeholder="Postleitzahl" ng-model="input.zipCode" ng-pattern="/^\d{4}$/">
-                    </label>
-                    <label class="item item-input">
+                    </ion-input>
+
+                    <ion-input class="item item-input">
                         <input class="my-input" type="text" placeholder="Ort" ng-model="input.place" ng-pattern="/^\D+$/">
-                    </label>
+                    </ion-input>
                     <ionic-datepicker input-obj="datepickerObject">
-                    <label class="item">
+                    <ion-input class="item">
                             {{input.date | date:datepickerObject.dateFormat}}
-                    </label>
+                    </ion-input>
                     </ionic-datepicker>
                     <ionic-timepicker input-obj="timePickerObject">
-                    <label class="item">
+                    <ion-input class="item">
                         <standard-time-meridian etime='timePickerObject.inputEpochTime'>{{input.chosenTime}}
                         </standard-time-meridian>
-                    </label>
+                    </ion-input>
                     </ionic-timepicker>
                 </div>
             </div>

@@ -2,18 +2,23 @@
 
 
     <ion-content scroll="false">
-        <div class="row {{detailHeaderClass}}">
-            <div class="col col-33 col-center">
-                <h1 class="text-center">{{quake.magnitude}}</h1>
-            </div>
-            <div class="col">
-                <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'LL'}}</span> <br>
-                <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'HH:mm:ss'}}</span>
+        <ion-list>
+            <ion-item>
+            <div class="row {{detailHeaderClass}}">
+                <div class="col col-33 col-center">
+                    <h1 class="text-center">{{quake.magnitude}}</h1>
+                </div>
+                <div class="col">
+                    <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'LL'}}</span> <br>
+                    <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'HH:mm:ss'}}</span>
 
-                <p class="bold">{{quake.country}}</p>
+                    <p class="bold">{{quake.country}}</p>
+                </div>
             </div>
-        </div>
-        <ion-scroll zooming="true" direction="y" class="myScroll">
+            </ion-item>
+        </ion-list>
+
+        <ion-scroll scroll="true" zooming="true" direction="y" class="myScroll" >
             <div>
                 <div class="row">
                     <div class="col col-top">

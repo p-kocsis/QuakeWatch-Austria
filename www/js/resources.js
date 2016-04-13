@@ -41,7 +41,12 @@
  */
 angular.module('quakewatch.resources', ['ngResource'])
     .constant('ApiEndpointZAMG', {
+        //http://localhost:8100/apiZAMG
+        //http://localhost:8100/apiZAMG
         url: 'http://localhost:8100/apiZAMG'
+    })
+    .constant('ApiEndpointSeismic', {
+        url: 'http://localhost:8100/api'
     })
     /**
      * @ngdoc service
@@ -53,7 +58,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * Für nähere Informationen zur implementierung einer eigenen Factory bei der Dokumentation für {@link resources resources} nachschlagen
      */
     .factory('JsonData', function (DataGeoWebZAMG,DataSeismicPortal) {
-        var restEndpoint=DataSeismicPortal;
+        var restEndpoint=DataGeoWebZAMG;
         var isOnline=null;
         return {
             /**
@@ -603,14 +608,14 @@ angular.module('quakewatch.resources', ['ngResource'])
     })
 
 
-    .factory('DataSeismicPortal', function ($http,$templateCache) {
+    .factory('DataSeismicPortal', function ($http,$templateCache,ApiEndpointSeismic) {
         //Ergebnis der Abfrage von ca.(mit lat und long eingeschraenkt) Oesterreich
         var myData = null;
         //Ergebnis Abfrage aller Erdbeben
         var worldData = null;
 
 
-        var AutPromise = $http({method: "GET", url: '/api/query?orderby=time&limit=50&minlat=46.3780&maxlat=49.0171&minlon=9.5359&maxlon=17.1627&format=json&nodata=404', cache: $templateCache}).
+        var AutPromise = $http({method: "GET", url: ApiEndpointSeismic.url+'/query?orderby=time&limit=50&minlat=46.3780&maxlat=49.0171&minlon=9.5359&maxlon=17.1627&format=json&nodata=404', cache: $templateCache}).
         then(function(response) {
             myData = response.data;
             return true;
@@ -620,7 +625,7 @@ angular.module('quakewatch.resources', ['ngResource'])
 
         //Abfrage der aller Erdbeben
         var getWorldData =
-            $http.get('/api/query?orderby=time&limit=50&format=json&nodata=404').success(function (data) {
+            $http.get(ApiEndpointSeismic.url+'/query?orderby=time&limit=50&format=json&nodata=404').success(function (data) {
                 worldData = data;
             });
 

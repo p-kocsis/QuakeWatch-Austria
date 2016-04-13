@@ -181,7 +181,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die beben_zusatzfragen.html View
      */
-    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport,$state,$ionicPopup) {
+    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport,$state,$ionicPopup,$ionicHistory) {
         $scope.input = {
           floor: "",
             comment: null,
@@ -190,6 +190,9 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             ranAway: null,
             facade: null
         };
+        $ionicHistory.nextViewOptions({
+            disableBack: true
+        });
         $scope.sendData = function (){
             QuakeReport.setFloor($scope.input.floor);
             QuakeReport.setComment($scope.input.comment);
@@ -202,6 +205,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
             });
             alertPopup.then(function(res) {
+                //$location.path("/app/home");
                 $state.go('app.home');
             });
 
