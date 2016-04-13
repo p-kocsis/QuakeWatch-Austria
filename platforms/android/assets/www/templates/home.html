@@ -8,13 +8,13 @@
             </div>
         </ion-header-bar>
 
-    <ion-content>
+        <ion-content>
             <ion-list>
                 <ion-item class="item {{quake.classColor}} row-no-padding" collection-repeat="quake in quakeList"
                           href="#/app/bebenDetail/{{quake.id}}">
                     <div class="row">
-                        <div class="col col-25 col-bottom">
-                            <h1 class="whiteButton text-leftt">{{quake.magnitude}}</h1>
+                        <div class="col col-33">
+                            <h1 class="whiteButton">{{quake.magnitude}}</h1>
                         </div>
                         <div class="col text-left">
                             <span>{{quake.dateAndTime| amUtc | amLocal | amDateFormat:'LLL'}}</span><br>
@@ -29,8 +29,8 @@
                     on-infinite="loadMoreData()"
                     distance="1%">
             </ion-infinite-scroll>
-    </ion-content>
-    <ion-footer-bar></ion-footer-bar>
+        </ion-content>
+        <ion-footer-bar></ion-footer-bar>
         <div class="bar bar-footer bar-assertive footer-button">
             <a class="button button-full button-clear" ng-click="openSelectModal()">
                 Habe Beben Verspürt
@@ -39,17 +39,38 @@
     </div>
     <div ng-if="isOnline == false">
         <ion-content style="background-color: #f2f2f2" class="padding">
-            <h3>Sie befinden sich im Offline Modus </h3>
-            <p>Es stehen Ihnen allerdings noch interessante Informationen über Erdbeben zur Verfügung (Navigation über das Menü) </p>
+            <div class="row row-center">
+                <div class="col">
+                    <h3>Sie befinden sich im Offline Modus </h3>
 
-            <ion-list>
-                <ion-item menu-close href="#/app/zusatzUebersicht">
-                    Erdbeben - &Uuml;bersicht
-                </ion-item>
-                <ion-item menu-close href="#/app/zusatzVerhalten">
-                    Erdbeben - Eigenes Verhalten
-                </ion-item>
-            </ion-list>
+                    <p>Es stehen Ihnen allerdings noch interessante Informationen über Erdbeben zur Verfügung
+                        (Navigation über
+                        das Menü) </p>
+
+                    <ion-list>
+                        <div class="item item-divider">
+                            Weitere Informationen
+                        </div>
+                        <ion-item href="#/app/zusatzUebersicht">
+                            &Uuml;bersicht
+                        </ion-item>
+                        <ion-item href="#/app/zusatzVerhalten">
+                            Eigenes Verhalten
+                        </ion-item>
+                        <ion-item href="#/app/zusatzLexikon">
+                            Lexikon
+                        </ion-item>
+                    </ion-list>
+
+                </div>
+            </div>
+            <div class="row row-center">
+                <div class="col">
+                    <a class="button button-assertive" ng-click="getOnline()">
+                        Online Modus
+                    </a>
+                </div>
+            </div>
         </ion-content>
     </div>
 </ion-view>

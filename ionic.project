@@ -9,6 +9,10 @@
     {
       "path": "/apiZAMG",
       "proxyUrl": "http://geoweb.zamg.ac.at/fdsnws/app/1"
+    },
+    {
+      "path": "/apiZAMGFiles",
+      "proxyUrl": "http://geoweb.zamg.ac.at/eq_app"
     }
   ],
   "gulpStartupTasks": [

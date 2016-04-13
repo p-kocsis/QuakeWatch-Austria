@@ -41,12 +41,13 @@
  */
 angular.module('quakewatch.resources', ['ngResource'])
     .constant('ApiEndpointZAMG', {
-        //http://localhost:8100/apiZAMG
-        //http://localhost:8100/apiZAMG
         url: 'http://localhost:8100/apiZAMG'
     })
     .constant('ApiEndpointSeismic', {
         url: 'http://localhost:8100/api'
+    })
+    .constant('ApiEndpointZAMGFiles', {
+        url: 'http://localhost:8100/apiZAMGFiles'
     })
     /**
      * @ngdoc service
@@ -57,8 +58,8 @@ angular.module('quakewatch.resources', ['ngResource'])
      * Es ist ein "Interface" welches den einfachen austausch der Endpunkte ermöglicht
      * Für nähere Informationen zur implementierung einer eigenen Factory bei der Dokumentation für {@link resources resources} nachschlagen
      */
-    .factory('JsonData', function (DataGeoWebZAMG,DataSeismicPortal) {
-        var restEndpoint=DataGeoWebZAMG;
+    .factory('JsonData', function (DataGeoWebZAMG,DataSeismicPortal,DataGeoWebZAMGStaticFiles) {
+        var restEndpoint=DataGeoWebZAMGStaticFiles;
         var isOnline=null;
         return {
             /**
@@ -621,6 +622,289 @@ angular.module('quakewatch.resources', ['ngResource'])
         };
     })
 
+    /**
+     * @ngdoc service
+     * @name resources.service:DataGeoWebZAMGStaticFiles
+     * @description
+     * # rest
+     * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
+     * [ZAMG]: http://localhost:8100/apiZAMG/query
+     */
+    .factory('DataGeoWebZAMGStaticFiles', function ($http,$ionicLoading,ApiEndpointZAMG,ApiEndpointZAMGFiles,$templateCache) {
+        var atData = null;
+        var atDataWithObjects = null;
+        var atLastDate=null;
+        var worldData = null;
+        var worldDataWithObjects = null;
+        var worldLastDate = null;
+        var euData = null;
+        var euDataWithObjects = null;
+        var euLastDate = null;
+
+        var AutPromise = $http({method: "GET", url: ApiEndpointZAMGFiles.url+'/at_latest.json', cache: $templateCache}).
+        then(function(response) {
+            atData = response.data;
+            return true;
+        }, function(response) {
+            return false;
+        });
+        //Abfrage der aller Erdbeben
+        var getWorldData = function() {
+            $http.get(ApiEndpointZAMGFiles.url+'/web_latest.json').success(function (data) {
+                worldData = data;
+            });
+        };
+        var getEuData= function() {
+            $http.get(ApiEndpointZAMGFiles.url+'/eu_latest.json').success(function (data) {
+                euData = data;
+            });
+        };
+        /**
+         * @ngdoc method
+         * @name resources.service#quakeClasses
+         * @methodOf resources.service:DataGeoWebZAMG
+         *
+         * @description
+         * Funktion um die Farbe der Erdbeben in der home.html zu bestimmen
+         * Sie wird in **convertFeatureToQuakeObject** verwendet.
+         * @example
+         * quakeClasses(feature.properties.mag),
+         * @param {int} mag magnitude vom Erdbeben(Feature)
+         * @returns {quakeData} Liefert ein formatiertes Object, welches in ein Array gepackt werden kann
+         */
+        var quakeClasses= function (mag) {
+            if(mag < 5){
+                return "item-balanced";
+            }
+            if(mag >= 5 && mag < 6){
+                return "item-energized";
+            }
+            if(mag >= 6){
+                return "item-assertive";
+            }
+        };
+        /**
+         * @ngdoc method
+         * @name resources.service#convertFeatureToQuakeObject
+         * @methodOf resources.service:DataGeoWebZAMG
+         *
+         * @description
+         * Funktion um JsonDaten in das vorgegebene Objekt umzuwandeln.
+         * @example
+         * convertFeatureToQuakeObject(atData.features[i]);
+         * @param {Object} feature feature = ein Erdbeben
+         * @returns {quakeData} Liefert ein formatiertes Object, welches in ein Array gepackt werden kann
+         */
+        var convertFeatureToQuakeObject = function(feature){
+            var timeFull = feature.properties.time;
+            var dateAndTime = timeFull.split("T");
+            var distanceFromPhoneToQuake="";
+            return new quakeData(
+                feature.id,
+                feature.properties.mag,
+                feature.properties.time,
+                feature.properties.lon,
+                feature.properties.lat,
+                feature.properties.maptitle.substring(13),
+                distanceFromPhoneToQuake,
+                quakeClasses(feature.properties.mag),
+                feature.properties.ldate,
+                feature.properties.ltime,
+                feature.properties.tz
+            );
+        };
+
+
+        return {
+            /**
+             * @ngdoc property
+             * @name resources.service#AutPromise
+             * @description
+             * Dieses "Versprechen" wird in der **app.js** aufgerufen, nur wenn dieses Verpsrechen erfüllt ist wird die App gestartet
+             * <pre>
+             * var AutPromise = $http({method: "GET", url: ApiEndpointZAMG.url+'/query?orderby=time;location=austria;limit=10', cache: $templateCache}).
+             * then(function(response) {
+             *     atData = response.data;
+             *     return true;
+             * }, function(response) {
+             *     return false;
+             * });
+             * </pre>
+             * @propertyOf resources.service:DataGeoWebZAMG
+             * @returns {boolean} true wenn die Daten erfolgreich abgefragt wurden
+             */
+            AutPromise: AutPromise,
+            //Oesterrechische Erdbeben Daten abfragen
+            //return: Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
+            /**
+             * @ngdoc method
+             * @name resources.service#getAut
+             * @methodOf resources.service:DataGeoWebZAMG
+             *
+             * @description
+             * Österrechische Erdbeben Daten abfragen, verwendung über JsonData
+             * @example
+             * JsonData.getAut();
+             * @returns {[quakeData]} Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
+             */
+            getAut: function () {
+                //alle Erdbebendaten im hintergrund Abfragen
+                getEuData();
+                getWorldData();
+                var bebenAutArray = [];
+                for (var i = 0; i < atData.features.length; i++) {
+                    bebenAutArray.push(convertFeatureToQuakeObject(atData.features[i]));
+                    if(i === atData.features.length-1){
+                        atLastDate = atData.features[i].properties.time;
+                    }
+                }
+                atDataWithObjects = bebenAutArray;
+                return bebenAutArray;
+            },
+            /**
+             * @ngdoc method
+             * @name resources.service#getEu
+             * @methodOf resources.service:DataGeoWebZAMG
+             *
+             * @description
+             * Europäische Erdbeben Daten abfragen, verwendung über JsonData
+             * @example
+             * JsonData.getEu();
+             * @returns {[quakeData]} Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
+             */
+            getEu: function(){
+                var bebenAutArray = [];
+                for (var i = 0; i < euData.features.length; i++) {
+                    bebenAutArray.push(convertFeatureToQuakeObject(euData.features[i]));
+                    if(i == euData.features.length-1){
+                        euLastDate = euData.features[i].properties.time;
+                    }
+                }
+                euDataWithObjects=bebenAutArray;
+                return bebenAutArray;
+            },
+            /**
+             * @ngdoc method
+             * @name resources.service#getWorld
+             * @methodOf resources.service:DataGeoWebZAMG
+             *
+             * @description
+             * Alle Erdbeben Daten abfragen, verwendung über JsonData
+             * @example
+             * JsonData.getWorld();
+             * @returns {[quakeData]} Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
+             */
+            getWorld: function () {
+                var bebenAutArray = [];
+                for (var i = 0; i < worldData.features.length; i++) {
+                    bebenAutArray.push(convertFeatureToQuakeObject(worldData.features[i]));
+                    if(i == worldData.features.length-1){
+                        worldLastDate = worldData.features[i].properties.time;
+                    }
+                }
+                worldDataWithObjects = bebenAutArray;
+                return bebenAutArray;
+            },
+            /**
+             * @ngdoc method
+             * @name resources.service#getMoreData
+             * @methodOf resources.service:DataGeoWebZAMG
+             *
+             * @description
+             * Erdbebendaten entsprechend der location laden, fortlaufend zu bereits vorhandenen Erdbebendaten
+             * @param {String} location aut,eu oder world
+             * @example
+             * JsonData.getMoreData(location);
+             * @returns {[quakeData]} Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
+             */
+            getMoreData: function(location){
+                switch (location){
+                    case "aut":
+                        return $http.get(ApiEndpointZAMG.url+'/query?endtime='+atLastDate+';orderby=time;limit=10;location=austria').then(function (response) {
+                            var bebenAutArray = [];
+                            data= response.data;
+                            for (var i = 0; i < data.features.length; i++) {
+                                bebenAutArray.push(convertFeatureToQuakeObject(data.features[i]));
+                                if(i == data.features.length-1){
+                                    atLastDate = data.features[i].properties.time;
+                                }
+                            }
+                            bebenAutArray.splice(0,1);
+                            atDataWithObjects = atDataWithObjects.concat(bebenAutArray);
+                            return bebenAutArray;
+                        });
+                        break;
+                    case "world":
+                        return $http.get(ApiEndpointZAMG.url+'/query?endtime='+worldLastDate+';orderby=time;limit=10;location=welt').then(function (response) {
+                            var bebenAutArray = [];
+                            data= response.data;
+                            for (var i = 0; i < data.features.length; i++) {
+                                bebenAutArray.push(convertFeatureToQuakeObject(data.features[i]));
+                                if(i == data.features.length-1){
+                                    worldLastDate = data.features[i].properties.time;
+                                }
+                            }
+                            bebenAutArray.splice(0,1);
+                            worldDataWithObjects = worldDataWithObjects.concat(bebenAutArray);
+                            return bebenAutArray;
+                        });
+                        break;
+                    case "eu":
+                        return $http.get(ApiEndpointZAMG.url+'/query?endtime='+euLastDate+';orderby=time;limit=10;location=europa').then(function (response) {
+                            var bebenAutArray = [];
+                            data= response.data;
+                            for (var i = 0; i < data.features.length; i++) {
+                                bebenAutArray.push(convertFeatureToQuakeObject(data.features[i]));
+                                if(i == data.features.length-1){
+                                    euLastDate = data.features[i].properties.time;
+                                }
+                            }
+                            bebenAutArray.splice(0,1);
+                            euDataWithObjects = euDataWithObjects.concat(bebenAutArray);
+                            return bebenAutArray;
+                        });
+                        break;
+                }
+            },
+            /**
+             * @ngdoc method
+             * @name resources.service#getQuakefromIdWorld
+             * @methodOf resources.service:DataGeoWebZAMG
+             *
+             * @description
+             * Ein Erdbeben aus den bereits geholten Erdbebendaten bekommen
+             * Wird verwendet um die Detailansicht der Erdbeben darzustellen
+             * @param {int} id Erdbebenid
+             * @example
+             * JsonData.getQuakefromIdWorld(id);
+             * @returns {quakeData} Ein Erdbebenobjekt, mit dem angeforderten Erdbeben
+             */
+            getQuakefromIdWorld: function (id) {
+                if(atDataWithObjects != null){
+                    for (var i = 0; i < atDataWithObjects.length; i++) {
+                        if (atDataWithObjects[i].id == id) {
+                            return atDataWithObjects[i];
+                        }
+                    }
+                }
+                if(worldDataWithObjects != null) {
+                    for (var i = 0; i < worldDataWithObjects.length; i++) {
+                        if (worldDataWithObjects[i].id == id) {
+                            return worldDataWithObjects[i];
+                        }
+                    }
+                }
+                if(euDataWithObjects != null) {
+                    for (var i = 0; i < euDataWithObjects.length; i++) {
+                        if (euDataWithObjects[i].id == id) {
+                            return euDataWithObjects[i];
+                        }
+                    }
+                }
+            }
+
+        };
+    })
 
     .factory('DataSeismicPortal', function ($http,$templateCache,ApiEndpointSeismic) {
         //Ergebnis der Abfrage von ca.(mit lat und long eingeschraenkt) Oesterreich
