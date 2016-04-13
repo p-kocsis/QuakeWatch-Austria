@@ -15,6 +15,7 @@
  *          locLastUpdate,
  *          mlocPLZ,
  *          mlocOrtsname,
+ *			mlocStrasse,
  *          stockwerk,
  *          klassifikation,
  *          verspuert,
@@ -40,7 +41,7 @@
  *     );
  * </pre>
  */
-function quakeReport(referenzID,locLon,locLat,locPrecision,locLastUpdate,mlocPLZ,mlocOrtsname,stockwerk,klassifikation,verspuert,kommentar,kontakt){
+function quakeReport(referenzID,locLon,locLat,locPrecision,locLastUpdate,mlocPLZ,mlocOrtsname,mlocStrasse,stockwerk,klassifikation,verspuert,kommentar,kontakt){
     this.referenzID=referenzID;
     this.locLon=locLon;
     this.locLat=locLat;
@@ -48,6 +49,7 @@ function quakeReport(referenzID,locLon,locLat,locPrecision,locLastUpdate,mlocPLZ
     this.locLastUpdate=locLastUpdate;
     this.mlocPLZ=mlocPLZ;
     this.mlocOrtsname=mlocOrtsname;
+	this.mlocStrasse=mlocStrasse;
     this.stockwerk=stockwerk;
     this.klassifikation=klassifikation;
     this.verspuert=verspuert;
