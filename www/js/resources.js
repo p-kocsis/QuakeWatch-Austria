@@ -701,10 +701,11 @@ angular.module('quakewatch.resources', ['ngResource'])
             var distanceFromPhoneToQuake="";
             return new quakeData(
                 feature.id,
-                feature.properties.mag,
+                Math.round(feature.properties.mag*10)/10,
                 feature.properties.time,
-                feature.properties.lon,
-                feature.properties.lat,
+                Math.round(feature.properties.lon*100)/100,
+                Math.round(feature.properties.lat*100)/100,
+                Math.round(feature.properties.depth),
                 feature.properties.maptitle.substring(13),
                 distanceFromPhoneToQuake,
                 quakeClasses(feature.properties.mag),

@@ -1,12 +1,10 @@
 <ion-view view-title="Beben Details">
 
-
     <ion-content scroll="false">
-        <ion-list>
-            <ion-item>
-            <div class="row {{detailHeaderClass}}">
+            <div class="{{detailHeaderClass}}">
+            <div class="row ">
                 <div class="col col-33 col-center">
-                    <h1 class="text-center">{{quake.magnitude}}</h1>
+                    <h1 class="text-center ">{{quake.magnitude}}</h1>
                 </div>
                 <div class="col">
                     <span>{{quake.dateAndTime | amUtc | amLocal | amDateFormat:'LL'}}</span> <br>
@@ -15,8 +13,7 @@
                     <p class="bold">{{quake.country}}</p>
                 </div>
             </div>
-            </ion-item>
-        </ion-list>
+            </div>
 
         <ion-scroll scroll="true" zooming="true" direction="y" class="myScroll" >
             <div>
@@ -28,7 +25,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <p class="bold"> Standort: </p>{{quake.locLon}} Länge {{quake.locLat}} Breite <br>
+                        <p class="bold"> Standort: </p>{{quake.locLon}} Länge / {{quake.locLat}} Breite / {{quake.depth}} Tiefe<br>
                         <a ng-click="showMap()">
                             Auf der Karte anzeigen
                         </a>
@@ -53,7 +50,7 @@
                 </div>
                 <div class="row clearfixScroll" ng-if="mapVisible">
                     <div class="col">
-                        <p class="bold">Entfernung des Handy Standortes vom Beben : </p>
+                        <p class="bold">spacer </p>
                     </div>
                 </div>
             </div>

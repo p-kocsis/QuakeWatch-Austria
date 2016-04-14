@@ -219,8 +219,11 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die beben_detail.html View
      */
-    .controller('BebenDetailCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window,$ionicLoading,NgMap) {
+    .controller('BebenDetailCtrl', function ($scope,$ionicHistory, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window,$ionicLoading,NgMap) {
 
+        $scope.myGoBack = function() {
+            $ionicHistory.goBack();
+        };
         $scope.mapVisible=false;
         $scope.showMap = function(){
             $scope.mapVisible= !$scope.mapVisible;

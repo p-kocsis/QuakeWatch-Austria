@@ -56,12 +56,13 @@ function quakeReport(referenzID,locLon,locLat,locPrecision,locLastUpdate,mlocPLZ
     this.kommentar=kommentar;
     this.kontakt=kontakt;
 }
-function quakeData(id,magnitude,dateAndTime,locLon,locLat,country,distanceFromPhoneToQuake,classColor,ldate,ltime,ltz){
+function quakeData(id,magnitude,dateAndTime,locLon,locLat,depth,country,distanceFromPhoneToQuake,classColor,ldate,ltime,ltz){
     this.id=id;
     this.magnitude=magnitude;
     this.dateAndTime=dateAndTime;
     this.locLon=locLon;
     this.locLat=locLat;
+    this.depth=depth;
     this.country=country;
     this.distanceFromPhoneToQuake=distanceFromPhoneToQuake;
     this.classColor=classColor;
