@@ -62,6 +62,9 @@ angular.module('quakewatch.resources', ['ngResource'])
         var restEndpoint=DataGeoWebZAMGStaticFiles;
         var isOnline=null;
         return {
+            reloadData: function(location){
+                return restEndpoint.reloadData(location);
+            },
             /**
              * @ngdoc method
              * @name resources.service#setOnline
@@ -652,6 +655,7 @@ angular.module('quakewatch.resources', ['ngResource'])
         var getWorldData = function() {
             $http.get(ApiEndpointZAMGFiles.url+'/web_latest.json').success(function (data) {
                 worldData = data;
+                return true;
             });
         };
         var getEuData= function() {
@@ -737,6 +741,24 @@ angular.module('quakewatch.resources', ['ngResource'])
             AutPromise: AutPromise,
             //Oesterrechische Erdbeben Daten abfragen
             //return: Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
+
+            reloadData: function(location){
+                switch (location){
+                    case "aut":
+                        if(AutPromise){
+                            return this.getAut();
+                        }
+                        break;
+                    case "world":
+                        getWorldData();
+                        return this.getWorld();
+                        break;
+                    case "eu":
+                        getEuData();
+                        return this.getEu();
+                }
+            },
+
             /**
              * @ngdoc method
              * @name resources.service#getAut

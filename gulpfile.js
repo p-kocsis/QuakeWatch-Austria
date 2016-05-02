@@ -26,6 +26,18 @@ gulp.task('remove-proxy', function(){
     .pipe(gulp.dest('/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/'));
 });
 
+gulp.task('add-proxy-fileEndpoint', function(){
+  gulp.src(['/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/resources.js'])
+    .pipe(replace('http://geoweb.zamg.ac.at/eq_app','http://localhost:8100/apiZAMGFiles'))
+    .pipe(gulp.dest('/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/'));
+});
+ 
+gulp.task('remove-proxy-fileEndpoint', function(){
+  gulp.src(['/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/resources.js'])
+    .pipe(replace('http://localhost:8100/apiZAMGFiles', 'http://geoweb.zamg.ac.at/eq_app'))
+    .pipe(gulp.dest('/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/'));
+});
+
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
     .pipe(sass())

@@ -18,7 +18,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die home.html View
      */
-    .controller('HomeCtrl', function ($scope, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport,$ionicLoading) {
+    .controller('HomeCtrl', function ($scope, $timeout, $ionicScrollDelegate, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport,$ionicLoading) {
         $scope.isOnline = JsonData.isOnline();
         if(!$scope.isOnline){
             $scope.getOnline = function () {
@@ -40,6 +40,17 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 $scope.quakeList = JsonData.getEu();
                 location = "eu";
             };
+            $scope.loaded=false;
+            $scope.reloadFiles= function (){
+                $ionicLoading.show({
+                    template: '<ion-spinner></ion-spinner><br/>Lade Erdbebendaten'
+                });
+                $scope.quakeList=JsonData.reloadData(location);
+                $ionicScrollDelegate.scrollTop();
+                $ionicLoading.hide();
+                $scope.loaded=true;
+                $timeout(function () { $scope.loaded=false; }, 3000);
+            }
             $scope.loadMoreData = function () {
                 JsonData.getMoreData(location).then(function (bebenAutArray) {
                     $scope.quakeList = $scope.quakeList.concat(bebenAutArray);

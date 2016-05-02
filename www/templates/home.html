@@ -1,4 +1,9 @@
-<ion-view view-title="QuakeWatch">
+<ion-view view-title="QuakeWatch Austria">
+    <ion-nav-buttons side="right">
+        <button class="button" ng-click="reloadFiles()">
+            <div class="ion-refresh"></div>
+        </button>
+    </ion-nav-buttons>
     <div ng-if="isOnline">
         <ion-header-bar class="bar-subheader bar-assertive">
             <div class="button-bar">
@@ -7,16 +12,17 @@
                 <a class="button button-clear light" ng-click="quakeWorld()">Welt</a>
             </div>
         </ion-header-bar>
-
         <ion-content>
+            <ion-item class="item item-assertive" ng-if="loaded">Erdbebendaten Aktualisiert</ion-item>
+
             <ion-list>
                 <ion-item class="item {{quake.classColor}} row-no-padding" collection-repeat="quake in quakeList"
                           href="#/app/bebenDetail/{{quake.id}}">
                     <div class="row">
-                        <div class="col col-33">
+                        <div class="col col-25 col-offset-10">
                             <h1 class="whiteButton">{{quake.magnitude}}</h1>
                         </div>
-                        <div class="col text-left">
+                        <div class="col text-left col-60">
                             <span>{{quake.dateAndTime| amUtc | amLocal | amDateFormat:'LLL'}}</span><br>
 
                             <p class="bold">{{quake.country}}</p>
