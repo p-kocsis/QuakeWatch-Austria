@@ -14,7 +14,6 @@
         </ion-header-bar>
         <ion-content>
             <ion-item class="item item-assertive" ng-if="loaded">Erdbebendaten Aktualisiert</ion-item>
-
             <ion-list>
                 <ion-item class="item {{quake.classColor}} row-no-padding" collection-repeat="quake in quakeList"
                           href="#/app/bebenDetail/{{quake.id}}">
@@ -24,7 +23,6 @@
                         </div>
                         <div class="col text-left col-60">
                             <span>{{quake.dateAndTime| amUtc | amLocal | amDateFormat:'LLL'}}</span><br>
-
                             <p class="bold">{{quake.country}}</p>
                         </div>
                     </div>

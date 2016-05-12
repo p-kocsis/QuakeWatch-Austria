@@ -18,6 +18,7 @@
   "gulpStartupTasks": [
     "sass",
 	"add-proxy",
+	"add-proxy-fileEndpoint",
     "watch"
 
   ],
