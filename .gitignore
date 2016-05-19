@@ -4,3 +4,5 @@ resources
 bower_components
 hooks
 node_modules
+addProxy.bat
+removeProxy.bat
