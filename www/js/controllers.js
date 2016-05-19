@@ -8,7 +8,7 @@
  *
  */
 angular.module('quakewatch.controllers', ['quakewatch.resources'])
-    .controller('AppCtrl', function (JsonData, $scope,RunningInfo) {
+    .controller('AppCtrl', function (JsonData, $scope,AppInfo) {
         $scope.isOnline = JsonData.isOnline();
         /*
         if(RunningInfo.isInitialRun == "true"){
@@ -16,9 +16,9 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
         }
         */
         //Generierung der API Key (Nur einmal bei der Installation)
-        if(RunningInfo.isInitialRun()){
-            RunningInfo.setInitialRun(false);
-            console.log("asd: "+RunningInfo.isInitialRun());
+        if(AppInfo.isInitialRun()){
+            AppInfo.setInitialRun(false);
+            console.log("asd: "+AppInfo.isInitialRun());
         }
 
 
