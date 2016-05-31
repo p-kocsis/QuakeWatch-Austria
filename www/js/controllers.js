@@ -230,26 +230,59 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     break;
                 case 3:
                     //stark
-                    var zusatzFragen = new zusatzFragen();
                     QuakeReport.setFloor($scope.input.floor);
                     zusatzFragen.f1=($scope.input.f1);
                     zusatzFragen.f2=($scope.input.f2);
                     zusatzFragen.f3=($scope.input.f3);
                     zusatzFragen.f15=($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
                     //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
                     break;
                 //stark, gebaeudeschaeden
                 case 4:
                     QuakeReport.setFloor($scope.input.floor);
                     zusatzFragen.f2=($scope.input.f2);
+                    zusatzFragen.f3=($scope.input.f3);
                     zusatzFragen.f7=($scope.input.f7);
                     zusatzFragen.f8=($scope.input.f8);
                     zusatzFragen.f15=($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
                     //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
                     break;
                 //sehr stark, betraechtliche gebaeudeschaeden
                 case 5:
-                
+                    QuakeReport.setFloor($scope.input.floor);
+                    zusatzFragen.f3=($scope.input.f3);
+                    zusatzFragen.f4=($scope.input.f4);
+                    zusatzFragen.f5=($scope.input.f5);
+                    zusatzFragen.f7=($scope.input.f7);
+                    zusatzFragen.f8=($scope.input.f8);
+                    zusatzFragen.f9=($scope.input.f9);
+                    zusatzFragen.f10=($scope.input.f10);
+                    zusatzFragen.f11=($scope.input.f11);
+                    zusatzFragen.f12=($scope.input.f12);
+                    zusatzFragen.f13=($scope.input.f13);
+                    zusatzFragen.f14=($scope.input.f14);
+                    zusatzFragen.f15=($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
+                //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    break;
+                case 6:
+                    QuakeReport.setFloor($scope.input.floor);
+                    zusatzFragen.f3=($scope.input.f3);
+                    zusatzFragen.f5=($scope.input.f5);
+                    zusatzFragen.f7=($scope.input.f7);
+                    zusatzFragen.f8=($scope.input.f8);
+                    zusatzFragen.f9=($scope.input.f9);
+                    zusatzFragen.f10=($scope.input.f10);
+                    zusatzFragen.f11=($scope.input.f11);
+                    zusatzFragen.f12=($scope.input.f12);
+                    zusatzFragen.f13=($scope.input.f13);
+                    zusatzFragen.f14=($scope.input.f14);
+                    zusatzFragen.f15=($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
+                //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    break;
             }
 
 

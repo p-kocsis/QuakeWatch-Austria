@@ -1,5 +1,5 @@
 <ion-view cache-view="false" view-title="Zusatzfragen">
-    <ion-content scroll="false">
+    <ion-content scroll="true">
         <form ng-submit="sendData()">
             <div class="row row-center">
                 <div class="col">
@@ -26,50 +26,166 @@
 
                     div wird verwendet um nicht jedes Element einzeln ausblenden zu müssen
                     -->
-                    <div ng-if="klassifikation == 1">
+                    <div ng-if="klassifikation == 3">
                         <br><h5>Sind Gegenstände umgefallen?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.itemsDropped">
-                                <option value="0">Ja</option>
-                                <option value="1" selected>Nein</option>
+                            <select ng-model="input.f1">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
                             </select>
                         </label>
                     </div>
 
-                    <div ng-if="true">
+                    <div ng-if="klassifikation == 3 || klassifikation == 4">
                         <br><h5>Sind Sie aus Angst ins Freie geflüchtet?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.ranAway">
-                                <option value="0">Ja</option>
-                                <option value="1" selected>Nein</option>
+                            <select ng-model="input.f2">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
                             </select>
                         </label>
                     </div>
 
-                    <div ng-if="true">
+                    <div ng-if="klassifikation != 1 || klassifikation != 2">
                         <br><h5>Feine Risse im Verputz?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.facade">
-                                <option value="0">Ja</option>
-                                <option value="1" selected>Nein</option>
+                            <select ng-model="input.f3">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
                             </select>
                         </label>
                     </div>
-
+                    <div ng-if="klassifikation == 5">
+                        <br><h5>Hatten Sie Gleichgewichtsprobleme?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f4">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 5">
+                        <br><h5>Sind viele Gegenstände aus den Regalen gefallen?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f5">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 6">
+                        <br><h5>Sind Möbel umgekippt?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f6">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 4 || klassifikation == 5 || klassifikation == 6">
+                        <br><h5>Haben Sie Gebäudeschäden beobachtet?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f7">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 3">
+                        <br><h5>Feine Risse im Verputz? </h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f8">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 4 || klassifikation == 5 || klassifikation == 6">
+                        <br><h5>Abfallen von Verputzteilen?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f9">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 5 || klassifikation == 6">
+                        <br><h5>Mauerrisse?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f10">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 5 || klassifikation == 6">
+                        <br><h5>Beschädigung des Rauchfanges?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f11">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 5 || klassifikation == 6">
+                        <br><h5>Herabfallen des Rauchfanges?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f12">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 5 || klassifikation == 6">
+                        <br><h5>Herabfallen von Dachziegeln?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f13">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 5 || klassifikation == 6">
+                        <br><h5>Einsturz von Zwischenwänden?</h5>
+                        <label class="item item-input item-select">
+                            &nbsp;
+                            <select ng-model="input.f14">
+                                <option value="true">Ja</option>
+                                <option value="false" selected>Nein</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation != 1 || klassifikation != 2">
+                        <br><h5>Bitte beschreiben Sie Ihre Wahrnehmung und Schäden</h5>
+                        <label class="item item-input">
+                            <textarea name="comment" id="comment-textarea" rows="5" ng-model="input.f15"> </textarea>
+                        </label>
+                    </div>
+                    <div ng-if="klassifikation == 1 || klassifikation == 2">
                     <br><h5>Ihr persönlicher Kommentar zum Erdbeben</h5>
                     <label class="item item-input">
-                        <textarea name="comment" id="comment-textarea" rows="5" ng-model="input.comment"> </textarea>
+                        <textarea name="comment" id="comment-textarea2" rows="5" ng-model="input.comment"> </textarea>
                     </label>
-
+                    </div>
 
                 </div>
             </div>
             <div class="row row-center">
                 <div class="col">
-                    <button class="button button-assertive" type="submit" ng-show="input.floor && input.facade">Weiter</button>
+                    <button class="button button-assertive" type="submit">Weiter</button>
                 </div>
             </div>
         </form>
