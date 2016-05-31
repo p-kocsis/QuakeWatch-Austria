@@ -6,3 +6,15 @@ hooks
 node_modules
 addProxy.bat
 removeProxy.bat
+.DS_Store
+.idea/
+app-settings.json
+docs/
+www/.DS_Store
+www/img/.DS_Store
+www/lib/.DS_Store
+www/lib/ionic/.DS_Store
+www/lib/locale/.DS_Store
+www/lib/ngmap/.DS_Store
+www/scratch.json
+www/scratch_zamg.json

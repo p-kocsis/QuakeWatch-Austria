@@ -10,20 +10,13 @@
 angular.module('quakewatch.controllers', ['quakewatch.resources'])
     .controller('AppCtrl', function (JsonData, $scope,AppInfo) {
         $scope.isOnline = JsonData.isOnline();
-        /*
-        if(RunningInfo.isInitialRun == "true"){
-            setInitialRun
-        }
-        */
-        //Generierung der API Key (Nur einmal bei der Installation)
-        if(AppInfo.isInitialRun()){
+        //Generierung des API Keys(Nur einmal bei der Installation)
+        console.log("isInitialRun: "+AppInfo.isInitialRun());
+        if(AppInfo.isInitialRun() === 'true'){
             AppInfo.setInitialRun(false);
-            console.log("asd: "+AppInfo.isInitialRun());
+            AppInfo.generateAPIKey();
         }
-
-
     })
-
     /**
      * @ngdoc controller
      * @name controllers.controller:HomeCtrl
@@ -217,10 +210,49 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             ranAway: null,
             facade: null
         };
+
+        $scope.klassifikation=QuakeReport.getQuakeDataObject().klassifikation;
+
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
         $scope.sendData = function () {
+            switch ($scope.klassifikation) {
+                //Schwach
+                case 1:
+                    QuakeReport.setFloor($scope.input.floor);
+                    QuakeReport.setComment($scope.input.comment);
+                    break;
+                //Deutlich
+                case 2:
+                    QuakeReport.setFloor($scope.input.floor);
+                    QuakeReport.setComment($scope.input.comment);
+                    break;
+                case 3:
+                    //stark
+                    var zusatzFragen = new zusatzFragen();
+                    QuakeReport.setFloor($scope.input.floor);
+                    zusatzFragen.f1=($scope.input.f1);
+                    zusatzFragen.f2=($scope.input.f2);
+                    zusatzFragen.f3=($scope.input.f3);
+                    zusatzFragen.f15=($scope.input.f15);
+                    //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    break;
+                //stark, gebaeudeschaeden
+                case 4:
+                    QuakeReport.setFloor($scope.input.floor);
+                    zusatzFragen.f2=($scope.input.f2);
+                    zusatzFragen.f7=($scope.input.f7);
+                    zusatzFragen.f8=($scope.input.f8);
+                    zusatzFragen.f15=($scope.input.f15);
+                    //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    break;
+                //sehr stark, betraechtliche gebaeudeschaeden
+                case 5:
+                
+            }
+
+
             QuakeReport.setFloor($scope.input.floor);
             QuakeReport.setComment($scope.input.comment);
             QuakeReport.sendData();
@@ -421,7 +453,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             if (typeof (val) === 'undefined') {
             } else {
                 var selectedTime = new Date(val * 1000);
-                console.log(selectedTime.toJSON());
+                console.log("timepickercallback: "+selectedTime.toJSON());
                 $scope.input.rawTime = selectedTime;
                 if (selectedTime.getUTCMinutes() < 10) {
                     $scope.input.chosenTime = selectedTime.getUTCHours() + ':0' + selectedTime.getUTCMinutes();
@@ -465,13 +497,11 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 $scope.input.date = val;
             }
         };
-
         //Zeit wählen ENDE
-
         $scope.goToComics = function () {
             QuakeReport.setPlace($scope.input.place);
             QuakeReport.setZIP($scope.input.zipCode);
-            QuakeReport.setStrasse($scope.input.strasse);
+            //QuakeReport.setStrasse($scope.input.strasse);
             var datetime = new Date(
                 $scope.input.date.getFullYear(),
                 $scope.input.date.getMonth(),
@@ -480,8 +510,10 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 $scope.input.rawTime.getMinutes(),
                 $scope.input.rawTime.getSeconds()
             );
-            QuakeReport.setDateTime(datetime.toJSON());
-            console.log(datetime.toJSON());
+            datetime = datetime.toISOString().slice(0,19)+"Z";
+            QuakeReport.setLocLastUpdate(datetime);
+            QuakeReport.setDateTime(datetime);
+            console.log(datetime);
             $state.go('app.bebenWahrnehmung');
         };
     });

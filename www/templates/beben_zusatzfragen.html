@@ -3,6 +3,7 @@
         <form ng-submit="sendData()">
             <div class="row row-center">
                 <div class="col">
+
                     <br><h5>In welchem Stock befanden Sie sich?</h5>
                     <label class="item item-input item-select">
                         &nbsp;<!--Workaround damit die Zeile hoch genung ist. Bei zu viel Zeit aendern, sonst stoerts aber nicht
@@ -25,7 +26,7 @@
 
                     div wird verwendet um nicht jedes Element einzeln ausblenden zu müssen
                     -->
-                    <div ng-if="true">
+                    <div ng-if="klassifikation == 1">
                         <br><h5>Sind Gegenstände umgefallen?</h5>
                         <label class="item item-input item-select">
                             &nbsp;

@@ -13,14 +13,16 @@
     {
       "path": "/apiZAMGFiles",
       "proxyUrl": "http://geoweb.zamg.ac.at/eq_app"
-    }
+    },
+    {
+      "path": "/geoweb",
+      "proxyUrl": "http://geoweb.zamg.ac.at"
+     }
   ],
   "gulpStartupTasks": [
     "sass",
 	"add-proxy",
-	"add-proxy-fileEndpoint",
     "watch"
-
   ],
   "watchPatterns": [
     "www/**/*",
