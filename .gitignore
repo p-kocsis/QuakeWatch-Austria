@@ -4,8 +4,6 @@ resources
 bower_components
 hooks
 node_modules
-addProxy.bat
-removeProxy.bat
 .DS_Store
 .idea/
 app-settings.json
