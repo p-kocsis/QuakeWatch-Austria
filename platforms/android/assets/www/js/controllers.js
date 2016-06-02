@@ -10,20 +10,13 @@
 angular.module('quakewatch.controllers', ['quakewatch.resources'])
     .controller('AppCtrl', function (JsonData, $scope,AppInfo) {
         $scope.isOnline = JsonData.isOnline();
-        /*
-        if(RunningInfo.isInitialRun == "true"){
-            setInitialRun
-        }
-        */
-        //Generierung der API Key (Nur einmal bei der Installation)
-        if(AppInfo.isInitialRun()){
+        //Generierung des API Keys(Nur einmal bei der Installation)
+        console.log("isInitialRun: "+AppInfo.isInitialRun());
+        if(AppInfo.isInitialRun() === 'true'){
             AppInfo.setInitialRun(false);
-            console.log("asd: "+AppInfo.isInitialRun());
+            AppInfo.generateAPIKey();
         }
-
-
     })
-
     /**
      * @ngdoc controller
      * @name controllers.controller:HomeCtrl
@@ -208,7 +201,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die beben_zusatzfragen.html View
      */
-    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport, $state, $ionicPopup, $ionicHistory) {
+    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport, $state, $ionicPopup, $ionicHistory,$cordovaNetwork) {
         $scope.input = {
             floor: "",
             comment: null,
@@ -217,24 +210,110 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             ranAway: null,
             facade: null
         };
+
+        $scope.klassifikation=QuakeReport.getQuakeDataObject().klassifikation;
+
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
         $scope.sendData = function () {
+            switch ($scope.klassifikation) {
+                //Schwach
+                case 1:
+                    QuakeReport.setFloor($scope.input.floor);
+                    QuakeReport.setComment($scope.input.comment);
+                    break;
+                //Deutlich
+                case 2:
+                    QuakeReport.setFloor($scope.input.floor);
+                    QuakeReport.setComment($scope.input.comment);
+                    break;
+                case 3:
+                    //stark
+                    QuakeReport.setFloor($scope.input.floor);
+                    zusatzFragen.f1=($scope.input.f1);
+                    zusatzFragen.f2=($scope.input.f2);
+                    zusatzFragen.f3=($scope.input.f3);
+                    zusatzFragen.f15=($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
+                    //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    break;
+                //stark, gebaeudeschaeden
+                case 4:
+                    QuakeReport.setFloor($scope.input.floor);
+                    zusatzFragen.f2=($scope.input.f2);
+                    zusatzFragen.f3=($scope.input.f3);
+                    zusatzFragen.f7=($scope.input.f7);
+                    zusatzFragen.f8=($scope.input.f8);
+                    zusatzFragen.f15=($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
+                    //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    break;
+                //sehr stark, betraechtliche gebaeudeschaeden
+                case 5:
+                    QuakeReport.setFloor($scope.input.floor);
+                    zusatzFragen.f3=($scope.input.f3);
+                    zusatzFragen.f4=($scope.input.f4);
+                    zusatzFragen.f5=($scope.input.f5);
+                    zusatzFragen.f7=($scope.input.f7);
+                    zusatzFragen.f8=($scope.input.f8);
+                    zusatzFragen.f9=($scope.input.f9);
+                    zusatzFragen.f10=($scope.input.f10);
+                    zusatzFragen.f11=($scope.input.f11);
+                    zusatzFragen.f12=($scope.input.f12);
+                    zusatzFragen.f13=($scope.input.f13);
+                    zusatzFragen.f14=($scope.input.f14);
+                    zusatzFragen.f15=($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
+                //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    break;
+                case 6:
+                    QuakeReport.setFloor($scope.input.floor);
+                    zusatzFragen.f3=($scope.input.f3);
+                    zusatzFragen.f5=($scope.input.f5);
+                    zusatzFragen.f7=($scope.input.f7);
+                    zusatzFragen.f8=($scope.input.f8);
+                    zusatzFragen.f9=($scope.input.f9);
+                    zusatzFragen.f10=($scope.input.f10);
+                    zusatzFragen.f11=($scope.input.f11);
+                    zusatzFragen.f12=($scope.input.f12);
+                    zusatzFragen.f13=($scope.input.f13);
+                    zusatzFragen.f14=($scope.input.f14);
+                    zusatzFragen.f15=($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
+                //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    break;
+            }
+
+
             QuakeReport.setFloor($scope.input.floor);
             QuakeReport.setComment($scope.input.comment);
             QuakeReport.sendData();
-            console.log($scope.input.floor);
-            var alertPopup = $ionicPopup.alert({
-                title: 'Danke für ihre Meldung!',
-                template: 'Danke für ihre Meldung!',
-                okText: '', // String (default: 'OK'). The text of the OK button.
-                okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
-            });
-            alertPopup.then(function (res) {
-                //$location.path("/app/home");
-                $state.go('app.home');
-            });
+            if($cordovaNetwork.isOnline()){
+                QuakeReport.sendData();
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Danke für ihre Meldung!',
+                    template: 'Danke für ihre Meldung!',
+                    okText: '', // String (default: 'OK'). The text of the OK button.
+                    okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
+                });
+                alertPopup.then(function (res) {
+                    //$location.path("/app/home");
+                    $state.go('app.home');
+                });
+            }else {
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Danke für ihre Meldung!',
+                    template: 'Leider haben sie keine Internet verbindung! Wenn Sie wieder online sind dann wird das Erdbeben für sie automatisch gemeldet.',
+                    okText: '', // String (default: 'OK'). The text of the OK button.
+                    okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
+                });
+                alertPopup.then(function (res) {
+                    //$location.path("/app/home");
+                    $state.go('app.home');
+                });
+            }
+
 
 
         };
@@ -421,7 +500,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             if (typeof (val) === 'undefined') {
             } else {
                 var selectedTime = new Date(val * 1000);
-                console.log(selectedTime.toJSON());
+                console.log("timepickercallback: "+selectedTime.toJSON());
                 $scope.input.rawTime = selectedTime;
                 if (selectedTime.getUTCMinutes() < 10) {
                     $scope.input.chosenTime = selectedTime.getUTCHours() + ':0' + selectedTime.getUTCMinutes();
@@ -465,13 +544,11 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 $scope.input.date = val;
             }
         };
-
         //Zeit wählen ENDE
-
         $scope.goToComics = function () {
             QuakeReport.setPlace($scope.input.place);
             QuakeReport.setZIP($scope.input.zipCode);
-            QuakeReport.setStrasse($scope.input.strasse);
+            //QuakeReport.setStrasse($scope.input.strasse);
             var datetime = new Date(
                 $scope.input.date.getFullYear(),
                 $scope.input.date.getMonth(),
@@ -480,8 +557,10 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 $scope.input.rawTime.getMinutes(),
                 $scope.input.rawTime.getSeconds()
             );
-            QuakeReport.setDateTime(datetime.toJSON());
-            console.log(datetime.toJSON());
+            datetime = datetime.toISOString().slice(0,19)+"Z";
+            QuakeReport.setLocLastUpdate(datetime);
+            QuakeReport.setDateTime(datetime);
+            console.log(datetime);
             $state.go('app.bebenWahrnehmung');
         };
     });

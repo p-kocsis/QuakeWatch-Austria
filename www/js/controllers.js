@@ -16,6 +16,11 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             AppInfo.setInitialRun(false);
             AppInfo.generateAPIKey();
         }
+        //Gecachetes Erdbeben melden
+        console.log(AppInfo.isCachedQuake());
+        if(AppInfo.isCachedQuake()){
+            AppInfo.reportCachedQuake();
+        }
     })
     /**
      * @ngdoc controller
@@ -35,15 +40,18 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
         if ($scope.isOnline) {
             var location = "";
             $scope.quakeAut = function () {
+                $ionicScrollDelegate.scrollTop();
                 $scope.quakeList = JsonData.getAut();
                 location = "aut";
             };
             $scope.quakeAut();
             $scope.quakeWorld = function () {
+                $ionicScrollDelegate.scrollTop();
                 $scope.quakeList = JsonData.getWorld();
                 location = "world";
             };
             $scope.quakeEu = function () {
+                $ionicScrollDelegate.scrollTop();
                 $scope.quakeList = JsonData.getEu();
                 location = "eu";
             };
@@ -59,17 +67,18 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 $timeout(function () {
                     $scope.loaded = false;
                 }, 3000);
-            }
+            };
             $scope.loadMoreData = function () {
                 JsonData.getMoreData(location).then(function (bebenAutArray) {
                     $scope.quakeList = $scope.quakeList.concat(bebenAutArray);
                     $scope.$broadcast('scroll.infiniteScrollComplete');
                 });
             };
+        
             $scope.$on('$stateChangeSuccess', function () {
                 $scope.loadMoreData();
             });
-
+        }
             //START BEBEN REPORT MODAL UND SEINE FUNKTIONEN
             $ionicModal.fromTemplateUrl('templates/lade_daten_modal.html', {
                 scope: $scope,
@@ -137,14 +146,14 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             };
             //Fuer die Buttons der 3 letzten spuerhbaren erdbeben (ID uebergeben)
             //TODO MIT DER ID WIEDER UMBAUEN
-            $scope.recentQuakes = function () {
-                //QuakeReport.setId(id);
+            $scope.recentQuakes = function (id) {
+                QuakeReport.setId(id);
                 $scope.selectModal.hide();
 
                 $state.go('app.bebenEintrag');
             };
             //END MODAL
-        }
+
     })
     /**
      * @ngdoc controller
@@ -201,7 +210,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die beben_zusatzfragen.html View
      */
-    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport, $state, $ionicPopup, $ionicHistory) {
+    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport, $state, $ionicPopup, $ionicHistory,$cordovaNetwork,AppInfo) {
         $scope.input = {
             floor: "",
             comment: null,
@@ -289,17 +298,34 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             QuakeReport.setFloor($scope.input.floor);
             QuakeReport.setComment($scope.input.comment);
             QuakeReport.sendData();
-            console.log($scope.input.floor);
-            var alertPopup = $ionicPopup.alert({
-                title: 'Danke für ihre Meldung!',
-                template: 'Danke für ihre Meldung!',
-                okText: '', // String (default: 'OK'). The text of the OK button.
-                okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
-            });
-            alertPopup.then(function (res) {
-                //$location.path("/app/home");
-                $state.go('app.home');
-            });
+            if($cordovaNetwork.isOnline()){
+                QuakeReport.sendData();
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Danke für ihre Meldung!',
+                    template: 'Danke für ihre Meldung!',
+                    okText: '', // String (default: 'OK'). The text of the OK button.
+                    okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
+                });
+                alertPopup.then(function (res) {
+                    //$location.path("/app/home");
+                    $state.go('app.home');
+                });
+            }else {
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Danke für ihre Meldung!',
+                    template: 'Leider haben sie keine Internet verbindung! Wenn Sie wieder online sind, dann wird das Erdbeben automatisch gemeldet.',
+                    okText: '', // String (default: 'OK'). The text of the OK button.
+                    okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
+
+                });
+                alertPopup.then(function (res) {
+                    //$location.path("/app/home");
+                    AppInfo.cacheQuake()
+                    $state.go('app.home');
+                });
+            }
+            
+
 
 
         };

@@ -41,13 +41,16 @@
  */
 angular.module('quakewatch.resources', ['ngResource'])
     .constant('ApiEndpointZAMG', {
-        url: 'http://localhost:8100/apiZAMG'
+        url: 'http://geoweb.zamg.ac.at/fdsnws/app/1'
     })
     .constant('ApiEndpointSeismic', {
         url: 'http://localhost:8100/api'
     })
     .constant('ApiEndpointZAMGFiles', {
-        url: 'http://localhost:8100/apiZAMGFiles'
+        url: 'http://geoweb.zamg.ac.at/eq_app'
+    })
+    .constant('GeowebEndpoint', {
+        url: 'http://geoweb.zamg.ac.at'
     })
     /**
      * @ngdoc service
@@ -124,7 +127,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * # rest
      * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
-     * [ZAMG]: http://localhost:8100/apiZAMG/query
+     * [ZAMG]: http://geoweb.zamg.ac.at/fdsnws/app/1/query
      */
     .factory('DataGeoWebZAMG', function ($http, $ionicLoading, ApiEndpointZAMG, $templateCache) {
         var atData = null;
@@ -411,24 +414,31 @@ angular.module('quakewatch.resources', ['ngResource'])
      * Diese Factory wird zum sammeln der neuen, vom User eingegebenen, Erdbebendaten.
      * In dieser funktion werden die Daten gesendet
      */
-    .factory('QuakeReport', function ($http,AppInfo) {
+    .factory('QuakeReport', function ($http,AppInfo,GeowebEndpoint) {
         var quakeDataObj = new quakeReport(
-            "",
-            '0.0',
-            '0.0',
-            '0.0',
+            "12345abc",
+            null,
+            null,
+            null,
             null,
             "",
             "",
             "",
             "",
             "",
-            "",
             '',
-            'unbekannt'
+            null,
+            null
         );
 
         return {
+
+            getQuakeDataObject: function () {
+                return quakeDataObj;
+            },
+            setZusatzfragen:function (zusatzfragen){
+                quakeDataObj.addquestions=zusatzfragen;
+            },
             /**
              * @ngdoc method
              * @name resources.service#setId
@@ -604,21 +614,7 @@ angular.module('quakewatch.resources', ['ngResource'])
              *
              * @param callback
              */
-            generateAPIKey: function () {
-                var apikey = "";
-                var req2 = {
-                    method: 'POST',
-                    url: '/apikey',
-                    headers: {
-                        'Content-Type': 'application/json; charset=utf-8',
-                        'Authorization': 'Basic cXVha2VhcGk6I3FrcCZtbGRuZyM='
-                    },
-                    data: ''
-                };
-                $http(req2).then(function (response) {
-                    apikey = response.data.apikey;
-                });
-            },
+
 
             /**
              * @ngdoc method
@@ -634,7 +630,7 @@ angular.module('quakewatch.resources', ['ngResource'])
                     //Daten senden
                     var req = {
                         method: 'POST',
-                        url: '/sendmsg',
+                        url: GeowebEndpoint.url+'/quakeapi/v02/message',
                         headers: {
                             'Content-Type': 'application/json; charset=utf-8',
                             'Authorization': 'Basic cXVha2VhcGk6I3FrcCZtbGRuZyM=',
@@ -644,21 +640,9 @@ angular.module('quakewatch.resources', ['ngResource'])
                     };
                     $http(req).then(function (response) {
                         //Check ob Response Code 200
-                        console.log(response);
+                        console.log("response: "+response);
                     });
-
-                console.log("id " + quakeDataObj.referenzID);
-                console.log("loclon " + quakeDataObj.locLon);
-                console.log("loclat " + quakeDataObj.locLat);
-                console.log("locprec " + quakeDataObj.locPrecision);
-                console.log("locallastupdate " + quakeDataObj.locLastUpdate);
-                console.log("plz " + quakeDataObj.mlocPLZ);
-                console.log("ort " + quakeDataObj.mlocOrtsname);
-                console.log("stock" + quakeDataObj.stockwerk);
-                console.log("klass " + quakeDataObj.klassifikation);
-                console.log("versp " + quakeDataObj.verspuert);
-                console.log("kommentar " + quakeDataObj.kommentar);
-                console.log("kontakt " + quakeDataObj.kontakt);
+                console.log(JSON.stringify(quakeDataObj));
             }
         };
     })
@@ -668,20 +652,28 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * Diese Klasse ermoeglicht es zu Ueberpruefen ob die Applikation zum ersten mal aufgerufen wurde.
      */
-    .factory('AppInfo', function ($window) {
+    .factory('AppInfo', function ($window,$http,GeowebEndpoint) {
         return {
             setInitialRun: function (initial) {
                 $window.localStorage["initialRun"] = (initial ? true : false);
             },
             isInitialRun: function () {
                 return $window.localStorage["initialRun"];
-                /*
-                 var value = $window.localStorage["initialRun1"] || true;
-                 return value == true;
-                 */
             },
-            setApiKey: function (apikey){
-                $window.localStorage["apiKey"] = apikey;
+            generateAPIKey: function () {
+                var req2 = {
+                    method: 'POST',
+                    url: GeowebEndpoint.url+'/quakeapi/v02/getapikey',
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                        'Authorization': 'Basic cXVha2VhcGk6I3FrcCZtbGRuZyM='
+                    },
+                    data: ''
+                };
+                $http(req2).then(function (response) {
+                    $window.localStorage["apiKey"] = response.data.apikey;
+                    console.log("api: "+response.data.apikey)
+                });
             },
             getApiKey: function(){
                 return $window.localStorage["apiKey"];
@@ -694,7 +686,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * # rest
      * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
-     * [ZAMG]: http://localhost:8100/apiZAMG/query
+     * [ZAMG]: http://geoweb.zamg.ac.at/fdsnws/app/1/query
      */
     .factory('DataGeoWebZAMGStaticFiles', function ($http, $ionicLoading, ApiEndpointZAMG, ApiEndpointZAMGFiles, $templateCache) {
         var atData = null;
@@ -1110,4 +1102,5 @@ angular.module('quakewatch.resources', ['ngResource'])
             }
         };
     });
+
 

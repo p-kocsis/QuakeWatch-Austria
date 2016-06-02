@@ -19,7 +19,6 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                 cordova.plugins.Keyboard.disableScroll(true);
             }
             if (window.StatusBar) {
-                // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
         });
@@ -49,7 +48,6 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                         });
                         var autData = JsonData.AutPromise;
                         autData.then(function(result) {
-                            console.log(result);
                             JsonData.setOnline(result);
                         });
                         return autData;

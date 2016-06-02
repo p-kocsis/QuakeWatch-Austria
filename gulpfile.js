@@ -18,13 +18,15 @@ gulp.task('add-proxy', function(){
   gulp.src(['/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/resources.js'])
     .pipe(replace('http://geoweb.zamg.ac.at/fdsnws/app/1','http://localhost:8100/apiZAMG'))
     .pipe(replace('http://geoweb.zamg.ac.at/eq_app','http://localhost:8100/apiZAMGFiles'))
+    .pipe(replace('http://geoweb.zamg.ac.at','http://localhost:8100/geoweb'))
     .pipe(gulp.dest('/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/'));
 });
  
 gulp.task('remove-proxy', function(){
   gulp.src(['/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/resources.js'])
+      .pipe(replace('http://localhost:8100/apiZAMGFiles', 'http://geoweb.zamg.ac.at/eq_app'))
     .pipe(replace('http://localhost:8100/apiZAMG', 'http://geoweb.zamg.ac.at/fdsnws/app/1'))
-    .pipe(replace('http://localhost:8100/apiZAMGFiles', 'http://geoweb.zamg.ac.at/eq_app'))
+    .pipe(replace('http://localhost:8100/geoweb', 'http://geoweb.zamg.ac.at'))
     .pipe(gulp.dest('/Volumes/Data HDD/Schule_2015_16/ITP/QuakeWatch_PHPStorm/QuakeWatch/www/js/'));
 });
 

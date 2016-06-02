@@ -5,7 +5,24 @@
     </ion-header-bar>
     <ion-content class="has-header has-footer" scroll="false">
         <ion-slide-box delegate-handle="modalSlider" show-pager="false">
-            <ion-slide class="padding" id="slide1">
+            <div ng-if="isOnline == false">
+                <ion-slide class="padding" id="slide1">
+                    <div class="col">
+                        <a class="button button-outline button-light button-width-full" ng-click="geradeJetzt()">
+                            Ja, gerade jetzt
+                        </a>
+                    </div>
+                    <div class="row row-center">
+                        <div class="col">
+                            <a class="button button-outline button-light button-width-full"
+                               ng-click="anderesBeben()">
+                                Vor mehr als 30 min
+                            </a>
+                        </div>
+                    </div>
+                </ion-slide>
+            </div>
+            <ion-slide ng-if="isOnline == true" class="padding" id="slide1">
                 <h3 class="light">Wann?</h3>
                 <div class="row row-center">
                     <div class="col">
@@ -16,18 +33,21 @@
                 </div>
                 <div class="row row-center">
                     <div class="col">
-                        <a class="button button-outline button-light button-width-full"  ng-click="vorMehrAls30Min()">
+                        <a class="button button-outline button-light button-width-full"
+                           ng-click="vorMehrAls30Min()">
                             Vor mehr als 30 min
                         </a>
                     </div>
                 </div>
             </ion-slide>
-            <ion-slide class="padding" id="slide2">
-					<h3 id="header2" class="light">Eines dieser Erdbeben?</h3>
-					<a class="button button-outline button-light button-width-full"  ng-click="recentQuakes()" ng-repeat="beben in letzteBeben">
-						{{beben.ldate}} {{beben.ltime}}
-					</a>
-                <a class="button button-outline button-light button-width-full"  ng-click="anderesBeben()" id="buttonAnderesBeben">
+            <ion-slide ng-if="isOnline == true" class="padding" id="slide2">
+                <h3 id="header2" class="light">Eines dieser Erdbeben?</h3>
+                <a class="button button-outline button-light button-width-full"
+                   ng-click="recentQuakes({{beben.id}})" ng-repeat="beben in letzteBeben">
+                    {{beben.ldate}} {{beben.ltime}}
+                </a>
+                <a class="button button-outline button-light button-width-full" ng-click="anderesBeben()"
+                   id="buttonAnderesBeben">
                     Anderes Erdbeben
                 </a>
             </ion-slide>
