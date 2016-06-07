@@ -41,16 +41,16 @@
  */
 angular.module('quakewatch.resources', ['ngResource'])
     .constant('ApiEndpointZAMG', {
-        url: 'http://geoweb.zamg.ac.at/fdsnws/app/1'
+        url: 'http://localhost:8100/apiZAMG'
     })
     .constant('ApiEndpointSeismic', {
         url: 'http://localhost:8100/api'
     })
     .constant('ApiEndpointZAMGFiles', {
-        url: 'http://geoweb.zamg.ac.at/eq_app'
+        url: 'http://localhost:8100/apiZAMGFiles'
     })
     .constant('GeowebEndpoint', {
-        url: 'http://geoweb.zamg.ac.at'
+        url: 'http://localhost:8100/geoweb'
     })
     /**
      * @ngdoc service
@@ -127,7 +127,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * # rest
      * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
-     * [ZAMG]: http://geoweb.zamg.ac.at/fdsnws/app/1/query
+     * [ZAMG]: http://localhost:8100/apiZAMG/query
      */
     .factory('DataGeoWebZAMG', function ($http, $ionicLoading, ApiEndpointZAMG, $templateCache) {
         var atData = null;
@@ -411,8 +411,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @ngdoc service
      * @name resources.service:QuakeReport
      * @description
-     * Diese Factory wird zum sammeln der neuen, vom User eingegebenen, Erdbebendaten.
-     * In dieser funktion werden die Daten gesendet
+     * Diese Factory wird zum sammeln/senden der neuen, vom User eingegebenen, Erdbebendaten verwendet.
      */
     .factory('QuakeReport', function ($http,AppInfo,GeowebEndpoint) {
         var quakeDataObj = new quakeReport(
@@ -651,16 +650,20 @@ angular.module('quakewatch.resources', ['ngResource'])
     /**
      *
      * @description
-     * Diese Klasse ermoeglicht es zu Ueberpruefen ob die Applikation zum ersten mal aufgerufen wurde.
+     * Mithilfe dieser Factory werden alle Funktionen, welche ein zwischenspeichern benoetigen, Ausgefuehrt werden
      */
     .factory('AppInfo', function ($window,$http,GeowebEndpoint) {
+        var firstTimeGpsPopup=true;
         return {
+            //----- Ueberpruefung ob die App zum ersten mal ausgefuehrt wird -----
             setInitialRun: function (initial) {
                 $window.localStorage["initialRun"] = (initial ? true : false);
             },
             isInitialRun: function () {
                 return $window.localStorage["initialRun"];
             },
+            // ENDE
+            //----- API Key verwaltung -----
             generateAPIKey: function () {
                 var req2 = {
                     method: 'POST',
@@ -679,6 +682,8 @@ angular.module('quakewatch.resources', ['ngResource'])
             getApiKey: function(){
                 return $window.localStorage["apiKey"];
             },
+            //ENDE
+            //----- Offline Melden von Erdbeben -----
             cacheQuake: function(quakeReportJson){
                 $window.localStorage["cachedQuake"]=quakeReportJson;
             },
@@ -690,7 +695,7 @@ angular.module('quakewatch.resources', ['ngResource'])
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8',
                         'Authorization': 'Basic cXVha2VhcGk6I3FrcCZtbGRuZyM=',
-                        'X-QuakeAPIKey': AppInfo.getApiKey()
+                        'X-QuakeAPIKey': $window.localStorage["apiKey"]
                     },
                     data: quakeDataObj //JSON Objekt in String umwandeln
                 };
@@ -700,10 +705,21 @@ angular.module('quakewatch.resources', ['ngResource'])
                 });
             },
             isCachedQuake: function () {
-                if(typeof ($window.localStorage["cachedQuake"]) === 'undefined' ){
+                console.log("cache: "+$window.localStorage["cachedQuake"]);
+                if($window.localStorage["cachedQuake"] === 'undefined' ){
                     return false;
                 }else {
                     return true;
+                }
+            },
+            removeCachedQuake: function () {
+                $window.localStorage["cachedQuake"]= undefined;
+            },
+            //ENDE
+            //----- GPS Popup nur einmal anzeigen -----
+            firstTimeGPSPopup: function () {
+                if(firstTimeGpsPopup){
+                    
                 }
             }
         }
@@ -714,7 +730,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * # rest
      * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
-     * [ZAMG]: http://geoweb.zamg.ac.at/fdsnws/app/1/query
+     * [ZAMG]: http://localhost:8100/apiZAMG/query
      */
     .factory('DataGeoWebZAMGStaticFiles', function ($http, $ionicLoading, ApiEndpointZAMG, ApiEndpointZAMGFiles, $templateCache) {
         var atData = null;

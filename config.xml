@@ -23,7 +23,7 @@
   <platform name="android">
 	<icon src="resources/icon.png"/>
   </platform>
-  
+
   <!-- Icon and SplashScreen for iOS -->
   <platform name="ios">
 	<icon src="resources/icon.png"/>
