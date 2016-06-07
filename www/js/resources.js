@@ -41,16 +41,16 @@
  */
 angular.module('quakewatch.resources', ['ngResource'])
     .constant('ApiEndpointZAMG', {
-        url: 'http://localhost:8100/apiZAMG'
+        url: 'http://geoweb.zamg.ac.at/fdsnws/app/1'
     })
     .constant('ApiEndpointSeismic', {
         url: 'http://localhost:8100/api'
     })
     .constant('ApiEndpointZAMGFiles', {
-        url: 'http://localhost:8100/apiZAMGFiles'
+        url: 'http://geoweb.zamg.ac.at/eq_app'
     })
     .constant('GeowebEndpoint', {
-        url: 'http://localhost:8100/geoweb'
+        url: 'http://geoweb.zamg.ac.at'
     })
     /**
      * @ngdoc service
@@ -127,7 +127,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * # rest
      * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
-     * [ZAMG]: http://localhost:8100/apiZAMG/query
+     * [ZAMG]: http://geoweb.zamg.ac.at/fdsnws/app/1/query
      */
     .factory('DataGeoWebZAMG', function ($http, $ionicLoading, ApiEndpointZAMG, $templateCache) {
         var atData = null;
@@ -719,9 +719,13 @@ angular.module('quakewatch.resources', ['ngResource'])
             //----- GPS Popup nur einmal anzeigen -----
             firstTimeGPSPopup: function () {
                 if(firstTimeGpsPopup){
-                    
+                    firstTimeGpsPopup=false;
+                    return true;
+                } else {
+                    return false;
                 }
             }
+            //ENDE
         }
     })
     /**
@@ -730,7 +734,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * # rest
      * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
-     * [ZAMG]: http://localhost:8100/apiZAMG/query
+     * [ZAMG]: http://geoweb.zamg.ac.at/fdsnws/app/1/query
      */
     .factory('DataGeoWebZAMGStaticFiles', function ($http, $ionicLoading, ApiEndpointZAMG, ApiEndpointZAMGFiles, $templateCache) {
         var atData = null;

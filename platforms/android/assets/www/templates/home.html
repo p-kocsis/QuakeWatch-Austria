@@ -1,6 +1,6 @@
 <ion-view view-title="QuakeWatch Austria">
     <ion-nav-buttons side="right">
-        <button class="button" ng-click="reloadFiles()">
+        <button class="button" ng-click="reloadFiles()" ng-if="isOnline" >
             <div class="ion-refresh"></div>
         </button>
     </ion-nav-buttons>
@@ -41,16 +41,15 @@
             </a>
         </div>
     </div>
+
     <div ng-if="isOnline == false">
         <ion-content style="background-color: #f2f2f2" class="padding">
             <div class="row row-center">
                 <div class="col">
                     <h3>Sie befinden sich im Offline Modus </h3>
-
                     <p>Es stehen Ihnen allerdings noch interessante Informationen über Erdbeben zur Verfügung
                         (Navigation über
                         das Menü) </p>
-
                     <ion-list>
                         <div class="item item-divider">
                             Weitere Informationen

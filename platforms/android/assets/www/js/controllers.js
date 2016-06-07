@@ -8,45 +8,74 @@
  *
  */
 angular.module('quakewatch.controllers', ['quakewatch.resources'])
-    .controller('AppCtrl', function (JsonData, $scope,AppInfo) {
+    /**
+    * In diesem Kontroller werden alle Funktionen, welche beim start der App erledigt werden müssen, ausgeführt.
+    */
+    .controller('AppCtrl', function (JsonData, $scope, AppInfo, $ionicPopup) {
         $scope.isOnline = JsonData.isOnline();
         //Generierung des API Keys(Nur einmal bei der Installation)
-        console.log("isInitialRun: "+AppInfo.isInitialRun());
-        if(AppInfo.isInitialRun() === 'true'){
+        if (AppInfo.isInitialRun() === 'true') {
             AppInfo.setInitialRun(false);
             AppInfo.generateAPIKey();
         }
+        //Gecachetes Erdbeben melden
+        if (AppInfo.isCachedQuake()) {
+            AppInfo.reportCachedQuake();
+            AppInfo.removeCachedQuake();
+            //console.log("isCached2: ",AppInfo.isCachedQuake());
+            //Popup um benutzer ueber das melden der gecacheten app zu benachrichtigen
+            var alertPopup = $ionicPopup.alert({
+                title: 'Ihre gecachte Meldung wurde versendet!',
+                template: 'Ihre gecachte Meldung wurde versendet!',
+                okText: '', // String (default: 'OK'). The text of the OK button.
+                okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
+
+            });
+            alertPopup.then(function (res) {
+                //$location.path("/app/home");
+                //$state.go('app.home');
+            });
+        }
+
     })
     /**
      * @ngdoc controller
      * @name controllers.controller:HomeCtrl
      * @description
-     * Das ist der Controller für die home.html View
+     * Das ist der Controller für die home.html View (inklusive des Erdbeben melden modals)
      */
-    .controller('HomeCtrl', function ($scope, $timeout, $ionicScrollDelegate, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport, $ionicLoading) {
+    .controller('HomeCtrl', function ($scope, $timeout, $ionicScrollDelegate, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport, $ionicLoading,AppInfo) {
         $scope.isOnline = JsonData.isOnline();
-
+        //Funktion fuer den Button "In den Online Modus wechseln"
         if (!$scope.isOnline) {
             $scope.getOnline = function () {
                 document.location.href = 'index.html';
             };
         }
-
         if ($scope.isOnline) {
             var location = "";
+            //Funktion um oesterreichische Erdbebendaten abzurufen und anzuzeigen
             $scope.quakeAut = function () {
+                $ionicScrollDelegate.scrollTop();
                 $scope.quakeList = JsonData.getAut();
                 location = "aut";
             };
+            //Beim aufruf der App werden 10 oesterreichische Erdbeben geladen
             $scope.quakeAut();
+            //Funktion um alle erdbebendaten abzurufen und anzuzeigen
             $scope.quakeWorld = function () {
+                $ionicScrollDelegate.scrollTop();
                 $scope.quakeList = JsonData.getWorld();
                 location = "world";
             };
+            //Funktion um alle europaeische Erdbebendaten abzurufen und anzuzeigen
             $scope.quakeEu = function () {
+                $ionicScrollDelegate.scrollTop();
                 $scope.quakeList = JsonData.getEu();
                 location = "eu";
             };
+            // Funktion um Daten mithilfe des Reload Buttons(rechts oben) nachzuladen
+            // (location beschreibt auf welcher Seite sich der Benutzer befindet Aut, Eu, Welt)
             $scope.loaded = false;
             $scope.reloadFiles = function () {
                 $ionicLoading.show({
@@ -59,7 +88,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 $timeout(function () {
                     $scope.loaded = false;
                 }, 3000);
-            }
+            };
+            //Funktion um Daten beim herabscrollen nachzuladen
             $scope.loadMoreData = function () {
                 JsonData.getMoreData(location).then(function (bebenAutArray) {
                     $scope.quakeList = $scope.quakeList.concat(bebenAutArray);
@@ -69,90 +99,116 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             $scope.$on('$stateChangeSuccess', function () {
                 $scope.loadMoreData();
             });
-
-            //START BEBEN REPORT MODAL UND SEINE FUNKTIONEN
-            $ionicModal.fromTemplateUrl('templates/lade_daten_modal.html', {
-                scope: $scope,
-                animation: 'slide-in-up'
-            }).then(function (modal) {
-                $scope.selectModal = modal;
-                $scope.selectModalSlider = $ionicSlideBoxDelegate.$getByHandle('modalSlider');
-                $scope.selectModalSlider.enableSlide(false);
-            });
-            $scope.closeSelectModal = function () {
-                if ($scope.selectModalSlider.currentIndex() == 0)
-                    $scope.selectModal.hide();
-                else
-                    $scope.selectModalSlider.previous();
-            };
-            $scope.openSelectModal = function () {
-                $scope.selectModalSlider.slide(0);
-                $scope.selectModal.show();
-                document.getElementById("modalHome").style.top = $window.innerHeight - 290 + "px";
-            };
-            //Wird beim betaetigen von Button vor mehr al 30 Minuten aktiviert
-            $scope.vorMehrAls30Min = function () {
-                $ionicSlideBoxDelegate.$getByHandle('modalSlider').next();
-                var beben = JsonData.getAut();
-                var bebenObject = beben[0];
-                var bebenObject2 = beben[1];
-                var bebenObject3 = beben[2];
-                $scope.letzteBeben = [bebenObject, bebenObject2, bebenObject3];
-                //$scope.letzteBeben = [bebenObject, bebenObject2];
-            };
-
-            //Routing fuer den Button anderes Beben
-            $scope.anderesBeben = function () {
-                $state.go('app.bebenEintrag');
-                $scope.selectModal.hide();
-            };
-            //Fuer das Button "Ja gerade jetzt" Standort bestimmen und Datum setzten
-            $scope.geradeJetzt = function () {
-                $ionicLoading.show({
-                    template: '<ion-spinner></ion-spinner><br/>Lade Standortdaten',
-                    hideOnStateChange: true
-                });
-                var posOptions = {timeout: 10000, enableHighAccuracy: false};
-                $cordovaGeolocation
-                    .getCurrentPosition(posOptions)
-                    .then(function (position) {
-                        var lat = position.coords.latitude;
-                        var long = position.coords.longitude;
-                        console.log(lat);
-                        console.log(long);
-                        var d1 = new Date();
-                        //d1.toUTCString();
-                        console.log(d1.toJSON());
-                        QuakeReport.setLocLastUpdate(d1.toJSON());
-                        QuakeReport.setDateTime(d1.toJSON());
-                        QuakeReport.setLon(long);
-                        QuakeReport.setLat(lat);
-                        QuakeReport.setLocPrec(position.coords.accuracy);
-                        $scope.selectModal.hide();
-                        $state.go('app.bebenWahrnehmung');
-                    }, function (err) {
-                        $scope.selectModal.hide();
-                        $state.go('app.bebenEintrag');
-                    });
-            };
-            //Fuer die Buttons der 3 letzten spuerhbaren erdbeben (ID uebergeben)
-            //TODO MIT DER ID WIEDER UMBAUEN
-            $scope.recentQuakes = function () {
-                //QuakeReport.setId(id);
-                $scope.selectModal.hide();
-
-                $state.go('app.bebenEintrag');
-            };
-            //END MODAL
         }
+
+        //----- START BEBEN REPORT MODAL UND SEINE FUNKTIONEN -----
+
+        $ionicModal.fromTemplateUrl('templates/lade_daten_modal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function (modal) {
+            $scope.selectModal = modal;
+            $scope.selectModalSlider = $ionicSlideBoxDelegate.$getByHandle('modalSlider');
+            $scope.selectModalSlider.enableSlide(false);
+        });
+        //Funktion um das "Erdbeben Melden" Modal zu schließen
+        $scope.closeSelectModal = function () {
+            if ($scope.selectModalSlider.currentIndex() == 0)
+                $scope.selectModal.hide();
+            else
+                $scope.selectModalSlider.previous();
+        };
+        //Funktion um das "Erdbeben Melden" Modal zu oeffnen
+        $scope.openSelectModal = function () {
+            $scope.selectModalSlider.slide(0);
+            $scope.selectModal.show();
+            document.getElementById("modalHome").style.top = $window.innerHeight - 290 + "px";
+        };
+        //Wird beim betaetigen von Button vor mehr al 30 Minuten aktiviert
+        $scope.vorMehrAls30Min = function () {
+            $ionicSlideBoxDelegate.$getByHandle('modalSlider').next();
+            var beben = JsonData.getAut();
+            var bebenObject = beben[0];
+            var bebenObject2 = beben[1];
+            var bebenObject3 = beben[2];
+            $scope.letzteBeben = [bebenObject, bebenObject2, bebenObject3];
+            //$scope.letzteBeben = [bebenObject, bebenObject2];
+        };
+
+        //Das GPS Popup oeffnen
+        function openGPSPopup() {
+            $cordovaDialogs.confirm('Ihr GPS ist nicht aktiviert - einige Funktionen werden nicht verfügbar sein!', 'GPS deaktiviert!', ['Ignorieren', 'GPS - Aktivieren'])
+                .then(function (buttonIndex) {
+                    if (buttonIndex == 2) {
+                        cordova.plugins.settings.openSetting("location_source", function () {
+                            return "open";
+                        }, function () {
+                            $scope.quake.distanceFromPhoneToQuake = "GPS Dienste ausgeschalten";
+                        });
+                    }
+                    if (buttonIndex == 1) {
+                        $scope.quake.distanceFromPhoneToQuake = "GPS Dienste ausgeschalten";
+                    }
+                });
+        }
+        //Routing fuer den Button anderes Beben
+        $scope.anderesBeben = function () {
+            $state.go('app.bebenEintrag');
+            $scope.selectModal.hide();
+        };
+        //Fuer das Button "Ja gerade jetzt" Standort bestimmen und Datum setzten
+        $scope.geradeJetzt = function () {
+            $ionicLoading.show({
+                template: '<ion-spinner></ion-spinner><br/>Lade Standortdaten',
+                hideOnStateChange: true
+            });
+            var posOptions = {timeout: 3000, enableHighAccuracy: false};
+            $cordovaGeolocation
+                .getCurrentPosition(posOptions)
+                .then(function (position) {
+                    var lat = position.coords.latitude;
+                    var long = position.coords.longitude;
+                    console.log(lat);
+                    console.log(long);
+                    var d1 = new Date();
+                    //d1.toUTCString();
+                    console.log(d1.toJSON());
+                    QuakeReport.setLocLastUpdate(d1.toJSON());
+                    QuakeReport.setDateTime(d1.toJSON());
+                    QuakeReport.setLon(long);
+                    QuakeReport.setLat(lat);
+                    QuakeReport.setLocPrec(position.coords.accuracy);
+                    $scope.selectModal.hide();
+                    $ionicLoading.hide();
+                    $state.go('app.bebenWahrnehmung');
+                }, function (err) {
+                    $ionicLoading.hide();
+                    if(AppInfo.firstTimeGPSPopup()){
+                        openGPSPopup();
+                        $scope.geradeJetzt();
+                    }
+                    $scope.selectModal.hide();
+                    $state.go('app.bebenEintrag');
+                });
+        };
+        //Fuer die Buttons der 3 letzten spuerhbaren erdbeben (ID uebergeben)
+        $scope.recentQuakes = function (id) {
+            QuakeReport.setId(id);
+            $scope.selectModal.hide();
+            $state.go('app.bebenEintrag');
+        };
+
+        //----- END MODAL -----
+
     })
     /**
      * @ngdoc controller
      * @name controllers.controller:BebenWahrnehmungCtrl
      * @description
-     * Das ist der Controller für die beben_wahrnehmung.html View
+     * Das ist der Controller für die beben_wahrnehmung.html View (Comics Seite)
      */
     .controller('BebenWahrnehmungCtrl', function ($scope, $state, QuakeReport) {
+        //Funktion fuer Button "Trifft am ehesten zu"
         $scope.continueToAdditional = function (magClass) {
             QuakeReport.setMagClass(magClass);
             $state.go('app.bebenZusatzfragen');
@@ -162,13 +218,15 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @ngdoc controller
      * @name controllers.controller:ZusatzVerhaltenCtrl
      * @description
-     * Das ist der Controller für die zusatz_verhalten_erdbeben.html View
+     * Das ist der Controller für die zusatz_verhalten_erdbeben.html View (Verhaltensratgeber)
      */
     .controller('ZusatzVerhaltenCtrl', function ($scope, $location, $anchorScroll, $ionicScrollDelegate) {
+        //Nach oben scrollen
         $scope.scrollTop = function () {
             $location.hash(" ");
             $ionicScrollDelegate.scrollTop(true);
         };
+        // Zu einem gewissen Verhaltenstipp auf der Seite scrollen
         $scope.scrollToAnchor = function (anchorID) {
             $location.hash(anchorID);
             var handle = $ionicScrollDelegate.$getByHandle('verhaltenContent');
@@ -179,7 +237,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @ngdoc controller
      * @name controllers.controller:ZusatzUebersichtCtrl
      * @description
-     * Das ist der Controller für die zusatz_uebersicht.html View
+     * Das ist der Controller für die zusatz_uebersicht.html View (Übersicht)
+     * Macht nichts muss aber wegen AngularJS/Ionic vorhanden sein
      */
     .controller('ZusatzUebersichtCtrl', function ($scope) {
 
@@ -188,9 +247,10 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @ngdoc controller
      * @name controllers.controller:ZusatzLexikonCtrl
      * @description
-     * Das ist der Controller für die zusatz_lexikon.html View
+     * Das ist der Controller für die zusatz_lexikon.html View (Lexikon)
      */
     .controller('ZusatzLexikonCtrl', function ($scope, $ionicScrollDelegate) {
+        //ganz nach oben scrollen
         $scope.scrollTop = function () {
             $ionicScrollDelegate.scrollTop(true);
         };
@@ -199,24 +259,26 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @ngdoc controller
      * @name controllers.controller:BebenZusatzfragenCtrl
      * @description
-     * Das ist der Controller für die beben_zusatzfragen.html View
+     * Das ist der Controller für die beben_zusatzfragen.html View (Zusatzfragen)
      */
-    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport, $state, $ionicPopup, $ionicHistory,$cordovaNetwork) {
+    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport, $state, $ionicPopup, $ionicHistory, $cordovaNetwork, AppInfo) {
+        //Input Object, von hier aus werden die Daten an die QuakeReport factory weitergegeben
         $scope.input = {
             floor: "",
             comment: null,
-            contact: null,
-            itemsDropped: null,
-            ranAway: null,
-            facade: null
+            contact: null
         };
 
-        $scope.klassifikation=QuakeReport.getQuakeDataObject().klassifikation;
-
+        //Abfragen der Klassifikation
+        $scope.klassifikation = QuakeReport.getQuakeDataObject().klassifikation;
+        /*
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
+        */
+        //Zusatzfragen in der QuakeReport Factory abspeichern
         $scope.sendData = function () {
+            //Je nach Klassifikation richtige Zusatzfragen in der Factory setzten
             switch ($scope.klassifikation) {
                 //Schwach
                 case 1:
@@ -231,66 +293,74 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 case 3:
                     //stark
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f1=($scope.input.f1);
-                    zusatzFragen.f2=($scope.input.f2);
-                    zusatzFragen.f3=($scope.input.f3);
-                    zusatzFragen.f15=($scope.input.f15);
+                    zusatzFragen.f1 = ($scope.input.f1);
+                    zusatzFragen.f2 = ($scope.input.f2);
+                    zusatzFragen.f3 = ($scope.input.f3);
+                    zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
                     //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
                     break;
                 //stark, gebaeudeschaeden
                 case 4:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f2=($scope.input.f2);
-                    zusatzFragen.f3=($scope.input.f3);
-                    zusatzFragen.f7=($scope.input.f7);
-                    zusatzFragen.f8=($scope.input.f8);
-                    zusatzFragen.f15=($scope.input.f15);
+                    zusatzFragen.f2 = ($scope.input.f2);
+                    zusatzFragen.f3 = ($scope.input.f3);
+                    zusatzFragen.f7 = ($scope.input.f7);
+                    zusatzFragen.f8 = ($scope.input.f8);
+                    zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
                     //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
                     break;
                 //sehr stark, betraechtliche gebaeudeschaeden
                 case 5:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f3=($scope.input.f3);
-                    zusatzFragen.f4=($scope.input.f4);
-                    zusatzFragen.f5=($scope.input.f5);
-                    zusatzFragen.f7=($scope.input.f7);
-                    zusatzFragen.f8=($scope.input.f8);
-                    zusatzFragen.f9=($scope.input.f9);
-                    zusatzFragen.f10=($scope.input.f10);
-                    zusatzFragen.f11=($scope.input.f11);
-                    zusatzFragen.f12=($scope.input.f12);
-                    zusatzFragen.f13=($scope.input.f13);
-                    zusatzFragen.f14=($scope.input.f14);
-                    zusatzFragen.f15=($scope.input.f15);
+                    zusatzFragen.f3 = ($scope.input.f3);
+                    zusatzFragen.f4 = ($scope.input.f4);
+                    zusatzFragen.f5 = ($scope.input.f5);
+                    zusatzFragen.f7 = ($scope.input.f7);
+                    zusatzFragen.f8 = ($scope.input.f8);
+                    zusatzFragen.f9 = ($scope.input.f9);
+                    zusatzFragen.f10 = ($scope.input.f10);
+                    zusatzFragen.f11 = ($scope.input.f11);
+                    zusatzFragen.f12 = ($scope.input.f12);
+                    zusatzFragen.f13 = ($scope.input.f13);
+                    zusatzFragen.f14 = ($scope.input.f14);
+                    zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
-                //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
                     break;
                 case 6:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f3=($scope.input.f3);
-                    zusatzFragen.f5=($scope.input.f5);
-                    zusatzFragen.f7=($scope.input.f7);
-                    zusatzFragen.f8=($scope.input.f8);
-                    zusatzFragen.f9=($scope.input.f9);
-                    zusatzFragen.f10=($scope.input.f10);
-                    zusatzFragen.f11=($scope.input.f11);
-                    zusatzFragen.f12=($scope.input.f12);
-                    zusatzFragen.f13=($scope.input.f13);
-                    zusatzFragen.f14=($scope.input.f14);
-                    zusatzFragen.f15=($scope.input.f15);
+                    zusatzFragen.f3 = ($scope.input.f3);
+                    zusatzFragen.f5 = ($scope.input.f5);
+                    zusatzFragen.f7 = ($scope.input.f7);
+                    zusatzFragen.f8 = ($scope.input.f8);
+                    zusatzFragen.f9 = ($scope.input.f9);
+                    zusatzFragen.f10 = ($scope.input.f10);
+                    zusatzFragen.f11 = ($scope.input.f11);
+                    zusatzFragen.f12 = ($scope.input.f12);
+                    zusatzFragen.f13 = ($scope.input.f13);
+                    zusatzFragen.f14 = ($scope.input.f14);
+                    zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
-                //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
+                    //TODO Fotos von Schaeden bitte an: seismo@zamg.ac.at
                     break;
             }
 
-
+            /*
             QuakeReport.setFloor($scope.input.floor);
             QuakeReport.setComment($scope.input.comment);
-            QuakeReport.sendData();
-            if($cordovaNetwork.isOnline()){
+            */
+
+            //QuakeReport.sendData();
+            //Ueberfruefen ob das Handy internet Zugang hat
+            $ionicHistory.nextViewOptions({
+                disableBack: true
+            });
+            if ($cordovaNetwork.isOnline()) {
+                //Daten versenden
                 QuakeReport.sendData();
+                //Benutzer ueber erfolgreiches versenden informieren
                 var alertPopup = $ionicPopup.alert({
                     title: 'Danke für ihre Meldung!',
                     template: 'Danke für ihre Meldung!',
@@ -301,32 +371,32 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     //$location.path("/app/home");
                     $state.go('app.home');
                 });
-            }else {
+            } else {
+                //Kein Interenet Zugang daher werden die Daten gecacht und der Benutzer wird benachrichtigt
                 var alertPopup = $ionicPopup.alert({
                     title: 'Danke für ihre Meldung!',
-                    template: 'Leider haben sie keine Internet verbindung! Wenn Sie wieder online sind dann wird das Erdbeben für sie automatisch gemeldet.',
+                    template: 'Leider haben sie keine Internet verbindung! Wenn Sie wieder online sind, dann wird das Erdbeben automatisch gemeldet.',
                     okText: '', // String (default: 'OK'). The text of the OK button.
                     okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
+
                 });
                 alertPopup.then(function (res) {
                     //$location.path("/app/home");
+                    AppInfo.cacheQuake();
                     $state.go('app.home');
                 });
             }
-
-
-
         };
-
     })
     /**
      * @ngdoc controller
      * @name controllers.controller:BebenDetailCtrl
      * @description
-     * Das ist der Controller für die beben_detail.html View
+     * Das ist der Controller für die beben_detail.html View (Beben Details, nach dem Anclicken eines Erbebens in der Home View gelangt man hierher)
      */
-    .controller('BebenDetailCtrl', function ($scope, $cordovaPreferences, $cordovaDialogs, $ionicPopup, $ionicHistory, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window, $ionicLoading, NgMap) {
+    .controller('BebenDetailCtrl', function ($scope, $cordovaPreferences, $cordovaDialogs, $ionicPopup, $ionicHistory, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window, $ionicLoading, AppInfo) {
 
+        //Berechnen des Handy Standortes vom Erdbeben (return in KM)
         function distance(lat1, lon1, lat2, lon2) {
             var p = 0.017453292519943295;    // Math.PI / 180
             var c = Math.cos;
@@ -336,7 +406,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             var fullResult = 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
             return Math.round(fullResult * 100) / 100;
         }
-
+        //Header Setzten (In der Detail Ansicht die Kopfzeile mit der Erdbebenmagnitude)
         function setHeaderColor() {
             switch ($scope.quake.classColor) {
                 case "item-balanced":
@@ -350,7 +420,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     break;
             }
         }
-
+        //Das GPS Popup oeffnen
         function openGPSPopup() {
             $cordovaDialogs.confirm('Ihr GPS ist nicht aktiviert - einige Funktionen werden nicht verfügbar sein!', 'GPS deaktiviert!', ['Ignorieren', 'GPS - Aktivieren'])
                 .then(function (buttonIndex) {
@@ -358,34 +428,35 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                         cordova.plugins.settings.openSetting("location_source", function () {
                             return "open";
                         }, function () {
-                            return "closed";
+                            $scope.quake.distanceFromPhoneToQuake = "GPS Dienste ausgeschalten";
                         });
                     }
                     if (buttonIndex == 1) {
+                        $scope.quake.distanceFromPhoneToQuake = "GPS Dienste ausgeschalten";
                     }
                 });
         }
 
-        /**
-         *
+        /*
+         * Standort bestimmen
          * @param callback Wenn die Position ermittelt werden konnte dann rueckgabe von true(GPS ON) und latitude und longtitude, bei fehler (GPS OFF) nur false
          */
-        function getLocation(callback){
-
+        function getLocation(callback) {
             if (typeof callback === "function") {
                 var posOptions = {timeout: 3500, enableHighAccuracy: false};
                 $cordovaGeolocation
                     .getCurrentPosition(posOptions)
                     .then(function (position) {
-                        callback(true,position.coords.latitude,position.coords.longitude);
+                        callback(true, position.coords.latitude, position.coords.longitude);
                     }, function (err) {
                         callback(false);
                     });
             }
         }
-
-        function printDistancePhoneToQuake(isGpsEnabled,lat,long) {
-            if(isGpsEnabled){
+        //Die Distanz zwischen Erdbeben und Handy in der HTML View anzeigen
+        // -> $scope.quake.distanceFromPhoneToQuake
+        function printDistancePhoneToQuake(isGpsEnabled, lat, long) {
+            if (isGpsEnabled) {
                 $scope.quake.distanceFromPhoneToQuake = distance(
                         lat,
                         long,
@@ -393,17 +464,24 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                         $scope.quake.locLon
                     ) + " km";
                 $scope.$broadcast('scroll.resize');
-            }else {
-                openGPSPopup();
+            } else {
+                if(AppInfo.firstTimeGPSPopup()){
+                    openGPSPopup();
+                } else {
+                    $scope.quake.distanceFromPhoneToQuake = "GPS Dienste ausgeschalten";
+                }
             }
         }
-
+        //Erdbeben Datenobjekt an die View weitergeben
         $scope.quake = JsonData.getQuakefromIdWorld($stateParams.bebenId);
         setHeaderColor();
+        //Entfernung von Handy zu Erdbeben bestimmen und anzeigen
         getLocation(printDistancePhoneToQuake);
+
         $scope.myGoBack = function () {
             $ionicHistory.goBack();
         };
+        //Google Maps Toggeln
         $scope.mapVisible = false;
         $scope.showMap = function () {
             $scope.mapVisible = !$scope.mapVisible;
@@ -412,7 +490,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
         };
 
 
-        //MODAL BEBENDETAIL
+        //----- MODAL BEBENDETAIL -----
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
             scope: $scope
         }).then(function (modal) {
@@ -435,7 +513,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 template: '<ion-spinner></ion-spinner><br/>Lade Standortdaten'
             });
             QuakeReport.setId($stateParams.bebenId);
-            var posOptions = {timeout: 10000, enableHighAccuracy: false};
+            var posOptions = {timeout: 3000, enableHighAccuracy: false};
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(function (position) {
@@ -461,15 +539,16 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             $scope.bebenmodal.hide();
             $state.go('app.bebenEintrag');
         };
-        //MODAL ENDE
+        //----- MODAL ENDE -----
     })
     /**
      * @ngdoc controller
      * @name controllers.controller:BebenEintragCtrl
      * @description
-     * Das ist der Controller für die beben_eintrag.html View
+     * Das ist der Controller für die beben_eintrag.html View (Angabe der Standortinformationen -> PLZ, Strasse..)
      */
     .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, QuakeReport) {
+        //Input objekt -> Daten von der View werden hier gespeichert
         $scope.input = {
             zipCode: null,
             place: null,
@@ -477,12 +556,13 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             chosenTime: "",
             rawTime: new Date()
         };
+        //Bestimmen ob Nullen benoetigt werden
         if ($scope.input.rawTime.getUTCMinutes() < 10) {
             $scope.input.chosenTime = $scope.input.rawTime.getHours() + ':0' + $scope.input.rawTime.getMinutes();
         } else {
             $scope.input.chosenTime = $scope.input.rawTime.getHours() + ':' + $scope.input.rawTime.getMinutes();
         }
-        //Zeit wählen
+        //----- Zeit waehlen -> Popup -----
         $scope.timePickerObject = {
             inputEpochTime: ((new Date()).getHours() * 60 * 60),  //Optional
             step: 5,  //Optional
@@ -500,7 +580,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             if (typeof (val) === 'undefined') {
             } else {
                 var selectedTime = new Date(val * 1000);
-                console.log("timepickercallback: "+selectedTime.toJSON());
+                console.log("timepickercallback: " + selectedTime.toJSON());
                 $scope.input.rawTime = selectedTime;
                 if (selectedTime.getUTCMinutes() < 10) {
                     $scope.input.chosenTime = selectedTime.getUTCHours() + ':0' + selectedTime.getUTCMinutes();
@@ -510,7 +590,9 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
 
             }
         }
+        //Zeit waehlen ENDE
 
+        //----- Monat Popup anzeigen -----
         var dateForFrom = new Date();
         var weekDaysList = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
         var monthList = ["Jän", "Feb", "März", "April", "Mai", "Juni", "Juli", "Aug", "Sept", "Okt", "Nov", "Dez"];
@@ -545,6 +627,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             }
         };
         //Zeit wählen ENDE
+        //-----  Daten mithilfe von QuakeReport speichern und weiter zur Comics Seite -----
         $scope.goToComics = function () {
             QuakeReport.setPlace($scope.input.place);
             QuakeReport.setZIP($scope.input.zipCode);
@@ -557,10 +640,11 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 $scope.input.rawTime.getMinutes(),
                 $scope.input.rawTime.getSeconds()
             );
-            datetime = datetime.toISOString().slice(0,19)+"Z";
+            datetime = datetime.toISOString().slice(0, 19) + "Z";
             QuakeReport.setLocLastUpdate(datetime);
             QuakeReport.setDateTime(datetime);
             console.log(datetime);
             $state.go('app.bebenWahrnehmung');
         };
+        // Daten uebergabe ENDE
     });

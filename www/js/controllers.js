@@ -44,7 +44,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die home.html View (inklusive des Erdbeben melden modals)
      */
-    .controller('HomeCtrl', function ($scope, $timeout, $ionicScrollDelegate, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport, $ionicLoading) {
+    .controller('HomeCtrl', function ($scope, $timeout, $ionicScrollDelegate, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport, $ionicLoading,AppInfo) {
         $scope.isOnline = JsonData.isOnline();
         //Funktion fuer den Button "In den Online Modus wechseln"
         if (!$scope.isOnline) {
@@ -135,6 +135,22 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             //$scope.letzteBeben = [bebenObject, bebenObject2];
         };
 
+        //Das GPS Popup oeffnen
+        function openGPSPopup() {
+            $cordovaDialogs.confirm('Ihr GPS ist nicht aktiviert - einige Funktionen werden nicht verfügbar sein!', 'GPS deaktiviert!', ['Ignorieren', 'GPS - Aktivieren'])
+                .then(function (buttonIndex) {
+                    if (buttonIndex == 2) {
+                        cordova.plugins.settings.openSetting("location_source", function () {
+                            return "open";
+                        }, function () {
+                            $scope.quake.distanceFromPhoneToQuake = "GPS Dienste ausgeschalten";
+                        });
+                    }
+                    if (buttonIndex == 1) {
+                        $scope.quake.distanceFromPhoneToQuake = "GPS Dienste ausgeschalten";
+                    }
+                });
+        }
         //Routing fuer den Button anderes Beben
         $scope.anderesBeben = function () {
             $state.go('app.bebenEintrag');
@@ -146,7 +162,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 template: '<ion-spinner></ion-spinner><br/>Lade Standortdaten',
                 hideOnStateChange: true
             });
-            var posOptions = {timeout: 10000, enableHighAccuracy: false};
+            var posOptions = {timeout: 3000, enableHighAccuracy: false};
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(function (position) {
@@ -163,8 +179,14 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     QuakeReport.setLat(lat);
                     QuakeReport.setLocPrec(position.coords.accuracy);
                     $scope.selectModal.hide();
+                    $ionicLoading.hide();
                     $state.go('app.bebenWahrnehmung');
                 }, function (err) {
+                    $ionicLoading.hide();
+                    if(AppInfo.firstTimeGPSPopup()){
+                        openGPSPopup();
+                        $scope.geradeJetzt();
+                    }
                     $scope.selectModal.hide();
                     $state.go('app.bebenEintrag');
                 });
@@ -244,7 +266,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
         $scope.input = {
             floor: "",
             comment: null,
-            contact: null,
+            contact: null
         };
 
         //Abfragen der Klassifikation
@@ -332,6 +354,9 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
 
             //QuakeReport.sendData();
             //Ueberfruefen ob das Handy internet Zugang hat
+            $ionicHistory.nextViewOptions({
+                disableBack: true
+            });
             if ($cordovaNetwork.isOnline()) {
                 //Daten versenden
                 QuakeReport.sendData();
@@ -369,7 +394,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die beben_detail.html View (Beben Details, nach dem Anclicken eines Erbebens in der Home View gelangt man hierher)
      */
-    .controller('BebenDetailCtrl', function ($scope, $cordovaPreferences, $cordovaDialogs, $ionicPopup, $ionicHistory, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window, $ionicLoading, NgMap) {
+    .controller('BebenDetailCtrl', function ($scope, $cordovaPreferences, $cordovaDialogs, $ionicPopup, $ionicHistory, $ionicModal, JsonData, $stateParams, $state, $cordovaGeolocation, QuakeReport, $window, $ionicLoading, AppInfo) {
 
         //Berechnen des Handy Standortes vom Erdbeben (return in KM)
         function distance(lat1, lon1, lat2, lon2) {
@@ -440,7 +465,11 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     ) + " km";
                 $scope.$broadcast('scroll.resize');
             } else {
-                openGPSPopup();
+                if(AppInfo.firstTimeGPSPopup()){
+                    openGPSPopup();
+                } else {
+                    $scope.quake.distanceFromPhoneToQuake = "GPS Dienste ausgeschalten";
+                }
             }
         }
         //Erdbeben Datenobjekt an die View weitergeben
@@ -484,7 +513,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 template: '<ion-spinner></ion-spinner><br/>Lade Standortdaten'
             });
             QuakeReport.setId($stateParams.bebenId);
-            var posOptions = {timeout: 10000, enableHighAccuracy: false};
+            var posOptions = {timeout: 3000, enableHighAccuracy: false};
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(function (position) {

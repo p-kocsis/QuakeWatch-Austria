@@ -411,12 +411,11 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @ngdoc service
      * @name resources.service:QuakeReport
      * @description
-     * Diese Factory wird zum sammeln der neuen, vom User eingegebenen, Erdbebendaten.
-     * In dieser funktion werden die Daten gesendet
+     * Diese Factory wird zum sammeln/senden der neuen, vom User eingegebenen, Erdbebendaten verwendet.
      */
     .factory('QuakeReport', function ($http,AppInfo,GeowebEndpoint) {
         var quakeDataObj = new quakeReport(
-            "12345abc",
+            null,
             null,
             null,
             null,
@@ -642,7 +641,8 @@ angular.module('quakewatch.resources', ['ngResource'])
                         //Check ob Response Code 200
                         console.log("response: "+response);
                     });
-                console.log(JSON.stringify(quakeDataObj));
+                console.log(JSON.stringify(quakeDataObj
+                ));
             }
         };
     })
@@ -650,16 +650,20 @@ angular.module('quakewatch.resources', ['ngResource'])
     /**
      *
      * @description
-     * Diese Klasse ermoeglicht es zu Ueberpruefen ob die Applikation zum ersten mal aufgerufen wurde.
+     * Mithilfe dieser Factory werden alle Funktionen, welche ein zwischenspeichern benoetigen, Ausgefuehrt werden
      */
     .factory('AppInfo', function ($window,$http,GeowebEndpoint) {
+        var firstTimeGpsPopup=true;
         return {
+            //----- Ueberpruefung ob die App zum ersten mal ausgefuehrt wird -----
             setInitialRun: function (initial) {
                 $window.localStorage["initialRun"] = (initial ? true : false);
             },
             isInitialRun: function () {
                 return $window.localStorage["initialRun"];
             },
+            // ENDE
+            //----- API Key verwaltung -----
             generateAPIKey: function () {
                 var req2 = {
                     method: 'POST',
@@ -677,7 +681,51 @@ angular.module('quakewatch.resources', ['ngResource'])
             },
             getApiKey: function(){
                 return $window.localStorage["apiKey"];
+            },
+            //ENDE
+            //----- Offline Melden von Erdbeben -----
+            cacheQuake: function(quakeReportJson){
+                $window.localStorage["cachedQuake"]=quakeReportJson;
+            },
+            reportCachedQuake: function(){
+                var quakeDataObj=$window.localStorage["cachedQuake"];
+                var req = {
+                    method: 'POST',
+                    url: GeowebEndpoint.url+'/quakeapi/v02/message',
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                        'Authorization': 'Basic cXVha2VhcGk6I3FrcCZtbGRuZyM=',
+                        'X-QuakeAPIKey': $window.localStorage["apiKey"]
+                    },
+                    data: quakeDataObj //JSON Objekt in String umwandeln
+                };
+                $http(req).then(function (response) {
+                    //Check ob Response Code 200
+                    console.log("response: "+response);
+                });
+            },
+            isCachedQuake: function () {
+                console.log("cache: "+$window.localStorage["cachedQuake"]);
+                if($window.localStorage["cachedQuake"] === 'undefined' ){
+                    return false;
+                }else {
+                    return true;
+                }
+            },
+            removeCachedQuake: function () {
+                $window.localStorage["cachedQuake"]= undefined;
+            },
+            //ENDE
+            //----- GPS Popup nur einmal anzeigen -----
+            firstTimeGPSPopup: function () {
+                if(firstTimeGpsPopup){
+                    firstTimeGpsPopup=false;
+                    return true;
+                } else {
+                    return false;
+                }
             }
+            //ENDE
         }
     })
     /**
@@ -805,6 +853,7 @@ angular.module('quakewatch.resources', ['ngResource'])
                 switch (location) {
                     case "aut":
                         if (AutPromise) {
+                            //console.log("TEST# neu geladene Daten:"+JSON.stringify(this.getAut()));
                             return this.getAut();
                         }
                         break;
