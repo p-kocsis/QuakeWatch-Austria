@@ -81,13 +81,17 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 if (!$cordovaNetwork.isOnline()) {
                     document.location.href = 'index.html';
                 } else {
+                    $scope.quakeList=JsonData.reloadData(location);
+                    $ionicScrollDelegate.scrollTop();
+                    $scope.loaded = true;
+                    /*
                     JsonData.reloadData(location).then(function (list) {
                             $ionicScrollDelegate.scrollTop();
                             $scope.loaded = true;
                             $scope.quakeList = list;
                         }
                     );
-
+                    */
                     //Nachricht wieder verdecken
                     $timeout(function () {
                         $scope.loaded = false;
@@ -458,6 +462,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             $cordovaDialogs.confirm('Ihr GPS ist nicht aktiviert - einige Funktionen werden nicht verfügbar sein!', 'GPS deaktiviert!', ['Ignorieren', 'GPS - Aktivieren'])
                 .then(function (buttonIndex) {
                     if (buttonIndex == 2) {
+                        $ionicLoading.hide();
                         cordova.plugins.settings.open(function () {
                             },
                             function () {
