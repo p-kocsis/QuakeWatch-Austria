@@ -261,6 +261,18 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             $ionicScrollDelegate.scrollTop(true);
         };
     })
+	/**
+     * @ngdoc controller
+     * @name controllers.controller:ZusatzImpressumCtrl
+     * @description
+     * Das ist der Controller für die zusatz_impressum.html View (Impressum)
+     */
+    .controller('ZusatzImpressumCtrl', function ($scope, $ionicScrollDelegate) {
+        //ganz nach oben scrollen
+        $scope.scrollTop = function () {
+            $ionicScrollDelegate.scrollTop(true);
+        };
+    })
     /**
      * @ngdoc controller
      * @name controllers.controller:BebenZusatzfragenCtrl
