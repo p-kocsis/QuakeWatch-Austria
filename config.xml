@@ -20,8 +20,8 @@
     <param name="ios-package" value="CDVSplashScreen" onload="true"/>
   </feature>
   -->
-  <preference name="SplashScreen" value="screen"/>
-  <preference name="SplashScreenDelay" value="3000"/>
+  <preference name="SplashScreen" value="none"/>
+  <!--<preference name="SplashScreenDelay" value="3000"/>-->
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
@@ -33,7 +33,6 @@
   <!-- Icon and SplashScreen for iOS -->
   <platform name="ios">
 	<icon src="resources/icon.png"/>
-    <splash src="resources/splash.png"/>
   </platform>
   
 </widget>

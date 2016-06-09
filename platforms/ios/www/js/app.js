@@ -132,6 +132,15 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                         controller: 'ZusatzLexikonCtrl'
                     }
                 }
+            })
+			.state('app.zusatzImpressum', {
+                url: '/zusatzImpressum',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/zusatz_impressum.html',
+                        controller: 'ZusatzImpressumCtrl'
+                    }
+                }
             });
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/app/home');

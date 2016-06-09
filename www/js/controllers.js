@@ -436,7 +436,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             }
         }
 
-        //Das GPS Popup oeffnen
+        //Das GPS Popup (fuer die distanz zwischen Handy und Erdbeben) oeffnen
         function openGPSPopup() {
             $cordovaDialogs.confirm('Ihr GPS ist nicht aktiviert - einige Funktionen werden nicht verfügbar sein!', 'GPS deaktiviert!', ['Ignorieren', 'GPS - Aktivieren'])
                 .then(function (buttonIndex) {
@@ -453,6 +453,23 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 });
         }
 
+        //Das GPS Popup (fuer ja gerade jetzt) oeffnen
+        function openGPSPopupJaGeradeJetzt() {
+            $cordovaDialogs.confirm('Ihr GPS ist nicht aktiviert - einige Funktionen werden nicht verfügbar sein!', 'GPS deaktiviert!', ['Ignorieren', 'GPS - Aktivieren'])
+                .then(function (buttonIndex) {
+                    if (buttonIndex == 2) {
+                        cordova.plugins.settings.open(function () {
+                            },
+                            function () {
+
+                            });
+                    }
+                    if (buttonIndex == 1) {
+                        $state.go('app.bebenEintrag');
+                    }
+                });
+        }
+        
         /*
          * Standort bestimmen
          * @param callback Wenn die Position ermittelt werden konnte dann rueckgabe von true(GPS ON) und latitude und longtitude, bei fehler (GPS OFF) nur false
@@ -507,7 +524,6 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             // document.getElementById("scrollArea").offsetHeight;
         };
 
-
         //----- MODAL BEBENDETAIL -----
         $ionicModal.fromTemplateUrl('templates/beben_verspuert_modal.html', {
             scope: $scope
@@ -549,7 +565,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 }, function (err) {
                     $scope.bebenmodal.hide();
                     $ionicLoading.hide();
-                    $state.go('app.bebenEintrag');
+                    openGPSPopupJaGeradeJetzt();
                 });
         };
         $scope.vorMehrAls30Min = function () {
@@ -565,7 +581,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die beben_eintrag.html View (Angabe der Standortinformationen -> PLZ, Strasse..)
      */
-    .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, QuakeReport) {
+    .controller('BebenEintragCtrl', function ($scope, $ionicModal, JsonData, $stateParams, $state, QuakeReport,$ionicLoading) {
+        $ionicLoading.hide();
         //Input objekt -> Daten von der View werden hier gespeichert
         $scope.input = {
             zipCode: null,
