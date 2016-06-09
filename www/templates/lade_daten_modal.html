@@ -1,9 +1,9 @@
 <ion-modal-view id="modalHome" class="mymodal assertive-bg">
-    <ion-header-bar class="assertive-bg" id="headerBar">
+    <ion-header-bar class="assertive-bg modalHeightFix" id="headerBar">
         <h1 class="title light">Erdbeben Verspürt?</h1>
         <a class="button button-clear whiteButton" ng-click="closeSelectModal()">Schließen</a>
     </ion-header-bar>
-    <ion-content class="has-header has-footer" scroll="false">
+    <ion-content class="has-header has-footer modalHeightFix" scroll="false">
         <ion-slide-box delegate-handle="modalSlider" show-pager="false">
             <div ng-if="isOnline == false">
                 <ion-slide class="padding" id="slide1">

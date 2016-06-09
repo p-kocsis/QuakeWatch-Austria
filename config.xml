@@ -14,6 +14,12 @@
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
+  <!--
+  <preference name="AutoHideSplashScreen" value="false"/>
+  <feature name="SplashScreen">
+    <param name="ios-package" value="CDVSplashScreen" onload="true"/>
+  </feature>
+  -->
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="3000"/>
   <feature name="StatusBar">
@@ -27,6 +33,7 @@
   <!-- Icon and SplashScreen for iOS -->
   <platform name="ios">
 	<icon src="resources/icon.png"/>
+    <splash src="resources/splash.png"/>
   </platform>
   
 </widget>

@@ -705,7 +705,7 @@ angular.module('quakewatch.resources', ['ngResource'])
                 });
             },
             isCachedQuake: function () {
-                console.log("cache: "+$window.localStorage["cachedQuake"]);
+                //console.log("cache: "+$window.localStorage["cachedQuake"]);
                 if($window.localStorage["cachedQuake"] === 'undefined' ){
                     return false;
                 }else {
