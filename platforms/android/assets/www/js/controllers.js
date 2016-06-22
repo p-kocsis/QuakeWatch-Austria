@@ -11,7 +11,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
 /**
  * In diesem Kontroller werden alle Funktionen, welche beim start der App erledigt werden müssen, ausgeführt.
  */
-    .controller('AppCtrl', function (JsonData, $scope, AppInfo, $ionicPopup) {
+    .controller('AppCtrl', function (JsonData, $scope, AppInfo, $ionicPopup,$cordovaNetwork) {
         $scope.isOnline = JsonData.isOnline();
         //Generierung des API Keys(Nur einmal bei der Installation)
         if (AppInfo.isInitialRun() === 'true') {
@@ -19,22 +19,24 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             AppInfo.generateAPIKey();
         }
         //Gecachetes Erdbeben melden
-        if (AppInfo.isCachedQuake() == true) {
-            AppInfo.reportCachedQuake();
-            AppInfo.removeCachedQuake();
-            //console.log("isCached2: ",AppInfo.isCachedQuake());
-            //Popup um benutzer ueber das melden der gecacheten app zu benachrichtigen
-            var alertPopup = $ionicPopup.alert({
-                title: 'Ihre gecachte Meldung wurde versendet!',
-                template: 'Ihre gecachte Meldung wurde versendet!',
-                okText: '', // String (default: 'OK'). The text of the OK button.
-                okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
+        if ($cordovaNetwork.isOnline()) {
+            if (AppInfo.isCachedQuake() == true) {
+                AppInfo.reportCachedQuake();
+                AppInfo.removeCachedQuake();
+                //console.log("isCached2: ",AppInfo.isCachedQuake());
+                //Popup um benutzer ueber das melden der gecacheten app zu benachrichtigen
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Ihre gecachte Meldung wurde versendet!',
+                    template: 'Ihre gecachte Meldung wurde versendet!',
+                    okText: '', // String (default: 'OK'). The text of the OK button.
+                    okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
 
-            });
-            alertPopup.then(function (res) {
-                //$location.path("/app/home");
-                //$state.go('app.home');
-            });
+                });
+                alertPopup.then(function (res) {
+                    //$location.path("/app/home");
+                    //$state.go('app.home');
+                });
+            }
         }
 
     })

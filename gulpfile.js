@@ -85,9 +85,9 @@ gulp.task('generate-docs', [], function () {
   var options = {
     html5Mode: false,
     startPage: '/api',
-    title: "QuakeWatch App Dokumentation"
+    title: "QuakeWatch Austria",
+    image: "resources/icon.png"
     /*
-    image: "path/to/my/image.png",
     imageLink: "http://my-domain.com",
     titleLink: "/api"
     */
@@ -99,7 +99,7 @@ gulp.task('generate-docs', [], function () {
       title: 'API Dokumentation'
     },
     tutorial: {
-      glob: ['docs_new_developer/*.js'],
+      glob: ['docs_new_developer/*.ngdoc'],
       title: 'Neuer Entwickler'
     }
   }).pipe(gulpDocs.process(options)).pipe(gulp.dest('./docs'));

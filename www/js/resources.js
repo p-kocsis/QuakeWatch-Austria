@@ -2,14 +2,17 @@
  * @ngdoc overview
  * @name resources
  * @description
- * # resources
- *  Hier wird jegliche Kommunikation, welche über das "WWW" ausgeführt wird, implementiert.
+ * # resources (resources.js)
+ *  Hier wird jegliche Kommunikation/Datenabfragen für die App, welche über das "WWW" ausgeführt wird, implementiert.
  * # Wie implementiere ich meine eigene REST/... Schnittstelle?
  *  * Eine neue Factory zum quakewatch.resources Module hinzufügen <br>
  *      <pre>
  *      .factory('IhrFactoryName', function ($http) {
  *          //Eigener Code
  *          return {
+ *              reloadData: function (location) {
+ *              return //neu geladene Daten der location entsprechend(eu,aut,world)
+ *              }
  *              AutPromise: // Österreichische Erdbebendaten Abfragen ($http bevorzugt),
  *              getAut: function () {
  *                   return // Ein array mit den österreichischen Erdbebendaten als quakeData Objekte
@@ -41,16 +44,16 @@
  */
 angular.module('quakewatch.resources', ['ngResource'])
     .constant('ApiEndpointZAMG', {
-        url: 'http://geoweb.zamg.ac.at/fdsnws/app/1'
+        url: 'http://localhost:8100/apiZAMG'
     })
     .constant('ApiEndpointSeismic', {
         url: 'http://localhost:8100/api'
     })
     .constant('ApiEndpointZAMGFiles', {
-        url: 'http://geoweb.zamg.ac.at/eq_app'
+        url: 'http://localhost:8100/apiZAMGFiles'
     })
     .constant('GeowebEndpoint', {
-        url: 'http://geoweb.zamg.ac.at'
+        url: 'http://localhost:8100/geoweb'
     })
     /**
      * @ngdoc service
@@ -65,6 +68,17 @@ angular.module('quakewatch.resources', ['ngResource'])
         var restEndpoint = DataGeoWebZAMGStaticFiles;
         var isOnline = null;
         return {
+            /**
+             * @ngdoc method
+             * @name resources.service#reloadData
+             * @methodOf resources.service:JsonData
+             *
+             * @description
+             * Mithilfe von dieser funktion werden alle Erdbebendaten neu geladen
+             * @example
+             * JsonData.reloadData('eu');
+             * @param {[quakeData]} Erdbebendaten entsprechend der Lokation
+             */
             reloadData: function (location) {
                 return restEndpoint.reloadData(location);
             },
@@ -76,8 +90,8 @@ angular.module('quakewatch.resources', ['ngResource'])
              * @description
              * Diese Funktion wird in der **app.js** aufgerufen um den Online-Status der App zu setzten.
              * @example
-             * JsonData.setOnline(online),
-             * @param {boolean} online status der App, hängt von der AutPromise ab
+             * JsonData.setOnline(online)
+             * @param {boolean} online status der App hängt von der AutPromise ab
              */
             setOnline: function (online) {
                 isOnline = online;
@@ -85,7 +99,7 @@ angular.module('quakewatch.resources', ['ngResource'])
             /**
              * @ngdoc method
              * @name resources.service#isOnline
-             * @methodOf resources.service:DataGeoWebZAMG
+             * @methodOf resources.service:JsonData
              *
              * @description
              * Den Online-Status der App überprüfen
@@ -96,26 +110,74 @@ angular.module('quakewatch.resources', ['ngResource'])
             isOnline: function () {
                 return isOnline;
             },
+            /**
+             * @ngdoc object
+             * @name resources.service#AutPromise
+             * @methodOf resources.service:JsonData
+             * @description
+             * Wenn dieses Attribut die Aut Erdbebendaten zurückliefert dann wird die Applikation gestartet.
+             *  -> Start der Applikation hängt von diesem Attribut ab
+             * @example
+             * var autData = JsonData.AutPromise;
+             */
             AutPromise: restEndpoint.AutPromise,
-            //Oesterrechische Erdbeben Daten abfragen
-            //return: Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
+            /**
+             * @ngdoc method
+             * @name resources.service#getAut
+             * @methodOf resources.service:JsonData
+             *
+             * @description
+             * Österreichische Erdbebendaten abfragen
+             * @example
+             * JsonData.getAut()
+             * @returns {[quakeData]} Österreichische Erbebendaten
+             */
             getAut: function () {
                 return restEndpoint.getAut();
             },
             //Ein Erdbeben nach ID Abfragen (Welt)
+            /**
+             * @ngdoc method
+             * @name resources.service#getQuakefromIdWorld
+             * @methodOf resources.service:JsonData
+             *
+             * @description
+             * Ein erdbeben nach id Abfragen wird bei der erdbeben detail Seite benötigt
+             * @example
+             * JsonData.getAut()
+             * @returns {quakeData} Erdbeben der ID entprechend
+             */
             getQuakefromIdWorld: function (id) {
                 return restEndpoint.getQuakefromIdWorld(id);
             },
-            //Alle Erdbebendaten abfragen
-            //return: Erdbeben Objekte , daten formatiert
+            /**
+             * @ngdoc method
+             * @name resources.service#getWorld
+             * @methodOf resources.service:JsonData
+             *
+             * @description
+             * Österreichische Erdbebendaten abfragen
+             * @example
+             * JsonData.getWorld()
+             * @returns {[quakeData]} Alle Erdbebendaten inkl. Österrreichische
+             */
             getWorld: function () {
                 return restEndpoint.getWorld();
             },
-            //Abfrage der Erdbeben in der EU
-            //return : Erdbeben Objekte , daten formatiert und nach EU gefieltert(Kontinent)
+            /**
+             * @ngdoc method
+             * @name resources.service#getEu
+             * @methodOf resources.service:JsonData
+             * @description
+             * Europäische Erdbebendaten abfragen
+             * @example
+             * JsonData.getEu()
+             * @returns {[quakeData]} Erdbebendaten nach EU gefiltert(Kontinent)
+             */
             getEu: function () {
                 return restEndpoint.getEu();
             },
+
             getMoreData: function (location) {
                 return restEndpoint.getMoreData(location);
             }
@@ -127,7 +189,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * # rest
      * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
-     * [ZAMG]: http://geoweb.zamg.ac.at/fdsnws/app/1/query
+     * [ZAMG]: http://localhost:8100/apiZAMG/query
      */
     .factory('DataGeoWebZAMG', function ($http, $ionicLoading, ApiEndpointZAMG, $templateCache) {
         var atData = null;
@@ -431,10 +493,29 @@ angular.module('quakewatch.resources', ['ngResource'])
         );
 
         return {
-
+            /**
+             * @ngdoc method
+             * @name resources.service#getQuakeDataObject
+             * @methodOf resources.service:QuakeReport
+             *
+             * @description 
+             * @example
+             * quakedata = QuakeReport.getQuakeDataObject();
+             */
             getQuakeDataObject: function () {
                 return quakeDataObj;
             },
+            /**
+             * @ngdoc method
+             * @name resources.service#setZusatzfragen
+             * @methodOf resources.service:QuakeReport
+             *
+             * @description
+             * @param {zusatzFragen} zusatfragen zusatzfragen
+             * @example
+             * zusatzFragen.f2 = ($scope.input.f2);
+             * QuakeReport.setZusatzfragen(zusatzFragen);
+             */
             setZusatzfragen:function (zusatzfragen){
                 quakeDataObj.addquestions=zusatzfragen;
             },
@@ -648,7 +729,8 @@ angular.module('quakewatch.resources', ['ngResource'])
     })
 
     /**
-     *
+     * @ngdoc service
+     * @name persistence.service:AppInfo
      * @description
      * Mithilfe dieser Factory werden alle Funktionen, welche ein zwischenspeichern benoetigen, Ausgefuehrt werden
      */
@@ -734,7 +816,7 @@ angular.module('quakewatch.resources', ['ngResource'])
      * @description
      * # rest
      * Ein Service um Erdbebendaten von der REST Schnittstelle der [ZAMG] abzufragen
-     * [ZAMG]: http://geoweb.zamg.ac.at/fdsnws/app/1/query
+     * [ZAMG]: http://localhost:8100/apiZAMG/query
      */
     .factory('DataGeoWebZAMGStaticFiles', function ($http, $ionicLoading, ApiEndpointZAMG, ApiEndpointZAMGFiles, $templateCache) {
         var atData = null;
@@ -773,7 +855,7 @@ angular.module('quakewatch.resources', ['ngResource'])
         /**
          * @ngdoc method
          * @name resources.service#quakeClasses
-         * @methodOf resources.service:DataGeoWebZAMG
+         * @methodOf resources.service:DataGeoWebZAMGStaticFiles
          *
          * @description
          * Funktion um die Farbe der Erdbeben in der home.html zu bestimmen
@@ -797,7 +879,7 @@ angular.module('quakewatch.resources', ['ngResource'])
         /**
          * @ngdoc method
          * @name resources.service#convertFeatureToQuakeObject
-         * @methodOf resources.service:DataGeoWebZAMG
+         * @methodOf resources.service:DataGeoWebZAMGStaticFiles
          *
          * @description
          * Funktion um JsonDaten in das vorgegebene Objekt umzuwandeln.
@@ -842,18 +924,15 @@ angular.module('quakewatch.resources', ['ngResource'])
              *     return false;
              * });
              * </pre>
-             * @propertyOf resources.service:DataGeoWebZAMG
+             * @propertyOf resources.service:DataGeoWebZAMGStaticFiles
              * @returns {boolean} true wenn die Daten erfolgreich abgefragt wurden
              */
             AutPromise: AutPromise,
-            //Oesterrechische Erdbeben Daten abfragen
-            //return: Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten
 
             reloadData: function (location) {
                 switch (location) {
                     case "aut":
                         if (AutPromise) {
-                            //console.log("TEST# neu geladene Daten:"+JSON.stringify(this.getAut()));
                             return this.getAut();
                         }
                         break;
@@ -870,7 +949,7 @@ angular.module('quakewatch.resources', ['ngResource'])
             /**
              * @ngdoc method
              * @name resources.service#getAut
-             * @methodOf resources.service:DataGeoWebZAMG
+             * @methodOf resources.service:DataGeoWebZAMGStaticFiles
              *
              * @description
              * Österrechische Erdbeben Daten abfragen, verwendung über JsonData
@@ -895,7 +974,7 @@ angular.module('quakewatch.resources', ['ngResource'])
             /**
              * @ngdoc method
              * @name resources.service#getEu
-             * @methodOf resources.service:DataGeoWebZAMG
+             * @methodOf resources.service:DataGeoWebZAMGStaticFiles
              *
              * @description
              * Europäische Erdbeben Daten abfragen, verwendung über JsonData
@@ -917,7 +996,7 @@ angular.module('quakewatch.resources', ['ngResource'])
             /**
              * @ngdoc method
              * @name resources.service#getWorld
-             * @methodOf resources.service:DataGeoWebZAMG
+             * @methodOf resources.service:DataGeoWebZAMGStaticFiles
              *
              * @description
              * Alle Erdbeben Daten abfragen, verwendung über JsonData
@@ -939,7 +1018,7 @@ angular.module('quakewatch.resources', ['ngResource'])
             /**
              * @ngdoc method
              * @name resources.service#getMoreData
-             * @methodOf resources.service:DataGeoWebZAMG
+             * @methodOf resources.service:DataGeoWebZAMGStaticFiles
              *
              * @description
              * Erdbebendaten entsprechend der location laden, fortlaufend zu bereits vorhandenen Erdbebendaten
@@ -1000,7 +1079,7 @@ angular.module('quakewatch.resources', ['ngResource'])
             /**
              * @ngdoc method
              * @name resources.service#getQuakefromIdWorld
-             * @methodOf resources.service:DataGeoWebZAMG
+             * @methodOf resources.service:DataGeoWebZAMGStaticFiles
              *
              * @description
              * Ein Erdbeben aus den bereits geholten Erdbebendaten bekommen

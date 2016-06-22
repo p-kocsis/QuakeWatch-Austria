@@ -1,15 +1,17 @@
 /**
  * @ngdoc overview
- * @name quakewatch
+ * @name routing
  * @description
- * # quakewatch
+ * # Routing in der QuakeWatch Austria App (app.js)
  * Hier wird das routing der Applikation durchgeführt.
  * Falls eine neue View (Seite, Menüpunkt, ..) hizugefügt wird dann muss diese auch hier verlinkt werden.
- * Alle externen Module die für die App benötigt werden sind hier inkludiert.(außer ngResource,es ist eine Gewohnheit diese im Service Modul zu importieren)
+ * Alle externen Module die für die App benötigt werden sind hier unter angular.module inkludiert.(außer ngResource,es ist eine Gewohnheit diese im Service Modul zu importieren)
+ * Die folgenden Objekte sind vond dem Typ State, die Namen entsprechen einen Namen von einem Status(State).
  */
 angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.resources','ngCordova','angularMoment','ionic-timepicker','ionic-datepicker','ngMap'])
     .run(function ($ionicPlatform,amMoment) {
         $ionicPlatform.ready(function () {
+            //Einstellen von Nativen Animationen (verbessert performance)
             // then override any default you want
             window.plugins.nativepagetransitions.globalOptions.duration = 500;
             window.plugins.nativepagetransitions.globalOptions.iosdelay = 350;
@@ -19,6 +21,7 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
             // these are used for slide left/right only currently
             window.plugins.nativepagetransitions.globalOptions.fixedPixelsTop = 0;
             window.plugins.nativepagetransitions.globalOptions.fixedPixelsBottom = 0;
+
             //Zum anzeigen der Vergangenen Zeit in deutsch(beben_detail)
             amMoment.changeLocale('de-at');
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -37,9 +40,10 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
         $stateProvider
         /**
          * @ngdoc object
-         * @name quakewatch.object:state('app')
+         * @name routing.app:sidemenu
          * @description
-         * Das ist der Controller für die home.html View
+         * Hier wird eine State definiert welche dazu dient, dass ein Sidemenu in die Applikation inkludiert wird.
+         * Mithilfe von **abstract: true** ist definiert das diese State eigentlich keine View ist
          */
             .state('app', {
                 url: '/app',
@@ -47,6 +51,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                 templateUrl: 'templates/menu.html',
                 controller: 'AppCtrl'
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:home
+             * @description
+             * sd
+             */
             .state('app.home', {
                 url: '/home',
                 resolve: {
@@ -70,6 +80,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                 }
 
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:bebenDetail
+             * @description
+             * Das ist der Controller für die home.html View
+             */
             .state('app.bebenDetail', {
                 url: '/bebenDetail/:bebenId',
                 views: {
@@ -79,6 +95,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                     }
                 }
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:bebenWahrnehmung
+             * @description
+             * Das ist der Controller für die home.html View
+             */
             .state('app.bebenWahrnehmung', {
                 url: '/bebenWahrnehmung',
                 views: {
@@ -88,6 +110,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                     }
                 }
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:bebenZusatzfragen
+             * @description
+             * Das ist der Controller für die home.html View
+             */
             .state('app.bebenZusatzfragen', {
                 url: '/bebenZusatzfragen',
                 views: {
@@ -97,6 +125,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                     }
                 }
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:zusatzVerhalten
+             * @description
+             * Das ist der Controller für die home.html View
+             */
 			.state('app.zusatzVerhalten', {
                 url: '/zusatzVerhalten',
                 views: {
@@ -106,6 +140,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                     }
                 }
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:zusatzUebersicht
+             * @description
+             * Das ist der Controller für die home.html View
+             */
 			.state('app.zusatzUebersicht', {
                 url: '/zusatzUebersicht',
                 views: {
@@ -115,6 +155,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                     }
                 }
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:bebenEintrag
+             * @description
+             * Das ist der Controller für die home.html View
+             */
             .state('app.bebenEintrag', {
                 url: '/bebenEintrag',
                 views: {
@@ -124,6 +170,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                     }
                 }
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:zusatzLexikon
+             * @description
+             * Das ist der Controller für die home.html View
+             */
 			.state('app.zusatzLexikon', {
                 url: '/zusatzLexikon',
                 views: {
@@ -133,6 +185,12 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
                     }
                 }
             })
+            /**
+             * @ngdoc object
+             * @name routing.app:zusatzImpressum
+             * @description
+             * Das ist der Controller für die home.html View
+             */
 			.state('app.zusatzImpressum', {
                 url: '/zusatzImpressum',
                 views: {

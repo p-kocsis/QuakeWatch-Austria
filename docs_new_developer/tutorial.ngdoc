@@ -1,0 +1,17 @@
+@ngdoc overview
+@name  tutorial
+@description
+
+# Animations
+
+AngularJS provides animation hooks for common directives such as `ngRepeat`, `ngSwitch`, and `ngView`, as well as custom directives
+via the `$animate` service. These animation hooks are set in place to trigger animations during the life cycle of various directives and when
+triggered, will attempt to perform a CSS Transition, CSS Keyframe Animation or a JavaScript callback Animation (depending on if an animation is
+placed on the given directive). Animations can be placed using vanilla CSS by following the naming conventions set in place by AngularJS
+or with JavaScript code when it's defined as a factory.
+
+#ajkhskjhasfkj
+
+##alksjdalskjd
+
+**asdsd**
