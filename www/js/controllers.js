@@ -21,7 +21,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             AppInfo.generateAPIKey();
         }
         //Gecachetes Erdbeben melden
-        if ($cordovaNetwork.isOnline()) {
+        //@TODO KOMMENTAR ENTFERNEN
+        //if ($cordovaNetwork.isOnline()) {
             if (AppInfo.isCachedQuake() == true) {
                 AppInfo.reportCachedQuake();
                 AppInfo.removeCachedQuake();
@@ -37,7 +38,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 alertPopup.then(function (res) {
                 });
             }
-        }
+        //}
     })
     /**
      * @ngdoc controller
