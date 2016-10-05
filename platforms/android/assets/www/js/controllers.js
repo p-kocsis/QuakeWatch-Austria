@@ -2,15 +2,17 @@
  * @ngdoc overview
  * @name controllers
  * @description
- * # controllers
- * Hier geschieht die ganze Logik der Applikation.
- * In diesem Modul sind alle Controller implementiert
- *
+ * # controllers (controllers.js)
+ * Die Logik dr Applikation ist in den Kontrollern für die einzelnen Views verteilt
+ * In diesem Modul sind alle Kontroller Implementiert
  */
 angular.module('quakewatch.controllers', ['quakewatch.resources'])
-/**
- * In diesem Kontroller werden alle Funktionen, welche beim start der App erledigt werden müssen, ausgeführt.
- */
+    /**
+    * @ngdoc controller
+    * @name controllers.controller:AppCtrl
+    * @description
+    * In diesem Kontroller werden alle Funktionen, welche beim start der App erledigt werden müssen, ausgeführt.
+    */
     .controller('AppCtrl', function (JsonData, $scope, AppInfo, $ionicPopup,$cordovaNetwork) {
         $scope.isOnline = JsonData.isOnline();
         //Generierung des API Keys(Nur einmal bei der Installation)
@@ -19,7 +21,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             AppInfo.generateAPIKey();
         }
         //Gecachetes Erdbeben melden
-        if ($cordovaNetwork.isOnline()) {
+        //@TODO KOMMENTAR ENTFERNEN
+        //if ($cordovaNetwork.isOnline()) {
             if (AppInfo.isCachedQuake() == true) {
                 AppInfo.reportCachedQuake();
                 AppInfo.removeCachedQuake();
@@ -33,12 +36,9 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
 
                 });
                 alertPopup.then(function (res) {
-                    //$location.path("/app/home");
-                    //$state.go('app.home');
                 });
             }
-        }
-
+        //}
     })
     /**
      * @ngdoc controller

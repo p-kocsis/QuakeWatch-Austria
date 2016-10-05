@@ -46,31 +46,31 @@
  * <pre>
  *     zusatzFragen={
  *   //Sind Gegenstände umgefallen?
- *       f1:null,
+ *       f01:null,
  *
  *   //Sind Sie aus Angst ins Freie geflüchtet?
- *       f2:null,
+ *       f02:null,
  *
  *   //Feine Risse im Verputz?
- *       f3:null,
+ *       f03:null,
  *
  *   //Hatten Sie Gleichgewichtsprobleme?
- *       f4:null,
+ *       f04:null,
  *
  *   //Sind viele Gegenstände aus den Regalen gefallen?
- *       f5:null,
+ *       f05:null,
  *
  *   //Sind Möbel umgekippt?
- *       f6:null,
+ *       f06:null,
  *
  *   //Haben Sie Gebäudeschäden beobachtet?
- *       f7:null,
+ *       f07:null,
  *
  *   //Risse im Verputz
- *       f8:null,
+ *       f08:null,
  *
  *   //Abfallen von Verputzteilen
- *       f9:null,
+ *       f09:null,
  *
  *   //Mauerrisse
  *       f10:null,
@@ -112,31 +112,31 @@ function quakeReport(referenzID,locLon,locLat,locPrecision,locLastUpdate,mlocPLZ
 
 var zusatzFragen={
     //Sind Gegenstände umgefallen?
-        f1:null,
+        f01:null,
 
     //Sind Sie aus Angst ins Freie geflüchtet?
-        f2:null,
+        f02:null,
 
     //Feine Risse im Verputz?
-        f3:null,
+        f03:null,
 
     //Hatten Sie Gleichgewichtsprobleme?
-        f4:null,
+        f04:null,
 
     //Sind viele Gegenstände aus den Regalen gefallen?
-        f5:null,
+        f05:null,
 
     //Sind Möbel umgekippt?
-        f6:null,
+        f06:null,
 
     //Haben Sie Gebäudeschäden beobachtet?
-        f7:null,
+        f07:null,
 
     //Risse im Verputz
-        f8:null,
+        f08:null,
 
     //Abfallen von Verputzteilen
-        f9:null,
+        f09:null,
 
     //Mauerrisse
         f10:null,

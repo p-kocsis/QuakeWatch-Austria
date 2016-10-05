@@ -16,14 +16,17 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
     .controller('AppCtrl', function (JsonData, $scope, AppInfo, $ionicPopup,$cordovaNetwork) {
         $scope.isOnline = JsonData.isOnline();
         //Generierung des API Keys(Nur einmal bei der Installation)
-        if (AppInfo.isInitialRun() === 'true') {
+        //console.log('BH in Controller AppCtrl');
+        //console.log(AppInfo);
+        //console.log(AppInfo.isInitialRun());
+        if (AppInfo.isInitialRun() === true) {
             AppInfo.setInitialRun(false);
             AppInfo.generateAPIKey();
         }
         //Gecachetes Erdbeben melden
         //@TODO KOMMENTAR ENTFERNEN
-        //if ($cordovaNetwork.isOnline()) {
-            if (AppInfo.isCachedQuake() == true) {
+        if ($cordovaNetwork.isOnline()) {
+            if (AppInfo.isCachedQuake() === true) {
                 AppInfo.reportCachedQuake();
                 AppInfo.removeCachedQuake();
                 //console.log("isCached2: ",AppInfo.isCachedQuake());
@@ -38,7 +41,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 alertPopup.then(function (res) {
                 });
             }
-        //}
+        }
     })
     /**
      * @ngdoc controller
@@ -317,31 +320,31 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 case 3:
                     //stark
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f1 = ($scope.input.f1);
-                    zusatzFragen.f2 = ($scope.input.f2);
-                    zusatzFragen.f3 = ($scope.input.f3);
+                    zusatzFragen.f01 = ($scope.input.f1);
+                    zusatzFragen.f02 = ($scope.input.f2);
+                    zusatzFragen.f03 = ($scope.input.f3);
                     zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
                     break;
                 //stark, gebaeudeschaeden
                 case 4:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f2 = ($scope.input.f2);
-                    zusatzFragen.f3 = ($scope.input.f3);
-                    zusatzFragen.f7 = ($scope.input.f7);
-                    zusatzFragen.f8 = ($scope.input.f8);
+                    zusatzFragen.f02 = ($scope.input.f2);
+                    zusatzFragen.f03 = ($scope.input.f3);
+                    zusatzFragen.f07 = ($scope.input.f7);
+                    zusatzFragen.f08 = ($scope.input.f8);
                     zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
                     break;
                 //sehr stark, betraechtliche gebaeudeschaeden
                 case 5:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f3 = ($scope.input.f3);
-                    zusatzFragen.f4 = ($scope.input.f4);
-                    zusatzFragen.f5 = ($scope.input.f5);
-                    zusatzFragen.f7 = ($scope.input.f7);
-                    zusatzFragen.f8 = ($scope.input.f8);
-                    zusatzFragen.f9 = ($scope.input.f9);
+                    zusatzFragen.f03 = ($scope.input.f3);
+                    zusatzFragen.f04 = ($scope.input.f4);
+                    zusatzFragen.f05 = ($scope.input.f5);
+                    zusatzFragen.f07 = ($scope.input.f7);
+                    zusatzFragen.f08 = ($scope.input.f8);
+                    zusatzFragen.f09 = ($scope.input.f9);
                     zusatzFragen.f10 = ($scope.input.f10);
                     zusatzFragen.f11 = ($scope.input.f11);
                     zusatzFragen.f12 = ($scope.input.f12);
@@ -352,11 +355,11 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     break;
                 case 6:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f3 = ($scope.input.f3);
-                    zusatzFragen.f5 = ($scope.input.f5);
-                    zusatzFragen.f7 = ($scope.input.f7);
-                    zusatzFragen.f8 = ($scope.input.f8);
-                    zusatzFragen.f9 = ($scope.input.f9);
+                    zusatzFragen.f03 = ($scope.input.f3);
+                    zusatzFragen.f05 = ($scope.input.f5);
+                    zusatzFragen.f07 = ($scope.input.f7);
+                    zusatzFragen.f08 = ($scope.input.f8);
+                    zusatzFragen.f09 = ($scope.input.f9);
                     zusatzFragen.f10 = ($scope.input.f10);
                     zusatzFragen.f11 = ($scope.input.f11);
                     zusatzFragen.f12 = ($scope.input.f12);
@@ -377,6 +380,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             $ionicHistory.nextViewOptions({
                 disableBack: true
             });
+//          console.log($cordovaNetwork.isOnline());
+//          if ( true ) {
             if ($cordovaNetwork.isOnline()) {
                 //Daten versenden
                 QuakeReport.sendData();

@@ -742,7 +742,7 @@ angular.module('quakewatch.resources', ['ngResource'])
                 $window.localStorage["initialRun"] = (initial ? true : false);
             },
             isInitialRun: function () {
-                return $window.localStorage["initialRun"];
+                return ($window.localStorage["initialRun"] === "false") ? false : true;
             },
             // ENDE
             //----- API Key verwaltung -----
