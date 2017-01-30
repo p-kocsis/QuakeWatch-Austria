@@ -13,7 +13,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
     * @description
     * In diesem Kontroller werden alle Funktionen, welche beim start der App erledigt werden müssen, ausgeführt.
     */
-    .controller('AppCtrl', function (JsonData, $scope, AppInfo, $ionicPopup,$cordovaNetwork) {
+    .controller('AppCtrl', function (JsonData, $scope, AppInfo, $ionicPopup) {
         $scope.isOnline = JsonData.isOnline();
         //Generierung des API Keys(Nur einmal bei der Installation)
         //console.log('BH in Controller AppCtrl');
@@ -25,7 +25,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
         }
         //Gecachetes Erdbeben melden
         //@TODO KOMMENTAR ENTFERNEN
-        if ($cordovaNetwork.isOnline()) {
+        //if ($cordovaNetwork.isOnline()) {
             if (AppInfo.isCachedQuake() === true) {
                 AppInfo.reportCachedQuake();
                 AppInfo.removeCachedQuake();
@@ -41,7 +41,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 alertPopup.then(function (res) {
                 });
             }
-        }
+        //}
     })
     /**
      * @ngdoc controller
@@ -49,7 +49,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die home.html View (inklusive des Erdbeben melden modals)
      */
-    .controller('HomeCtrl', function ($scope, $cordovaDialogs, $timeout, $ionicScrollDelegate, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport, $ionicLoading, AppInfo, $cordovaNetwork) {
+    .controller('HomeCtrl', function ($scope, $cordovaDialogs, $timeout, $ionicScrollDelegate, $ionicModal, $window, JsonData, $state, $ionicSlideBoxDelegate, $ionicPopup, $cordovaGeolocation, QuakeReport, $ionicLoading, AppInfo) {
         $scope.isOnline = JsonData.isOnline();
         //Funktion fuer den Button "In den Online Modus wechseln"
         if (!$scope.isOnline) {
@@ -83,7 +83,9 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             // (location beschreibt auf welcher Seite sich der Benutzer befindet Aut, Eu, Welt)
             $scope.loaded = false;
             $scope.reloadFiles = function () {
-                if (!$cordovaNetwork.isOnline()) {
+                // $scope.isOnline
+                if (!$scope.isOnline) {
+                //if (!$cordovaNetwork.isOnline()) {
                     document.location.href = 'index.html';
                 } else {
                     $scope.quakeList=JsonData.reloadData(location);
@@ -105,7 +107,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             };
             //Funktion um Daten beim herabscrollen nachzuladen
             $scope.loadMoreData = function () {
-                if (!$cordovaNetwork.isOnline()) {
+                if (!JsonData.isOnline()) {
+                //if (!$cordovaNetwork.isOnline()) {
                     JsonData.setOnline(false);
                     $scope.$broadcast('scroll.infiniteScrollComplete');
                     document.location.href = 'index.html';
@@ -288,7 +291,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
      * @description
      * Das ist der Controller für die beben_zusatzfragen.html View (Zusatzfragen)
      */
-    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport, $state, $ionicPopup, $ionicHistory, $cordovaNetwork, AppInfo) {
+    .controller('BebenZusatzfragenCtrl', function ($scope, QuakeReport, $state, $ionicPopup, $ionicHistory, AppInfo) {
         //Input Object, von hier aus werden die Daten an die QuakeReport factory weitergegeben
         $scope.input = {
             floor: "",
@@ -382,7 +385,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             });
 //          console.log($cordovaNetwork.isOnline());
 //          if ( true ) {
-            if ($cordovaNetwork.isOnline()) {
+            if ($scope.isOnline) {
+            //if ($cordovaNetwork.isOnline()) {
                 //Daten versenden
                 QuakeReport.sendData();
                 //Benutzer ueber erfolgreiches versenden informieren

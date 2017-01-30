@@ -13,6 +13,7 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
         $ionicPlatform.ready(function () {
             //Einstellen von Nativen Animationen (verbessert performance)
             // then override any default you want
+            /*
             window.plugins.nativepagetransitions.globalOptions.duration = 500;
             window.plugins.nativepagetransitions.globalOptions.iosdelay = 350;
             window.plugins.nativepagetransitions.globalOptions.androiddelay = 350;
@@ -21,7 +22,7 @@ angular.module('quakewatch', ['ionic', 'quakewatch.controllers', 'quakewatch.res
             // these are used for slide left/right only currently
             window.plugins.nativepagetransitions.globalOptions.fixedPixelsTop = 0;
             window.plugins.nativepagetransitions.globalOptions.fixedPixelsBottom = 0;
-
+            */
             //Zum anzeigen der Vergangenen Zeit in deutsch(beben_detail)
             amMoment.changeLocale('de-at');
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
