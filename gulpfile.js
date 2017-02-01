@@ -76,7 +76,7 @@ gulp.task('serve-docs', function() {
   connect.server({
     root: './docs',
     livereload: false,
-    port: 8200
+      port: 8200
   });
 });
 

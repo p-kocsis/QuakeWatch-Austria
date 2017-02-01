@@ -3,7 +3,6 @@
         <form ng-submit="sendData()">
             <div class="row row-center">
                 <div class="col">
-
                     <br><h5>In welchem Stock befanden Sie sich?</h5>
                     <label class="item item-input item-select">
                         &nbsp;<!--Workaround damit die Zeile hoch genung ist. Bei zu viel Zeit aendern, sonst stoerts aber nicht
@@ -30,7 +29,7 @@
                         <br><h5>Sind Gegenstände umgefallen?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.f1">
+                            <select ng-model="input.f01">
                                 <option value="true">Ja</option>
                                 <option value="false" selected>Nein</option>
                             </select>
@@ -40,7 +39,7 @@
                         <br><h5>Sind Sie aus Angst ins Freie geflüchtet?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.f2">
+                            <select ng-model="input.f02">
                                 <option value="true">Ja</option>
                                 <option value="false" selected>Nein</option>
                             </select>
@@ -51,7 +50,7 @@
                         <br><h5>Feine Risse im Verputz?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.f3">
+                            <select ng-model="input.f03">
                                 <option value="true">Ja</option>
                                 <option value="false" selected>Nein</option>
                             </select>
@@ -61,7 +60,7 @@
                         <br><h5>Hatten Sie Gleichgewichtsprobleme?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.f4">
+                            <select ng-model="input.f04">
                                 <option value="true">Ja</option>
                                 <option value="false" selected>Nein</option>
                             </select>
@@ -71,7 +70,7 @@
                         <br><h5>Sind viele Gegenstände aus den Regalen gefallen?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.f5">
+                            <select ng-model="input.f05">
                                 <option value="true">Ja</option>
                                 <option value="false" selected>Nein</option>
                             </select>
@@ -81,7 +80,7 @@
                         <br><h5>Sind Möbel umgekippt?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.f6">
+                            <select ng-model="input.f06">
                                 <option value="true">Ja</option>
                                 <option value="false" selected>Nein</option>
                             </select>
@@ -91,7 +90,7 @@
                         <br><h5>Haben Sie Gebäudeschäden beobachtet?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.f7">
+                            <select ng-model="input.f07">
                                 <option value="true">Ja</option>
                                 <option value="false" selected>Nein</option>
                             </select>
@@ -101,7 +100,7 @@
                         <br><h5>Abfallen von Verputzteilen?</h5>
                         <label class="item item-input item-select">
                             &nbsp;
-                            <select ng-model="input.f9">
+                            <select ng-model="input.f09">
                                 <option value="true">Ja</option>
                                 <option value="false" selected>Nein</option>
                             </select>
@@ -169,6 +168,11 @@
                         <textarea name="comment" id="comment-textarea2" rows="5" ng-model="input.comment"> </textarea>
                     </label>
                     </div>
+                    <br><h5>kontakt</h5>
+                    <label class="item item-input">
+                        <textarea name="comment" id="contact" rows="5" ng-model="input.contact"> </textarea>
+                    </label>
+                </div>
 
                 </div>
             </div>

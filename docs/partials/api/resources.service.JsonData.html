@@ -1,0 +1,79 @@
+<h1><code ng:non-bindable="">JsonData</code>
+<div><span class="hint">service in module <code ng:non-bindable="">resources</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="resources-service-page resources-service-jsondata-page"><h3 id="rest-interface" id="description_rest-interface">REST Interface</h3>
+<p>Diese Factory wird in der App verwendet um Erdbebendaten zu laden.
+Es ist ein &quot;Interface&quot; welches den einfachen austausch der Endpunkte ermöglicht
+Für nähere Informationen zur implementierung einer eigenen Factory bei der Dokumentation für <a href="#/api/resources">resources</a> nachschlagen</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_autpromise">AutPromise()</h3>
+<div class="autpromise"><div class="resources-service-autpromise-page"><p>Wenn dieses Attribut die Aut Erdbebendaten zurückliefert dann wird die Applikation gestartet.
+-&gt; Start der Applikation hängt von diesem Attribut ab</p>
+</div><h4 id="methods_autpromise_example">Example</h4>
+<div class="example"><div class="resources-service-autpromise-page"><p>var autData = JsonData.AutPromise;</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_getaut">getAut()</h3>
+<div class="getaut"><div class="resources-service-getaut-page"><p>Österreichische Erdbebendaten abfragen</p>
+</div><h5 id="methods_getaut_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[quakeData]</a></td><td><div class="resources-service-getaut-page"><p>Österreichische Erbebendaten</p>
+</div></td></tr></table><h4 id="methods_getaut_example">Example</h4>
+<div class="example"><div class="resources-service-getaut-page"><p>JsonData.getAut()</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_geteu">getEu()</h3>
+<div class="geteu"><div class="resources-service-geteu-page"><p>Europäische Erdbebendaten abfragen</p>
+</div><h5 id="methods_geteu_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[quakeData]</a></td><td><div class="resources-service-geteu-page"><p>Erdbebendaten nach EU gefiltert(Kontinent)</p>
+</div></td></tr></table><h4 id="methods_geteu_example">Example</h4>
+<div class="example"><div class="resources-service-geteu-page"><p>JsonData.getEu()</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_getquakefromidworld">getQuakefromIdWorld()</h3>
+<div class="getquakefromidworld"><div class="resources-service-getquakefromidworld-page"><p>Ein erdbeben nach id Abfragen wird bei der erdbeben detail Seite benötigt</p>
+</div><h5 id="methods_getquakefromidworld_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-quakedata">quakeData</a></td><td><div class="resources-service-getquakefromidworld-page"><p>Erdbeben der ID entprechend</p>
+</div></td></tr></table><h4 id="methods_getquakefromidworld_example">Example</h4>
+<div class="example"><div class="resources-service-getquakefromidworld-page"><p>JsonData.getAut()</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_getworld">getWorld()</h3>
+<div class="getworld"><div class="resources-service-getworld-page"><p>Österreichische Erdbebendaten abfragen</p>
+</div><h5 id="methods_getworld_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[quakeData]</a></td><td><div class="resources-service-getworld-page"><p>Alle Erdbebendaten inkl. Österrreichische</p>
+</div></td></tr></table><h4 id="methods_getworld_example">Example</h4>
+<div class="example"><div class="resources-service-getworld-page"><p>JsonData.getWorld()</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_isonline">isOnline()</h3>
+<div class="isonline"><div class="resources-service-isonline-page"><p>Den Online-Status der App überprüfen</p>
+</div><h5 id="methods_isonline_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="resources-service-isonline-page"><p>Liefert den Online-Status der App</p>
+</div></td></tr></table><h4 id="methods_isonline_example">Example</h4>
+<div class="example"><div class="resources-service-isonline-page"><p>JsonData.isOnline()</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_reloaddata">reloadData(Erdbebendaten)</h3>
+<div class="reloaddata"><div class="resources-service-reloaddata-page"><p>Mithilfe von dieser funktion werden alle Erdbebendaten neu geladen</p>
+</div><h5 id="methods_reloaddata_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>Erdbebendaten</td><td><a href="" class="label type-hint type-hint-object">[quakeData]</a></td><td><div class="resources-service-reloaddata-page"><p>entsprechend der Lokation</p>
+</div></td></tr></tbody></table><h4 id="methods_reloaddata_example">Example</h4>
+<div class="example"><div class="resources-service-reloaddata-page"><p>JsonData.reloadData(&#39;eu&#39;);</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_setonline">setOnline(online)</h3>
+<div class="setonline"><div class="resources-service-setonline-page"><p>Diese Funktion wird in der <strong>app.js</strong> aufgerufen um den Online-Status der App zu setzten.</p>
+</div><h5 id="methods_setonline_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>online</td><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="resources-service-setonline-page"><p>status der App hängt von der AutPromise ab</p>
+</div></td></tr></tbody></table><h4 id="methods_setonline_example">Example</h4>
+<div class="example"><div class="resources-service-setonline-page"><p>JsonData.setOnline(online)</p>
+</div></div>
+</div>
+</li>
+</ul>
+</div>
+</div>

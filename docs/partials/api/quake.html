@@ -1,0 +1,95 @@
+<h1><code ng:non-bindable="">quake</code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="quake-page"><h3 id="quake" id="description_quake">quake</h3>
+<p>Eine &quot;Klasse&quot; die für die Speicherung Empfangener bzw. neu eingegebener Daten</p>
+<h3 id="quakereport" id="description_quakereport">quakeReport</h3>
+<p>Eine Klasse zum sammeln der Erdbebendaten (entprechend der /quakeapi/v01/)
+<pre class="prettyprint linenums">
+     new quakeReport(
+         referenzID,
+         locLon,
+         locLat,
+         locPrecision,
+         locLastUpdate,
+         mlocPLZ,
+         mlocOrtsname,
+         mlocStrasse,
+         stockwerk,
+         klassifikation,
+         verspuert,
+         kommentar,
+         kontakt
+     );
+</pre>
+<h3 id="quakedata" id="description_quakedata">quakeData</h3>
+<p>Eine &quot;Klasse&quot; um die Erdbebendaten von jeglicher Quelle für die App verständlich zu machen.
+<pre class="prettyprint linenums">
+    new quakeData(
+        id,
+        magnitude,
+        dateAndTime,
+        locLon,
+        locLat,
+        country,
+        distanceFromPhoneToQuake,
+        classColor,
+        ldate,
+        ltime,
+        ltz
+    );
+</pre>
+<h3 id="zusatzfragen" id="description_zusatzfragen">zusatzFragen</h3>
+<p>Eine &quot;Klasse&quot; um die zusatzfragen zu Erdbeben zu speichern (entprechend der /quakeapi/v02/)
+<pre class="prettyprint linenums">
+    zusatzFragen={
+  //Sind Gegenstände umgefallen?
+      f01:null,
+
+  //Sind Sie aus Angst ins Freie geflüchtet?
+      f02:null,
+
+  //Feine Risse im Verputz?
+      f03:null,
+
+  //Hatten Sie Gleichgewichtsprobleme?
+      f04:null,
+
+  //Sind viele Gegenstände aus den Regalen gefallen?
+      f05:null,
+
+  //Sind Möbel umgekippt?
+      f06:null,
+
+  //Haben Sie Gebäudeschäden beobachtet?
+      f07:null,
+
+  //Risse im Verputz
+      f08:null,
+
+  //Abfallen von Verputzteilen
+      f09:null,
+
+  //Mauerrisse
+      f10:null,
+
+  //Beschädigung des Rauchfanges
+      f11:null,
+
+  //Herabfallen des Rauchfanges
+      f12:null,
+
+  //Herabfallen von Dachziegeln
+      f13:null,
+
+  //Einsturz von Zwischenwänden
+      f14:null,
+
+  //Bitte beschreiben Sie Ihre Wahrnehmung und Schäden
+      f15:null
+  };
+</pre>
+</div></div>
+</div>

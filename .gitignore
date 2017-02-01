@@ -5,7 +5,6 @@ hooks
 node_modules
 .DS_Store
 .idea/
-docs/
 www/.DS_Store
 www/img/.DS_Store
 www/lib/.DS_Store

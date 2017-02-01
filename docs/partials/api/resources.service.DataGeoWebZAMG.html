@@ -1,0 +1,92 @@
+<h1><code ng:non-bindable="">DataGeoWebZAMG</code>
+<div><span class="hint">service in module <code ng:non-bindable="">resources</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="resources-service-page resources-service-datageowebzamg-page"><h3 id="rest" id="description_rest">rest</h3>
+<p>Ein Service um Erdbebendaten von der REST Schnittstelle der <a href="http://geoweb.zamg.ac.at/fdsnws/app/1/query">ZAMG</a> abzufragen</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_convertfeaturetoquakeobject">convertFeatureToQuakeObject(feature)</h3>
+<div class="convertfeaturetoquakeobject"><div class="resources-service-convertfeaturetoquakeobject-page"><p>Funktion um JsonDaten in das vorgegebene Objekt umzuwandeln.</p>
+</div><h5 id="methods_convertfeaturetoquakeobject_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>feature</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="resources-service-convertfeaturetoquakeobject-page"><p>feature = ein Erdbeben</p>
+</div></td></tr></tbody></table><h5 id="methods_convertfeaturetoquakeobject_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-quakedata">quakeData</a></td><td><div class="resources-service-convertfeaturetoquakeobject-page"><p>Liefert ein formatiertes Object, welches in ein Array gepackt werden kann</p>
+</div></td></tr></table><h4 id="methods_convertfeaturetoquakeobject_example">Example</h4>
+<div class="example"><div class="resources-service-convertfeaturetoquakeobject-page"><p>convertFeatureToQuakeObject(atData.features[i]);</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_getaut">getAut()</h3>
+<div class="getaut"><div class="resources-service-getaut-page"><p>Österrechische Erdbeben Daten abfragen, verwendung über JsonData</p>
+</div><h5 id="methods_getaut_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[quakeData]</a></td><td><div class="resources-service-getaut-page"><p>Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten</p>
+</div></td></tr></table><h4 id="methods_getaut_example">Example</h4>
+<div class="example"><div class="resources-service-getaut-page"><p>JsonData.getAut();</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_geteu">getEu()</h3>
+<div class="geteu"><div class="resources-service-geteu-page"><p>Europäische Erdbeben Daten abfragen, verwendung über JsonData</p>
+</div><h5 id="methods_geteu_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[quakeData]</a></td><td><div class="resources-service-geteu-page"><p>Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten</p>
+</div></td></tr></table><h4 id="methods_geteu_example">Example</h4>
+<div class="example"><div class="resources-service-geteu-page"><p>JsonData.getEu();</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_getmoredata">getMoreData(location)</h3>
+<div class="getmoredata"><div class="resources-service-getmoredata-page"><p>Erdbebendaten entsprechend der location laden, fortlaufend zu bereits vorhandenen Erdbebendaten</p>
+</div><h5 id="methods_getmoredata_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>location</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="resources-service-getmoredata-page"><p>aut,eu oder world</p>
+</div></td></tr></tbody></table><h5 id="methods_getmoredata_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[quakeData]</a></td><td><div class="resources-service-getmoredata-page"><p>Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten</p>
+</div></td></tr></table><h4 id="methods_getmoredata_example">Example</h4>
+<div class="example"><div class="resources-service-getmoredata-page"><p>JsonData.getMoreData(location);</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_getquakefromidworld">getQuakefromIdWorld(id)</h3>
+<div class="getquakefromidworld"><div class="resources-service-getquakefromidworld-page"><p>Ein Erdbeben aus den bereits geholten Erdbebendaten bekommen
+Wird verwendet um die Detailansicht der Erdbeben darzustellen</p>
+</div><h5 id="methods_getquakefromidworld_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>id</td><td><a href="" class="label type-hint type-hint-int">int</a></td><td><div class="resources-service-getquakefromidworld-page"><p>Erdbebenid</p>
+</div></td></tr></tbody></table><h5 id="methods_getquakefromidworld_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-quakedata">quakeData</a></td><td><div class="resources-service-getquakefromidworld-page"><p>Ein Erdbebenobjekt, mit dem angeforderten Erdbeben</p>
+</div></td></tr></table><h4 id="methods_getquakefromidworld_example">Example</h4>
+<div class="example"><div class="resources-service-getquakefromidworld-page"><p>JsonData.getQuakefromIdWorld(id);</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_getworld">getWorld()</h3>
+<div class="getworld"><div class="resources-service-getworld-page"><p>Alle Erdbeben Daten abfragen, verwendung über JsonData</p>
+</div><h5 id="methods_getworld_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">[quakeData]</a></td><td><div class="resources-service-getworld-page"><p>Ein Array mit Erdbeben Objekten welche die Daten formatiert beinhalten</p>
+</div></td></tr></table><h4 id="methods_getworld_example">Example</h4>
+<div class="example"><div class="resources-service-getworld-page"><p>JsonData.getWorld();</p>
+</div></div>
+</div>
+</li>
+<li><h3 id="methods_quakeclasses">quakeClasses(mag)</h3>
+<div class="quakeclasses"><div class="resources-service-quakeclasses-page"><p>Funktion um die Farbe der Erdbeben in der home.html zu bestimmen
+Sie wird in <strong>convertFeatureToQuakeObject</strong> verwendet.</p>
+</div><h5 id="methods_quakeclasses_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>mag</td><td><a href="" class="label type-hint type-hint-int">int</a></td><td><div class="resources-service-quakeclasses-page"><p>magnitude vom Erdbeben(Feature)</p>
+</div></td></tr></tbody></table><h5 id="methods_quakeclasses_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-quakedata">quakeData</a></td><td><div class="resources-service-quakeclasses-page"><p>Liefert ein formatiertes Object, welches in ein Array gepackt werden kann</p>
+</div></td></tr></table><h4 id="methods_quakeclasses_example">Example</h4>
+<div class="example"><div class="resources-service-quakeclasses-page"><p>quakeClasses(feature.properties.mag),</p>
+</div></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_autpromise">AutPromise</h3>
+<div class="autpromise"><div class="resources-service-autpromise-page"><p>Dieses &quot;Versprechen&quot; wird in der <strong>app.js</strong> aufgerufen, nur wenn dieses Verpsrechen erfüllt ist wird die App gestartet
+<pre class="prettyprint linenums">
+var AutPromise = $http({method: "GET", url: ApiEndpointZAMG.url+'/query?orderby=time;location=austria;limit=10', cache: $templateCache}).
+then(function(response) {
+    atData = response.data;
+    return true;
+}, function(response) {
+    return false;
+});
+</pre>
+</div><h5 id="properties_autpromise_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="resources-service-autpromise-page"><p>true wenn die Daten erfolgreich abgefragt wurden</p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+</div>

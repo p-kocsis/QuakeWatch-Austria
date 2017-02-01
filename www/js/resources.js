@@ -569,7 +569,20 @@ angular.module('quakewatch.resources', ['ngResource'])
              * QuakeReport.setId(10);
              */
             setLocPrec: function (prec) {
-                quakeDataObj.locPrecision = prec;
+                //1.2.2017
+                // Erzwinge . falls die Precision nichts zurückliefert
+                var precAsString = ""+prec;
+                if(precAsString){
+                    if(precAsString.includes(".")){
+                        quakeDataObj.locPrecision = prec;
+                    } else {
+                        quakeDataObj.locPrecision = prec+".0";
+                    }
+
+                } else {
+                    quakeDataObj.locPrecision = null;
+                }
+
             },
             /**
              * @ngdoc method
@@ -582,7 +595,11 @@ angular.module('quakewatch.resources', ['ngResource'])
              * QuakeReport.setLocLastUpdate("2016-01-11T18:02:04.151Z");
              */
             setLocLastUpdate: function (time) {
-                quakeDataObj.locLastUpdate = time;
+                if(time.includes(".")){
+                    quakeDataObj.locLastUpdate = time.split(".")[0]+"Z"
+                } else {
+                    quakeDataObj.locLastUpdate = time;
+                }
             },
             /**
              * @ngdoc method
@@ -607,8 +624,8 @@ angular.module('quakewatch.resources', ['ngResource'])
              * @example
              * QuakeReport.setPlace("Wien");
              */
-            setPlace: function (place) {
-                quakeDataObj.mlocOrtsname = place;
+            setPlace: function (place,strasse) {
+                quakeDataObj.mlocOrtsname = place+", "+strasse;
             },
             /**
              * @ngdoc method
@@ -648,7 +665,11 @@ angular.module('quakewatch.resources', ['ngResource'])
              */
             //Zeit und datum in utc
             setDateTime: function (time) {
-                quakeDataObj.verspuert = time;
+                if(time.includes(".")){
+                    quakeDataObj.verspuert = time.split(".")[0]+"Z"
+                } else {
+                    quakeDataObj.verspuert = time;
+                }
             },
             /**
              * @ngdoc method
@@ -679,11 +700,11 @@ angular.module('quakewatch.resources', ['ngResource'])
             },
             /**
              * @ngdoc method
-             * @name resources.service#setContact
+             * @name resources.service#setStrasse
              * @methodOf resources.service:QuakeReport
              *
              * @description
-             * @param {String} contact Strasse
+             * @param {String} strasse Strasse
              * @example
              * QuakeReport.setStrasse("Asdgasse 1");
              */
@@ -707,7 +728,11 @@ angular.module('quakewatch.resources', ['ngResource'])
              * QuakeReport.sendData();
              */
             sendData: function () {
-                    //Daten senden
+                if(!quakeDataObj.mlocPLZ){
+                    quakeDataObj.mlocPLZ = "unk"
+                }
+                console.log(JSON.stringify(quakeDataObj));
+
                     var req = {
                         method: 'POST',
                         url: GeowebEndpoint.url+'/quakeapi/v02/message',
@@ -722,8 +747,8 @@ angular.module('quakewatch.resources', ['ngResource'])
                         //Check ob Response Code 200
                         console.log("response: "+response);
                     });
-                console.log(JSON.stringify(quakeDataObj
-                ));
+                console.log(JSON.stringify(quakeDataObj));
+                return JSON.stringify(quakeDataObj);
             }
         };
     })

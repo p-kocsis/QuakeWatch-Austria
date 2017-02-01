@@ -296,7 +296,22 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
         $scope.input = {
             floor: "",
             comment: null,
-            contact: null
+            contact: null,
+            f01:null,
+            f02:null,
+            f03:null,
+            f04:null,
+            f05:null,
+            f06:null,
+            f07:null,
+            f08:null,
+            f09:null,
+            f010:null,
+            f011:null,
+            f012:null,
+            f013:null,
+            f014:null,
+            f015:null
         };
 
         //Abfragen der Klassifikation
@@ -314,40 +329,46 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                 case 1:
                     QuakeReport.setFloor($scope.input.floor);
                     QuakeReport.setComment($scope.input.comment);
+                    zusatzFragen.f03 = ($scope.input.f03);
+                    zusatzFragen.f15 = ($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
                     break;
                 //Deutlich
                 case 2:
                     QuakeReport.setFloor($scope.input.floor);
                     QuakeReport.setComment($scope.input.comment);
+                    zusatzFragen.f03 = ($scope.input.f03);
+                    zusatzFragen.f15 = ($scope.input.f15);
+                    QuakeReport.setZusatzfragen(zusatzFragen);
                     break;
                 case 3:
                     //stark
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f01 = ($scope.input.f1);
-                    zusatzFragen.f02 = ($scope.input.f2);
-                    zusatzFragen.f03 = ($scope.input.f3);
+                    zusatzFragen.f01 = ($scope.input.f01);
+                    zusatzFragen.f02 = ($scope.input.f02);
+                    zusatzFragen.f03 = ($scope.input.f03);
                     zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
                     break;
                 //stark, gebaeudeschaeden
                 case 4:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f02 = ($scope.input.f2);
-                    zusatzFragen.f03 = ($scope.input.f3);
-                    zusatzFragen.f07 = ($scope.input.f7);
-                    zusatzFragen.f08 = ($scope.input.f8);
+                    zusatzFragen.f02 = ($scope.input.f02);
+                    zusatzFragen.f03 = ($scope.input.f03);
+                    zusatzFragen.f07 = ($scope.input.f07);
+                    zusatzFragen.f08 = ($scope.input.f08);
                     zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
                     break;
                 //sehr stark, betraechtliche gebaeudeschaeden
                 case 5:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f03 = ($scope.input.f3);
-                    zusatzFragen.f04 = ($scope.input.f4);
-                    zusatzFragen.f05 = ($scope.input.f5);
-                    zusatzFragen.f07 = ($scope.input.f7);
-                    zusatzFragen.f08 = ($scope.input.f8);
-                    zusatzFragen.f09 = ($scope.input.f9);
+                    zusatzFragen.f03 = ($scope.input.f03);
+                    zusatzFragen.f04 = ($scope.input.f04);
+                    zusatzFragen.f05 = ($scope.input.f05);
+                    zusatzFragen.f07 = ($scope.input.f07);
+                    zusatzFragen.f08 = ($scope.input.f08);
+                    zusatzFragen.f09 = ($scope.input.f09);
                     zusatzFragen.f10 = ($scope.input.f10);
                     zusatzFragen.f11 = ($scope.input.f11);
                     zusatzFragen.f12 = ($scope.input.f12);
@@ -355,14 +376,15 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     zusatzFragen.f14 = ($scope.input.f14);
                     zusatzFragen.f15 = ($scope.input.f15);
                     QuakeReport.setZusatzfragen(zusatzFragen);
+
                     break;
                 case 6:
                     QuakeReport.setFloor($scope.input.floor);
-                    zusatzFragen.f03 = ($scope.input.f3);
-                    zusatzFragen.f05 = ($scope.input.f5);
-                    zusatzFragen.f07 = ($scope.input.f7);
-                    zusatzFragen.f08 = ($scope.input.f8);
-                    zusatzFragen.f09 = ($scope.input.f9);
+                    zusatzFragen.f03 = ($scope.input.f03);
+                    zusatzFragen.f05 = ($scope.input.f05);
+                    zusatzFragen.f07 = ($scope.input.f07);
+                    zusatzFragen.f08 = ($scope.input.f08);
+                    zusatzFragen.f09 = ($scope.input.f09);
                     zusatzFragen.f10 = ($scope.input.f10);
                     zusatzFragen.f11 = ($scope.input.f11);
                     zusatzFragen.f12 = ($scope.input.f12);
@@ -372,6 +394,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
                     QuakeReport.setZusatzfragen(zusatzFragen);
                     break;
             }
+            QuakeReport.setContact($scope.input.contact);
 
             /*
              QuakeReport.setFloor($scope.input.floor);
@@ -388,11 +411,12 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             if ($scope.isOnline) {
             //if ($cordovaNetwork.isOnline()) {
                 //Daten versenden
-                QuakeReport.sendData();
+                var sentData = QuakeReport.sendData();
                 //Benutzer ueber erfolgreiches versenden informieren
                 var alertPopup = $ionicPopup.alert({
                     title: 'Danke für ihre Meldung!',
-                    template: 'Danke für ihre Meldung!',
+                    template: sentData,
+                    //template: 'Danke für ihre Meldung!',
                     okText: '', // String (default: 'OK'). The text of the OK button.
                     okType: 'button-assertive' // String (default: 'button-positive'). The type of the OK button.
                 });
@@ -605,7 +629,8 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             place: null,
             date: new Date(),
             chosenTime: "",
-            rawTime: new Date()
+            rawTime: new Date(),
+            strasse:""
         };
         //Bestimmen ob Nullen benoetigt werden
         if ($scope.input.rawTime.getUTCMinutes() < 10) {
@@ -681,7 +706,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
         //Zeit wählen ENDE
         //-----  Daten mithilfe von QuakeReport speichern und weiter zur Comics Seite -----
         $scope.goToComics = function () {
-            QuakeReport.setPlace($scope.input.place);
+            QuakeReport.setPlace($scope.input.place,$scope.input.strasse);
             QuakeReport.setZIP($scope.input.zipCode);
             //QuakeReport.setStrasse($scope.input.strasse);
             var datetime = new Date(
@@ -695,6 +720,7 @@ angular.module('quakewatch.controllers', ['quakewatch.resources'])
             datetime = datetime.toISOString().slice(0, 19) + "Z";
             QuakeReport.setLocLastUpdate(datetime);
             QuakeReport.setDateTime(datetime);
+            //QuakeReport.setStrasse($scope.input.strasse);
             console.log(datetime);
             $state.go('app.bebenWahrnehmung');
         };
