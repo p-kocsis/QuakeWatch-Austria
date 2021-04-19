@@ -1,7 +1,6 @@
 # Projektbeschreibung
 Entwicklung einer mobilen Applikation mithilfe von einem hybriden Webapplikationsframework(ionic 1) für folgende Funktionen:
 
-"
 - Alles über Erdbeben in Österreich und der Welt
 - Melden Sie uns auf einfache Weise Ihre Wahrnehmungen und Schäden
 - Ratgeber: Richtiges Verhalten während eines Bebens
